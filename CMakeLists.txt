@@ -10,6 +10,11 @@ include_directories(include)
 
 add_executable(madness-tactical
         src/main.cpp
-        src/Game.cpp)
+        src/Game.cpp
+        src/Body.cpp
+        src/Entity.cpp
+        src/SceneNode.cpp
+        src/Unit.cpp
+        )
 
 target_link_libraries(madness-tactical sfml-graphics sfml-system sfml-window)
