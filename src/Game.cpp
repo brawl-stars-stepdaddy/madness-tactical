@@ -6,9 +6,27 @@ m_window(sf::VideoMode(1080, 1080), "SFML test"),
 m_player(),
 m_texture(),
 m_player_speed(500.f) {
-    m_resource_holder.load(TexturesID::Sun, "../res/The_Sun_in_high_resolution_pillars.jpg");
-    m_player.setTexture(m_resource_holder.get(TexturesID::Sun));
-    m_player.setPosition(100.f, 100.f);
+    m_resource_holder.load(TexturesID::SUN, "../res/The_Sun_in_high_resolution_pillars.jpg");
+    m_resource_holder.load(TexturesID::DIRT, "../res/dirt.jpg");
+    m_resource_holder.get(TexturesID::DIRT).setRepeated(true);
+    m_resource_holder.get(TexturesID::DIRT).setSmooth(true);
+    shape1.setPointCount(3);
+    shape1.setPoint(0, {0, 0});
+    shape1.setPoint(1, {300, 300});
+    shape1.setPoint(2, {50, 400});
+    shape2.setPointCount(3);
+    shape2.setPoint(0, {300 - 300, 300 - 300});
+    shape2.setPoint(1, {50 - 300, 400 - 300});
+    shape2.setPoint(2, {500 - 300, 350 - 300});
+    shape2.setPosition({300, 300});
+    shape1.setTextureRect(sf::IntRect(0, 0, 300, 400));
+    shape1.setTexture(&m_resource_holder.get(TexturesID::DIRT));
+    shape2.setTextureRect(sf::IntRect(50, 300, 450, 100));
+    shape2.setTexture(&m_resource_holder.get(TexturesID::DIRT));
+    m_player.setTexture(m_resource_holder.get(TexturesID::DIRT));
+    m_player.setPosition(200.f, 200.f);
+    sf::FloatRect bounds = m_player.getLocalBounds();
+    m_player.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
 void Game::run() {
@@ -77,6 +95,8 @@ void Game::update(sf::Time delta_time) {
 
 void Game::render() {
     m_window.clear();
+    m_window.draw(shape1);
+    m_window.draw(shape2);
     m_window.draw(m_player);
     m_window.display();
 }

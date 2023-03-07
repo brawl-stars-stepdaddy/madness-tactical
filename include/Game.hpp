@@ -3,10 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "ResourceHolder.hpp"
-
-enum class TexturesID {
-    Sun
-};
+#include "ResourceIdentifiers.hpp"
 
 struct Game {
 public:
@@ -23,10 +20,12 @@ private:
 
     void handle_player_input(sf::Keyboard::Key key, bool is_pressed);
 
-    sf::RenderWindow m_window;
+    sf::RenderWindow m_window, m_window2;
     sf::Sprite m_player;
+    sf::ConvexShape shape1;
+    sf::ConvexShape shape2;
     sf::Texture m_texture;
-    ResourceHolder<TexturesID, sf::Texture> m_resource_holder;
+    TextureHolder m_resource_holder;
     float m_player_speed;
     bool m_is_moving_up = false;
     bool m_is_moving_down = false;
