@@ -9,14 +9,13 @@ const float DEG  =  -57.29577f;
 
 struct Ball {};
 
-// Convert Box2D vertices to ClipperLib::IntPoint
-Clipper2Lib::PathsD b2VerticesToClipper(const b2Vec2* vertices, int32 count)
-{
+// Convert Box2D chains to ClipperLib::IntPoint
+Clipper2Lib::PathsD b2VerticesToClipper(const b2Vec2* vertices, int count) {
     Clipper2Lib::PathsD result;
     Clipper2Lib::PathD tmp;
     tmp.reserve(count);
 
-    for (int32 i = 0; i < count; ++i)
+    for (int i = 0; i < count; ++i)
     {
         const auto x = vertices[i].x;
         const auto y = vertices[i].y;
@@ -30,26 +29,43 @@ int main() {
     b2Vec2 gravity(0.0f, -10.0f);
     b2World world(gravity);
 
+    std::vector<p2t::Point*> points_inv;
+    points_inv.push_back(new p2t::Point(700, 100));
+    points_inv.push_back(new p2t::Point(700, 300));
+    points_inv.push_back(new p2t::Point(500, 280));
+    points_inv.push_back(new p2t::Point(300, 300));
+    points_inv.push_back(new p2t::Point(300, 100));
+
     std::vector<p2t::Point*> points;
     points.push_back(new p2t::Point(300, 100));
-    points.push_back(new p2t::Point(450, 150));
-    points.push_back(new p2t::Point(550, 100));
-    points.push_back(new p2t::Point(650, 150));
+    points.push_back(new p2t::Point(300, 300));
+    points.push_back(new p2t::Point(500, 280));
     points.push_back(new p2t::Point(700, 300));
-    points.push_back(new p2t::Point(600, 350));
-    points.push_back(new p2t::Point(400, 300));
-    points.push_back(new p2t::Point(100, 350));
-    points.push_back(new p2t::Point(200, 150));
+    points.push_back(new p2t::Point(700, 100));
 
-    auto* cdt = new p2t::CDT(points);
-    cdt->Triangulate();
 
-    std::vector<p2t::Triangle*> triangles = cdt->GetTriangles();
+    std::vector<p2t::Point*> hole_points;
+    hole_points.push_back(new p2t::Point(400, 150));
+    hole_points.push_back(new p2t::Point(400, 250));
+    hole_points.push_back(new p2t::Point(600, 250));
+    hole_points.push_back(new p2t::Point(600, 150));
+
+    std::vector<p2t::Point*> hole2_points;
+    hole2_points.push_back(new p2t::Point(450, 175));
+    hole2_points.push_back(new p2t::Point(450, 225));
+    hole2_points.push_back(new p2t::Point(550, 225));
+    hole2_points.push_back(new p2t::Point(550, 175));
+
+    auto cdt = p2t::CDT(points_inv);
+    auto cdt2 = p2t::CDT(hole2_points);
+    cdt.AddHole(hole_points);
+    cdt.Triangulate();
+    cdt2.Triangulate();
 
 // Don't forget to free the memory allocated for the CDT and its triangles
 
     std::vector<sf::ConvexShape> sf_triangles;
-    for (const auto& triangle : triangles) {
+    for (const auto& triangle : cdt.GetTriangles()) {
         sf::ConvexShape tr;
         tr.setPointCount(3);
         p2t::Point* p1 = triangle->GetPoint(0);
@@ -59,20 +75,32 @@ int main() {
         tr.setPoint(1, {static_cast<float>(p2->x), static_cast<float>(500 - p2->y)});
         tr.setPoint(2, {static_cast<float>(p3->x), static_cast<float>(500 - p3->y)});
         tr.setFillColor(sf::Color(136, 69, 19));
-        //tr.setOutlineThickness(5);
-        //tr.setOutlineColor(sf::Color(61,12,2));
+        tr.setOutlineThickness(5);
+        tr.setOutlineColor(sf::Color(61,12,2));
+        sf_triangles.push_back(tr);
+    }
+    for (const auto& triangle : cdt2.GetTriangles()) {
+        sf::ConvexShape tr;
+        tr.setPointCount(3);
+        p2t::Point* p1 = triangle->GetPoint(0);
+        p2t::Point* p2 = triangle->GetPoint(1);
+        p2t::Point* p3 = triangle->GetPoint(2);
+        tr.setPoint(0, {static_cast<float>(p1->x), static_cast<float>(500 - p1->y)});
+        tr.setPoint(1, {static_cast<float>(p2->x), static_cast<float>(500 - p2->y)});
+        tr.setPoint(2, {static_cast<float>(p3->x), static_cast<float>(500 - p3->y)});
+        tr.setFillColor(sf::Color(136, 69, 19));
+        tr.setOutlineThickness(5);
+        tr.setOutlineColor(sf::Color(61,12,2));
         sf_triangles.push_back(tr);
     }
 
-     delete cdt;
-
     b2ChainShape containing_box_shape;
-    b2Vec2 corners[4];
+    std::vector<b2Vec2> corners(4);
     corners[0] = b2Vec2(0.0f / SCALE, 0.0f / SCALE);
     corners[1] = b2Vec2(0.0f / SCALE, 500.0f / SCALE);
     corners[2] = b2Vec2(1000.0f / SCALE, 500.0f / SCALE);
     corners[3] = b2Vec2(1000.0f / SCALE, 0.0f / SCALE);
-    containing_box_shape.CreateLoop(corners, 4);
+    containing_box_shape.CreateLoop(corners.data(), 4);
 
     b2BodyDef containing_box;
     containing_box.position.Set(0.0f / SCALE, 0.0f / SCALE);
@@ -86,7 +114,7 @@ int main() {
     b2ChainShape ground_box_shape;
     b2Vec2 ground_chain[1000];
     int cnt = 0;
-    for (auto &point : points) {
+    for (auto &point : points_inv) {
         ground_chain[cnt++] = b2Vec2(point->x / SCALE, point->y / SCALE);
     }
     int ground_chain_size = cnt;
@@ -99,6 +127,22 @@ int main() {
     ground_fixture.shape = &ground_box_shape;
     ground_fixture.friction = 1.0f;
     ground_body->CreateFixture(&ground_fixture);
+
+    b2ChainShape ground_box_shape2;
+    b2Vec2 ground_chain2[1000];
+    int cnt2 = 0;
+    for (auto &point : points) {
+        ground_chain2[cnt2++] = b2Vec2(point->x / SCALE, point->y / SCALE);
+    }
+    int ground_chain_size2 = cnt2;
+    ground_box_shape2.CreateLoop(ground_chain2, cnt2);
+
+    b2BodyDef ground_box2;
+    ground_box2.position.Set(0.0f / SCALE, 0.0f / SCALE);
+    b2FixtureDef ground_fixture2;
+    ground_fixture2.shape = &ground_box_shape2;
+    ground_fixture2.friction = 1.0f;
+    ground_body->CreateFixture(&ground_fixture2);
 
 
     b2BodyDef bodyDef;
@@ -212,11 +256,11 @@ int main() {
 
        // window.draw(s_ground);
 
-       for (auto tr : sf_triangles) {
+       for (const auto& tr : sf_triangles) {
            window.draw(tr);
        }
 
-        for (auto b : black_circles) {
+        for (const auto& b : black_circles) {
             window.draw(b);
         }
 
