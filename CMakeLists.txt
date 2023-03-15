@@ -10,14 +10,19 @@ include_directories(${PROJECT_SOURCE_DIR}/libs/box2d/include)
 link_directories(libs/box2d)
 
 add_subdirectory(libs/clipper2)
-add_subdirectory(libs/poly2tri)
+add_subdirectory(libs/polypartition)
+
+include_directories(include)
 
 add_executable(madness-tactical
-        src/main.cpp)
+        src/main.cpp
+        src/Map.cpp
+        src/Explosion.cpp
+        )
 
 target_link_libraries(madness-tactical
         sfml-graphics sfml-system sfml-window
         box2d
         clipper2
-        poly2tri
+        polypartition
         )

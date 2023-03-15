@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 #include <clipper2/clipper.h>
-#include <poly2tri/poly2tri.h>
+#include <polypartition.h>
 #include "Explosion.hpp"
 
 struct Map {
@@ -18,7 +18,6 @@ public:
 
 private:
     b2Body *body;
-    std::vector<b2Fixture *> fixtures;
     std::vector<std::vector<b2Vec2>> chains;
     Clipper2Lib::PathsD paths;
 
