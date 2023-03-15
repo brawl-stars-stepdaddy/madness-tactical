@@ -29,7 +29,6 @@ int main() {
     points.back().emplace_back(9, 1.9);
 
 
-
     points.emplace_back();
     points.back().emplace_back(3, 2);
     points.back().emplace_back(7, 2);
@@ -49,13 +48,13 @@ int main() {
     Map map(&world, points);
 
     std::vector<sf::ConvexShape> sf_triangles = map.get_triangulation();
-    for (auto& triangle : sf_triangles) {
+    for (auto &triangle: sf_triangles) {
         for (int i = 0; i < 3; i++) {
-            triangle.setPoint(i,  {triangle.getPoint(i).x * SCALE, 500 - triangle.getPoint(i).y * SCALE});
+            triangle.setPoint(i, {triangle.getPoint(i).x * SCALE, 500 - triangle.getPoint(i).y * SCALE});
         }
         triangle.setFillColor(sf::Color(136, 69, 19));
         triangle.setOutlineThickness(1);
-        triangle.setOutlineColor(sf::Color(61,12,2));
+        triangle.setOutlineColor(sf::Color(61, 12, 2));
     }
 
     b2BodyDef bodyDef;
@@ -63,10 +62,10 @@ int main() {
     bodyDef.position.Set(5.0f, 3.5f);
 
     Ball ball = Ball();
-    Ball* ball_ptr = &ball;
+    Ball *ball_ptr = &ball;
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(ball_ptr);
 
-    b2Body* body = world.CreateBody(&bodyDef);
+    b2Body *body = world.CreateBody(&bodyDef);
     b2CircleShape dynamicCircle;
     dynamicCircle.m_radius = 0.2f;
     b2FixtureDef fixtureDef;
@@ -103,15 +102,12 @@ int main() {
 
     while (window.isOpen()) {
         sf::Event e{};
-        while (window.pollEvent(e))
-        {
+        while (window.pollEvent(e)) {
             if (e.type == sf::Event::Closed)
                 window.close();
 
-            if (e.type == sf::Event::MouseButtonPressed)
-            {
-                if (e.mouseButton.button == sf::Mouse::Left)
-                {
+            if (e.type == sf::Event::MouseButtonPressed) {
+                if (e.mouseButton.button == sf::Mouse::Left) {
                     auto [x_, y_] = sf::Mouse::getPosition(window);
 
                     float x = static_cast<float>(x_) / SCALE;
@@ -144,20 +140,19 @@ int main() {
         }
 
 
-
         world.Step(timeStep, velocityIterations, positionIterations);
 
         window.clear();
 
-       for (const auto& tr : sf_triangles) {
-           window.draw(tr);
-       }
+        for (const auto &tr: sf_triangles) {
+            window.draw(tr);
+        }
 
-       for (const auto& hole : holes) {
-           window.draw(hole);
-       }
+        for (const auto &hole: holes) {
+            window.draw(hole);
+        }
 
-        for (b2Body* it = world.GetBodyList(); it != nullptr; it = it->GetNext()) {
+        for (b2Body *it = world.GetBodyList(); it != nullptr; it = it->GetNext()) {
             b2Vec2 pos = it->GetPosition();
             float angle = it->GetAngle();
             if (it->GetUserData().pointer == reinterpret_cast<uintptr_t>(ball_ptr)) {
@@ -169,5 +164,4 @@ int main() {
 
         window.display();
     }
-
 }
