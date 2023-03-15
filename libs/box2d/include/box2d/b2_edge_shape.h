@@ -26,7 +26,7 @@
 #include "b2_api.h"
 #include "b2_shape.h"
 
-/// A line segment (edge) shape. These can be connected in chains or loops
+/// A line segment (edge) shape. These can be connected in m_chains or loops
 /// to other edge shapes. Edges created independently are two-sided and do
 /// no provide smooth movement across junctions.
 class B2_API b2EdgeShape : public b2Shape

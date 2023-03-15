@@ -108,10 +108,10 @@ struct B2_API b2FixtureProxy
 	int32 proxyId;
 };
 
-/// A fixture is used to attach a shape to a body for collision detection. A fixture
+/// A fixture is used to attach a shape to a m_body for collision detection. A fixture
 /// inherits its transform from its parent. Fixtures hold additional non-geometric data
 /// such as friction, collision filters, etc.
-/// Fixtures are created via b2Body::CreateFixture.
+/// Fixtures are created via m_body::CreateFixture.
 /// @warning you cannot reuse fixtures.
 class B2_API b2Fixture
 {
@@ -134,7 +134,7 @@ public:
 	bool IsSensor() const;
 
 	/// Set the contact filtering data. This will not update contacts until the next time
-	/// step when either parent body is active and awake.
+	/// step when either parent m_body is active and awake.
 	/// This automatically calls Refilter.
 	void SetFilterData(const b2Filter& filter);
 
@@ -144,12 +144,12 @@ public:
 	/// Call this if you want to establish collision that was previously disabled by b2ContactFilter::ShouldCollide.
 	void Refilter();
 
-	/// Get the parent body of this fixture. This is nullptr if the fixture is not attached.
-	/// @return the parent body.
+	/// Get the parent m_body of this fixture. This is nullptr if the fixture is not attached.
+	/// @return the parent m_body.
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
 
-	/// Get the next fixture in the parent body's fixture list.
+	/// Get the next fixture in the parent m_body's fixture list.
 	/// @return the next shape.
 	b2Fixture* GetNext();
 	const b2Fixture* GetNext() const;
@@ -159,7 +159,7 @@ public:
 	b2FixtureUserData& GetUserData();
 
 	/// Test a point for containment in this fixture.
-	/// @param p a point in world coordinates.
+	/// @param p a point in world m_coordinates.
 	bool TestPoint(const b2Vec2& p) const;
 
 	/// Cast a ray against this shape.
@@ -174,7 +174,7 @@ public:
 	void GetMassData(b2MassData* massData) const;
 
 	/// Set the density of this fixture. This will _not_ automatically adjust the mass
-	/// of the body. You must call b2Body::ResetMassData to update the body's mass.
+	/// of the m_body. You must call m_body::ResetMassData to update the m_body's mass.
 	void SetDensity(float density);
 
 	/// Get the density of this fixture.
@@ -203,7 +203,7 @@ public:
 
 	/// Get the fixture's AABB. This AABB may be enlarge and/or stale.
 	/// If you need a more accurate AABB, compute it using the shape and
-	/// the body transform.
+	/// the m_body transform.
 	const b2AABB& GetAABB(int32 childIndex) const;
 
 	/// Dump this fixture to the log file.
@@ -223,7 +223,7 @@ protected:
 	void Create(b2BlockAllocator* allocator, b2Body* body, const b2FixtureDef* def);
 	void Destroy(b2BlockAllocator* allocator);
 
-	// These support body activation/deactivation.
+	// These support m_body activation/deactivation.
 	void CreateProxies(b2BroadPhase* broadPhase, const b2Transform& xf);
 	void DestroyProxies(b2BroadPhase* broadPhase);
 

@@ -68,7 +68,7 @@
 /// chosen to be numerically significant, but visually insignificant.
 #define b2_angularSlop			(2.0f / 180.0f * b2_pi)
 
-/// The radius of the polygon/edge shape skin. This should not be modified. Making
+/// The m_radius of the polygon/edge shape skin. This should not be modified. Making
 /// this smaller means polygons will have an insufficient buffer for continuous collision.
 /// Making it larger may create artifacts for vertex collision.
 #define b2_polygonRadius		(2.0f * b2_linearSlop)
@@ -90,12 +90,12 @@
 /// prevent overshoot.
 #define b2_maxAngularCorrection		(8.0f / 180.0f * b2_pi)
 
-/// The maximum linear translation of a body per step. This limit is very large and is used
+/// The maximum linear translation of a m_body per step. This limit is very large and is used
 /// to prevent numerical problems. You shouldn't need to adjust this. Meters.
 #define b2_maxTranslation			(2.0f * b2_lengthUnitsPerMeter)
 #define b2_maxTranslationSquared	(b2_maxTranslation * b2_maxTranslation)
 
-/// The maximum angular velocity of a body. This limit is very large and is used
+/// The maximum angular velocity of a m_body. This limit is very large and is used
 /// to prevent numerical problems. You shouldn't need to adjust this.
 #define b2_maxRotation				(0.5f * b2_pi)
 #define b2_maxRotationSquared		(b2_maxRotation * b2_maxRotation)
@@ -109,13 +109,13 @@
 
 // Sleep
 
-/// The time that a body must be still before it will go to sleep.
+/// The time that a m_body must be still before it will go to sleep.
 #define b2_timeToSleep				0.5f
 
-/// A body cannot sleep if its linear velocity is above this tolerance.
+/// A m_body cannot sleep if its linear velocity is above this tolerance.
 #define b2_linearSleepTolerance		(0.01f * b2_lengthUnitsPerMeter)
 
-/// A body cannot sleep if its angular velocity is above this tolerance.
+/// A m_body cannot sleep if its angular velocity is above this tolerance.
 #define b2_angularSleepTolerance	(2.0f / 180.0f * b2_pi)
 
 /// Dump to a file. Only one dump file allowed at a time.

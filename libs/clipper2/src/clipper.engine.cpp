@@ -639,7 +639,7 @@ namespace Clipper2Lib {
                 while (prev_v != v0 && prev_v->pt.y == v0->pt.y)
                     prev_v = prev_v->prev;
                 if (prev_v == v0)
-                    continue; // only open paths can be completely flat
+                    continue; // only open m_paths can be completely flat
                 going_up = prev_v->pt.y > v0->pt.y;
             }
 
@@ -834,7 +834,7 @@ namespace Clipper2Lib {
         //Wind counts refer to polygon regions not edges, so here an edge's WindCnt
         //indicates the higher of the wind counts for the two regions touching the
         //edge. (NB Adjacent regions can only ever have their wind counts differ by
-        //one. Also, open paths have no meaningful wind directions or counts.)
+        //one. Also, open m_paths have no meaningful wind directions or counts.)
 
         Active* e2 = e.prev_in_ael;
         //find the nearest closed path edge of the same PolyType in AEL (heading left)
@@ -948,7 +948,7 @@ namespace Clipper2Lib {
         if (d != 0) return d < 0;
 
         //edges must be collinear to get here
-        //for starting open paths, place them according to
+        //for starting open m_paths, place them according to
         //the direction they're about to turn
         if (!IsMaxima(resident) && (resident.top.y > newcomer.top.y))
         {
@@ -1172,7 +1172,7 @@ namespace Clipper2Lib {
         else
         {
             Active* prevHotEdge = GetPrevHotEdge(e1);
-            //e.windDx is the winding direction of the **input** paths
+            //e.windDx is the winding direction of the **input** m_paths
             //and unrelated to the winding direction of output polygons.
             //Output orientation is determined by e.outrec.frontE which is
             //the ascending edge (see AddLocalMinPoly).
@@ -1606,7 +1606,7 @@ namespace Clipper2Lib {
                 return resultOp;
             }
 
-                //horizontal edges can pass under open paths at a LocMins
+                //horizontal edges can pass under open m_paths at a LocMins
             else if (pt == edge_o->local_min->vertex->pt &&
                      !IsOpenEnd(*edge_o->local_min->vertex))
             {
@@ -2345,7 +2345,7 @@ namespace Clipper2Lib {
         Point64 pt = NextVertex(horzEdge)->pt;
         while (pt.y == horzEdge.top.y)
         {
-            //always trim 180 deg. spikes (in closed paths)
+            //always trim 180 deg. spikes (in closed m_paths)
             //but otherwise break if preserveCollinear = true
             if (preserveCollinear &&
                 ((pt.x < horzEdge.top.x) != (horzEdge.bot.x < horzEdge.top.x)))
@@ -2449,7 +2449,7 @@ namespace Clipper2Lib {
                         pt = NextVertex(horz)->pt;
                         if (is_left_to_right)
                         {
-                            //with open paths we'll only break once past horz's end
+                            //with open m_paths we'll only break once past horz's end
                             if (IsOpen(*e) && !IsSamePolyType(*e, horz) && !IsHotEdge(*e))
                             {
                                 if (TopX(*e, pt.y) > pt.x) break;
@@ -2837,7 +2837,7 @@ namespace Clipper2Lib {
             {
                 // nb: CleanCollinear can add to outrec_list_
                 CleanCollinear(outrec);
-                //closed paths should always return a Positive orientation
+                //closed m_paths should always return a Positive orientation
                 if (BuildPath64(outrec->pts, ReverseSolution, false, path))
                     solutionClosed.emplace_back(std::move(path));
             }
@@ -2941,7 +2941,7 @@ namespace Clipper2Lib {
             else
             {
                 CleanCollinear(outrec);
-                //closed paths should always return a Positive orientation
+                //closed m_paths should always return a Positive orientation
                 if (BuildPathD(outrec->pts, ReverseSolution, false, path, invScale_))
                     solutionClosed.emplace_back(std::move(path));
             }

@@ -6,7 +6,7 @@
 
 struct Entity : SceneNode {
 protected:
-    Body m_body;
+    // Body m_body;
 
 private:
     virtual void update_current(sf::Time delta_time);

@@ -713,7 +713,7 @@ namespace Clipper2Lib
         // A curve has positive orientation [and area] if a region 'R'
         // is on the left when traveling around the outside of 'R'.
         //https://mathworld.wolfram.com/CurveOrientation.html
-        //nb: This statement is premised on using Cartesian coordinates
+        //nb: This statement is premised on using Cartesian m_coordinates
         return Area<T>(poly) >= 0;
     }
 

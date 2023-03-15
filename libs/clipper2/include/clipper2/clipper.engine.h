@@ -119,7 +119,7 @@ namespace Clipper2Lib {
         //AEL: 'active edge list' (Vatti's AET - active edge table)
         //     a linked list of all edges (from left to right) that are present
         //     (or 'active') within the current scanbeam (a horizontal 'beam' that
-        //     sweeps from bottom to top over the paths in the clipping operation).
+        //     sweeps from bottom to top over the m_paths in the clipping operation).
         Active* prev_in_ael = nullptr;
         Active* next_in_ael = nullptr;
         //SEL: 'sorted edge list' (Vatti's ST - sorted table)
@@ -262,7 +262,7 @@ namespace Clipper2Lib {
         ZCallback64 zCallback_ = nullptr;
 		void SetZ(const Active& e1, const Active& e2, Point64& pt);
 #endif
-        void CleanUp();  // unlike Clear, CleanUp preserves added paths
+        void CleanUp();  // unlike Clear, CleanUp preserves added m_paths
         void AddPath(const Path64& path, PathType polytype, bool is_open);
         void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
     public:
@@ -278,10 +278,10 @@ namespace Clipper2Lib {
 
     // PolyPath / PolyTree --------------------------------------------------------
 
-    //PolyTree: is intended as a READ-ONLY data structure for CLOSED paths returned
+    //PolyTree: is intended as a READ-ONLY data structure for CLOSED m_paths returned
     //by clipping operations. While this structure is more complex than the
     //alternative Paths structure, it does preserve path 'ownership' - ie those
-    //paths that contain (or own) other paths. This will be useful to some users.
+    //m_paths that contain (or own) other m_paths. This will be useful to some users.
 
     class PolyPath {
     protected:
@@ -520,7 +520,7 @@ namespace Clipper2Lib {
 			// de-scale (x & y)
 			// temporarily convert integers to their initial float values
 			// this will slow clipping marginally but will make it much easier
-			// to understand the coordinates passed to the callback function
+			// to understand the m_coordinates passed to the callback function
 			PointD tmp = PointD(pt) * invScale_;
 			PointD e1b = PointD(e1bot) * invScale_;
 			PointD e1t = PointD(e1top) * invScale_;

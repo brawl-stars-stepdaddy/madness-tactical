@@ -27,7 +27,7 @@
 #include "b2_joint.h"
 
 /// Weld joint definition. You need to specify local anchor points
-/// where they are attached and the relative body angle. The position
+/// where they are attached and the relative m_body angle. The position
 /// of the anchor points is important for computing the reaction torque.
 struct B2_API b2WeldJointDef : public b2JointDef
 {
@@ -42,9 +42,9 @@ struct B2_API b2WeldJointDef : public b2JointDef
 	}
 
 	/// Initialize the bodies, anchors, reference angle, stiffness, and damping.
-	/// @param bodyA the first body connected by this joint
-	/// @param bodyB the second body connected by this joint
-	/// @param anchor the point of connection in world coordinates
+	/// @param bodyA the first m_body connected by this joint
+	/// @param bodyB the second m_body connected by this joint
+	/// @param anchor the point of connection in world m_coordinates
 	void Initialize(b2Body* bodyA, b2Body* bodyB, const b2Vec2& anchor);
 
 	/// The local anchor point relative to bodyA's origin.

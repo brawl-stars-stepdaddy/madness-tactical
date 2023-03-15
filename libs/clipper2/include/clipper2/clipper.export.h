@@ -13,7 +13,7 @@
 // (std::vector<> etc) into the following data structures:
 //
 // CPath64 (int64_t*) & CPathD (double_t*):
-// Path64 and PathD are converted into arrays of x,y coordinates.
+// Path64 and PathD are converted into arrays of x,y m_coordinates.
 // However in these arrays the first x,y coordinate pair is a
 // counter with 'x' containing the number of following coordinate
 // pairs. ('y' should be 0, with one exception explained below.)
@@ -26,7 +26,7 @@
 // These are arrays of pointers to CPath64 and CPathD where
 // the first pointer is to a 'counter path'. This 'counter
 // path' has a single x,y coord pair with 'y' (not 'x')
-// containing the number of paths that follow. ('x' = 0).
+// containing the number of m_paths that follow. ('x' = 0).
 // _______________________________
 // |counter|path1|path2|...|pathN|
 // |addr0  |addr1|addr2|...|addrN| (*addr0[0]=0; *addr0[1]=N)
@@ -483,7 +483,7 @@ namespace Clipper2Lib {
         // and returns this memory filled with path data
         size_t cnt = pp.size(), cnt2 = cnt;
 
-        // don't allocate space for empty paths
+        // don't allocate space for empty m_paths
         for (size_t i = 0; i < cnt; ++i)
             if (!pp[i].size()) --cnt2;
         if (!cnt2) return nullptr;
@@ -566,7 +566,7 @@ namespace Clipper2Lib {
     inline CPathsD CreateCPathsD(const PathsD& pp)
     {
         size_t cnt = pp.size(), cnt2 = cnt;
-        // don't allocate space for empty paths
+        // don't allocate space for empty m_paths
         for (size_t i = 0; i < cnt; ++i)
             if (!pp[i].size()) --cnt2;
         if (!cnt2) return nullptr;
@@ -656,7 +656,7 @@ namespace Clipper2Lib {
         // allocates memory for *multiple* CPathD, and
         // returns the structure filled with scaled path data
         size_t cnt = pp.size(), cnt2 = cnt;
-        // don't allocate space for empty paths
+        // don't allocate space for empty m_paths
         for (size_t i = 0; i < cnt; ++i)
             if (!pp[i].size()) --cnt2;
         if (!cnt2) return nullptr;

@@ -40,11 +40,11 @@ struct B2_API b2MouseJointDef : public b2JointDef
 	}
 
 	/// The initial world target point. This is assumed
-	/// to coincide with the body anchor initially.
+	/// to coincide with the m_body anchor initially.
 	b2Vec2 target;
 
 	/// The maximum constraint force that can be exerted
-	/// to move the candidate body. Usually you will express
+	/// to move the candidate m_body. Usually you will express
 	/// as some multiple of the weight (multiplier * mass * gravity).
 	float maxForce;
 
@@ -55,7 +55,7 @@ struct B2_API b2MouseJointDef : public b2JointDef
 	float damping;
 };
 
-/// A mouse joint is used to make a point on a body track a
+/// A mouse joint is used to make a point on a m_body track a
 /// specified world point. This a soft constraint with a maximum
 /// force. This allows the constraint to stretch and without
 /// applying huge forces.

@@ -23,7 +23,8 @@ add_executable(madness-tactical
         src/SceneNode.cpp
         src/Unit.cpp
         src/Map.cpp
-        src/Explosion.cpp
+        src/WeaponEffect.cpp
+        src/Character.cpp
 )
 
 target_link_libraries(madness-tactical

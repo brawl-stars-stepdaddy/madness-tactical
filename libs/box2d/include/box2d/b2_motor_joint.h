@@ -60,7 +60,7 @@ struct B2_API b2MotorJointDef : public b2JointDef
 
 /// A motor joint is used to control the relative motion
 /// between two bodies. A typical usage is to control the movement
-/// of a dynamic body with respect to the ground.
+/// of a dynamic m_body with respect to the ground.
 class B2_API b2MotorJoint : public b2Joint
 {
 public:

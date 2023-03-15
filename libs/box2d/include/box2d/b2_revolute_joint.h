@@ -31,10 +31,10 @@
 /// initial configuration can violate the constraint slightly. You also need to
 /// specify the initial relative angle for joint limits. This helps when saving
 /// and loading a game.
-/// The local anchor points are measured from the body's origin
+/// The local anchor points are measured from the m_body's origin
 /// rather than the center of mass because:
 /// 1. you might not know where the center of mass will be.
-/// 2. if you add/remove shapes from a body and recompute the mass,
+/// 2. if you add/remove shapes from a m_body and recompute the mass,
 ///    the joints will be broken.
 struct B2_API b2RevoluteJointDef : public b2JointDef
 {

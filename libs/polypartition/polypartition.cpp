@@ -1711,7 +1711,7 @@ int TPPLPartition::TriangulateMonotone(TPPLPoly *inPoly, TPPLPolyList *triangles
   char *vertextypes = new char[numpoints];
   long *priority = new long[numpoints];
 
-  // Merge left and right vertex chains.
+  // Merge left and right vertex m_chains.
   priority[0] = topindex;
   vertextypes[topindex] = 0;
   leftindex = topindex + 1;

@@ -82,8 +82,8 @@ struct B2_API b2ManifoldPoint
 
 /// A manifold for two touching convex shapes.
 /// Box2D supports multiple types of contact:
-/// - clip point versus plane with radius
-/// - point versus point with radius (circles)
+/// - clip point versus plane with m_radius
+/// - point versus point with m_radius (circles)
 /// The local point usage depends on the manifold type:
 /// -e_circles: the local center of circleA
 /// -e_faceA: the center of faceA

@@ -56,16 +56,16 @@ struct B2_API b2Jacobian
 };
 
 /// A joint edge is used to connect bodies and joints together
-/// in a joint graph where each body is a node and each joint
+/// in a joint graph where each m_body is a node and each joint
 /// is an edge. A joint edge belongs to a doubly linked list
-/// maintained in each attached body. Each joint has two joint
-/// nodes, one for each attached body.
+/// maintained in each attached m_body. Each joint has two joint
+/// nodes, one for each attached m_body.
 struct B2_API b2JointEdge
 {
-	b2Body* other;			///< provides quick access to the other body attached.
+	b2Body* other;			///< provides quick access to the other m_body attached.
 	b2Joint* joint;			///< the joint
-	b2JointEdge* prev;		///< the previous joint edge in the body's joint list
-	b2JointEdge* next;		///< the next joint edge in the body's joint list
+	b2JointEdge* prev;		///< the previous joint edge in the m_body's joint list
+	b2JointEdge* next;		///< the next joint edge in the m_body's joint list
 };
 
 /// Joint definitions are used to construct joints.
@@ -85,10 +85,10 @@ struct B2_API b2JointDef
 	/// Use this to attach application specific data to your joints.
 	b2JointUserData userData;
 
-	/// The first attached body.
+	/// The first attached m_body.
 	b2Body* bodyA;
 
-	/// The second attached body.
+	/// The second attached m_body.
 	b2Body* bodyB;
 
 	/// Set this flag to true if the attached bodies should collide.
@@ -114,16 +114,16 @@ public:
 	/// Get the type of the concrete joint.
 	b2JointType GetType() const;
 
-	/// Get the first body attached to this joint.
+	/// Get the first m_body attached to this joint.
 	b2Body* GetBodyA();
 
-	/// Get the second body attached to this joint.
+	/// Get the second m_body attached to this joint.
 	b2Body* GetBodyB();
 
-	/// Get the anchor point on bodyA in world coordinates.
+	/// Get the anchor point on bodyA in world m_coordinates.
 	virtual b2Vec2 GetAnchorA() const = 0;
 
-	/// Get the anchor point on bodyB in world coordinates.
+	/// Get the anchor point on bodyB in world m_coordinates.
 	virtual b2Vec2 GetAnchorB() const = 0;
 
 	/// Get the reaction force on bodyB at the joint anchor in Newtons.
@@ -139,7 +139,7 @@ public:
 	/// Get the user data pointer.
 	b2JointUserData& GetUserData();
 
-	/// Short-cut function to determine if either body is enabled.
+	/// Short-cut function to determine if either m_body is enabled.
 	bool IsEnabled() const;
 
 	/// Get collide connected.
@@ -150,7 +150,7 @@ public:
 	/// Dump this joint to the log file.
 	virtual void Dump() { b2Dump("// Dump is not supported for this joint type.\n"); }
 
-	/// Shift the origin for any points stored in world coordinates.
+	/// Shift the origin for any points stored in world m_coordinates.
 	virtual void ShiftOrigin(const b2Vec2& newOrigin) { B2_NOT_USED(newOrigin);  }
 
 	/// Debug draw this joint

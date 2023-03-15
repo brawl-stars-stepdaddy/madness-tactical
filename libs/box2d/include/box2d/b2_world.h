@@ -71,12 +71,12 @@ public:
 	/// by you and must remain in scope.
 	void SetDebugDraw(b2Draw* debugDraw);
 
-	/// Create a rigid body given a definition. No reference to the definition
+	/// Create a rigid m_body given a definition. No reference to the definition
 	/// is retained.
 	/// @warning This function is locked during callbacks.
 	b2Body* CreateBody(const b2BodyDef* def);
 
-	/// Destroy a rigid body given a definition. No reference to the definition
+	/// Destroy a rigid m_body given a definition. No reference to the definition
 	/// is retained. This function is locked during callbacks.
 	/// @warning This automatically deletes all associated shapes and joints.
 	/// @warning This function is locked during callbacks.
@@ -126,9 +126,9 @@ public:
 	/// @param point2 the ray ending point
 	void RayCast(b2RayCastCallback* callback, const b2Vec2& point1, const b2Vec2& point2) const;
 
-	/// Get the world body list. With the returned body, use b2Body::GetNext to get
-	/// the next body in the world list. A nullptr body indicates the end of the list.
-	/// @return the head of the world body list.
+	/// Get the world m_body list. With the returned m_body, use m_body::GetNext to get
+	/// the next m_body in the world list. A nullptr m_body indicates the end of the list.
+	/// @return the head of the world m_body list.
 	b2Body* GetBodyList();
 	const b2Body* GetBodyList() const;
 
@@ -200,7 +200,7 @@ public:
 	bool GetAutoClearForces() const;
 
 	/// Shift the world origin. Useful for large worlds.
-	/// The body shift formula is: position -= newOrigin
+	/// The m_body shift formula is: position -= newOrigin
 	/// @param newOrigin the new origin with respect to the old origin
 	void ShiftOrigin(const b2Vec2& newOrigin);
 

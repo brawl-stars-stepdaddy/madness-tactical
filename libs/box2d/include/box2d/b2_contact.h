@@ -70,16 +70,16 @@ struct B2_API b2ContactRegister
 };
 
 /// A contact edge is used to connect bodies and contacts together
-/// in a contact graph where each body is a node and each contact
+/// in a contact graph where each m_body is a node and each contact
 /// is an edge. A contact edge belongs to a doubly linked list
-/// maintained in each attached body. Each contact has two contact
-/// nodes, one for each attached body.
+/// maintained in each attached m_body. Each contact has two contact
+/// nodes, one for each attached m_body.
 struct B2_API b2ContactEdge
 {
-	b2Body* other;			///< provides quick access to the other body attached.
+	b2Body* other;			///< provides quick access to the other m_body attached.
 	b2Contact* contact;		///< the contact
-	b2ContactEdge* prev;	///< the previous contact edge in the body's contact list
-	b2ContactEdge* next;	///< the next contact edge in the body's contact list
+	b2ContactEdge* prev;	///< the previous contact edge in the m_body's contact list
+	b2ContactEdge* next;	///< the next contact edge in the m_body's contact list
 };
 
 /// The class manages contact between two shapes. A contact exists for each overlapping

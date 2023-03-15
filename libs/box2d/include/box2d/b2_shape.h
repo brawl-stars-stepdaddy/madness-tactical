@@ -72,7 +72,7 @@ public:
 
 	/// Test a point for containment in this shape. This only works for convex shapes.
 	/// @param xf the shape world transform.
-	/// @param p a point in world coordinates.
+	/// @param p a point in world m_coordinates.
 	virtual bool TestPoint(const b2Transform& xf, const b2Vec2& p) const = 0;
 
 	/// Cast a ray against a child shape.

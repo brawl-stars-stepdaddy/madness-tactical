@@ -55,8 +55,8 @@ public:
 	/// Build vertices to represent an oriented box.
 	/// @param hx the half-width.
 	/// @param hy the half-height.
-	/// @param center the center of the box in local coordinates.
-	/// @param angle the rotation of the box in local coordinates.
+	/// @param center the center of the box in local m_coordinates.
+	/// @param angle the rotation of the box in local m_coordinates.
 	void SetAsBox(float hx, float hy, const b2Vec2& center, float angle);
 
 	/// @see b2Shape::TestPoint

@@ -54,7 +54,7 @@
 
 // User data
 
-/// You can define this to inject whatever data you want in b2Body
+/// You can define this to inject whatever data you want in m_body
 struct B2_API b2BodyUserData
 {
 	b2BodyUserData()

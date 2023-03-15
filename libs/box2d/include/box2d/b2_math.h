@@ -43,13 +43,13 @@ struct B2_API b2Vec2
 	/// Default constructor does nothing (for performance).
 	b2Vec2() {}
 
-	/// Construct using coordinates.
+	/// Construct using m_coordinates.
 	b2Vec2(float xIn, float yIn) : x(xIn), y(yIn) {}
 
 	/// Set this vector to all zeros.
 	void SetZero() { x = 0.0f; y = 0.0f; }
 
-	/// Set this vector to some specified coordinates.
+	/// Set this vector to some specified m_coordinates.
 	void Set(float x_, float y_) { x = x_; y = y_; }
 
 	/// Negate this vector.
@@ -113,7 +113,7 @@ struct B2_API b2Vec2
 		return length;
 	}
 
-	/// Does this vector contain finite coordinates?
+	/// Does this vector contain finite m_coordinates?
 	bool IsValid() const
 	{
 		return b2IsValid(x) && b2IsValid(y);
@@ -134,13 +134,13 @@ struct B2_API b2Vec3
 	/// Default constructor does nothing (for performance).
 	b2Vec3() {}
 
-	/// Construct using coordinates.
+	/// Construct using m_coordinates.
 	b2Vec3(float xIn, float yIn, float zIn) : x(xIn), y(yIn), z(zIn) {}
 
 	/// Set this vector to all zeros.
 	void SetZero() { x = 0.0f; y = 0.0f; z = 0.0f; }
 
-	/// Set this vector to some specified coordinates.
+	/// Set this vector to some specified m_coordinates.
 	void Set(float x_, float y_, float z_) { x = x_; y = y_; z = z_; }
 
 	/// Negate this vector.
@@ -361,8 +361,8 @@ struct B2_API b2Transform
 	b2Rot q;
 };
 
-/// This describes the motion of a body/shape for TOI computation.
-/// Shapes are defined with respect to the body origin, which may
+/// This describes the motion of a m_body/shape for TOI computation.
+/// Shapes are defined with respect to the m_body origin, which may
 /// no coincide with the center of mass. However, to support dynamics
 /// we must interpolate the center of mass position.
 struct B2_API b2Sweep

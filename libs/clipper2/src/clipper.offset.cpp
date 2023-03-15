@@ -498,7 +498,7 @@ namespace Clipper2Lib {
                 continue;
 
             group.path.clear();
-            if (cnt == 1) // single point - only valid with open paths
+            if (cnt == 1) // single point - only valid with open m_paths
             {
                 if (group_delta_ < 1) continue;
                 //single vertex so build a circle or square ...

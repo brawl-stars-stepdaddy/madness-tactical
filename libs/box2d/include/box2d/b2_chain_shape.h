@@ -49,7 +49,7 @@ public:
 	/// @param count the vertex count
 	void CreateLoop(const b2Vec2* vertices, int32 count);
 
-	/// Create a chain with ghost vertices to connect multiple chains together.
+	/// Create a chain with ghost vertices to connect multiple m_chains together.
 	/// @param vertices an array of vertices, these are copied
 	/// @param count the vertex count
 	/// @param prevVertex previous vertex from chain that connects to the start

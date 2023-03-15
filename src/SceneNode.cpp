@@ -21,7 +21,7 @@ SceneNode::Ptr SceneNode::detach_child(const SceneNode &node) {
     return res;
 }
 
-void SceneNode::draw(sf::RenderWindow &target, sf::RenderStates states) const {
+void SceneNode::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= m_relative_transform.getTransform();
     draw_current(target, states);
     for (const Ptr &it : m_children) {

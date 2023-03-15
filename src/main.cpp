@@ -1,7 +1,8 @@
 #include "box2d/box2d.h"
 #include "SFML/Graphics.hpp"
 #include "Map.hpp"
-#include "Explosion.hpp"
+#include "Character.hpp"
+#include "WeaponEffect.hpp"
 
 const float SCALE = 100.f;
 const float DEG  =  -57.29577f;
@@ -14,21 +15,6 @@ int main() {
 
     std::vector<std::vector<std::pair<float, float>>> points;
 
-
-    points.emplace_back();
-    points.back().emplace_back(0, 0);
-    points.back().emplace_back(10, 0);
-    points.back().emplace_back(10, 5);
-    points.back().emplace_back(0, 5);
-
-
-    points.emplace_back();
-    points.back().emplace_back(1, 1.9);
-    points.back().emplace_back(1, 4);
-    points.back().emplace_back(9, 4);
-    points.back().emplace_back(9, 1.9);
-
-
     points.emplace_back();
     points.back().emplace_back(3, 2);
     points.back().emplace_back(7, 2);
@@ -37,17 +23,10 @@ int main() {
     points.back().emplace_back(4, 3);
     points.back().emplace_back(3, 3);
 
-    points.emplace_back();
-    points.back().emplace_back(6, 2.75);
-    points.back().emplace_back(6.5, 2.75);
-    points.back().emplace_back(6.5, 2.25);
-    points.back().emplace_back(3.5, 2.25);
-    points.back().emplace_back(3.5, 2.75);
-    points.back().emplace_back(4, 2.75);
 
-    Map map(&world, points);
+    auto map = std::make_unique<Map>(&world, points);
 
-    std::vector<sf::ConvexShape> sf_triangles = map.get_triangulation();
+    std::vector<sf::ConvexShape> sf_triangles = map->get_triangulation();
     for (auto &triangle: sf_triangles) {
         for (int i = 0; i < 3; i++) {
             triangle.setPoint(i, {triangle.getPoint(i).x * SCALE, 500 - triangle.getPoint(i).y * SCALE});
@@ -57,6 +36,10 @@ int main() {
         triangle.setOutlineColor(sf::Color(61, 12, 2));
     }
 
+    auto worm = std::make_unique<Character>(&world, 500, 800);
+
+
+    /*
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(5.0f, 3.5f);
@@ -65,7 +48,7 @@ int main() {
     Ball *ball_ptr = &ball;
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(ball_ptr);
 
-    b2Body *body = world.CreateBody(&bodyDef);
+    m_body *m_body = world.CreateBody(&bodyDef);
     b2CircleShape dynamicCircle;
     dynamicCircle.m_radius = 0.2f;
     b2FixtureDef fixtureDef;
@@ -73,7 +56,8 @@ int main() {
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 1.0f;
     fixtureDef.restitution = 0.5f;
-    body->CreateFixture(&fixtureDef);
+    m_body->CreateFixture(&fixtureDef);
+     */
 
     float timeStep = 1.0f / 60.0f;
     int32 velocityIterations = 6;
@@ -82,14 +66,14 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(1000, 500), "Physics Test");
     window.setFramerateLimit(60);
 
-    sf::Texture football_texture;
-    football_texture.loadFromFile("../assets/football.jpg");
-    football_texture.setSmooth(true);
-
-    sf::CircleShape s_circle(20);
-    s_circle.setTexture(&football_texture);
-    s_circle.setOrigin(20, 20);
-    s_circle.setPosition(500, 150);
+//    sf::Texture football_texture;
+//    football_texture.loadFromFile("../assets/football.jpg");
+//    football_texture.setSmooth(true);
+//
+//    sf::CircleShape s_circle(20);
+//    s_circle.setTexture(&football_texture);
+//    s_circle.setOrigin(20, 20);
+//    s_circle.setPosition(500, 150);
 
 /*    sf::RectangleShape s_ground({500, 100});
     s_ground.setFillColor(sf::Color(136, 69, 19));
@@ -99,6 +83,13 @@ int main() {
     s_ground.setPosition(500, 250);*/
 
     std::vector<sf::CircleShape> holes;
+
+    auto map_ptr = map.get();
+    auto worm_ptr = worm.get();
+
+    auto scene_node = std::make_unique<SceneNode>();
+    scene_node->attach_child(std::move(map));
+    scene_node->attach_child(std::move(worm));
 
     while (window.isOpen()) {
         sf::Event e{};
@@ -113,8 +104,10 @@ int main() {
                     float x = static_cast<float>(x_) / SCALE;
                     float y = static_cast<float>(500 - y_) / SCALE;
 
-                    Explosion explosion({x, y}, 0.5);
-                    map.apply_explosion(explosion);
+                    WeaponEffect explosion({x, y}, 0.5, WeaponEffect::WeaponEffectType::Explosion);
+                    map_ptr->apply_weapon_effect(explosion);
+                    worm_ptr->apply_weapon_effect(explosion);
+
 
                     sf::CircleShape new_hole;
                     new_hole.setRadius(50);
@@ -125,20 +118,6 @@ int main() {
                 }
             }
         }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            body->ApplyForceToCenter(b2Vec2(3, 0), true);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            body->ApplyForceToCenter(b2Vec2(-3, 0), true);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            body->ApplyForceToCenter(b2Vec2(0, 3), true);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            body->ApplyForceToCenter(b2Vec2(0, -3), true);
-        }
-
 
         world.Step(timeStep, velocityIterations, positionIterations);
 

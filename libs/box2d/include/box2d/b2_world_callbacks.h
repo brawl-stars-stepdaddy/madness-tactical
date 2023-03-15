@@ -36,7 +36,7 @@ struct b2ContactResult;
 struct b2Manifold;
 
 /// Joints and fixtures are destroyed when their associated
-/// body is destroyed. Implement this listener so that you
+/// m_body is destroyed. Implement this listener so that you
 /// may nullify references to these joints and shapes.
 class B2_API b2DestructionListener
 {
@@ -48,7 +48,7 @@ public:
 	virtual void SayGoodbye(b2Joint* joint) = 0;
 
 	/// Called when any fixture is about to be destroyed due
-	/// to the destruction of its parent body.
+	/// to the destruction of its parent m_body.
 	virtual void SayGoodbye(b2Fixture* fixture) = 0;
 };
 
@@ -65,7 +65,7 @@ public:
 };
 
 /// Contact impulses for reporting. Impulses are used instead of forces because
-/// sub-step forces may approach infinity for rigid body collisions. These
+/// sub-step forces may approach infinity for rigid m_body collisions. These
 /// match up one-to-one with the contact points in b2Manifold.
 struct B2_API b2ContactImpulse
 {

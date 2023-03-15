@@ -29,7 +29,7 @@
 const float b2_minPulleyLength = 2.0f;
 
 /// Pulley joint definition. This requires two ground anchors,
-/// two dynamic body anchor points, and a pulley ratio.
+/// two dynamic m_body anchor points, and a pulley ratio.
 struct B2_API b2PulleyJointDef : public b2JointDef
 {
 	b2PulleyJointDef()
@@ -51,10 +51,10 @@ struct B2_API b2PulleyJointDef : public b2JointDef
 					const b2Vec2& anchorA, const b2Vec2& anchorB,
 					float ratio);
 
-	/// The first ground anchor in world coordinates. This point never moves.
+	/// The first ground anchor in world m_coordinates. This point never moves.
 	b2Vec2 groundAnchorA;
 
-	/// The second ground anchor in world coordinates. This point never moves.
+	/// The second ground anchor in world m_coordinates. This point never moves.
 	b2Vec2 groundAnchorB;
 
 	/// The local anchor point relative to bodyA's origin.
