@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_EXPLOSION_HPP
-#define MADNESS_TACTICAL_EXPLOSION_HPP
+#ifndef EXPLOSION_HPP_
+#define EXPLOSION_HPP_
 
 #include <box2d/box2d.h>
 
@@ -14,4 +14,4 @@ private:
     float radius;
 };
 
-#endif //MADNESS_TACTICAL_EXPLOSION_HPP
+#endif

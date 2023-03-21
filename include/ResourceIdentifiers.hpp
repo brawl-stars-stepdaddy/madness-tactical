@@ -2,18 +2,20 @@
 #define RESOURCE_IDENTIFIERS_HPP_
 
 namespace sf {
-    class Texture;
+class Texture;
 }
 
 enum class TexturesID {
     SUN,
     DIRT,
     ENGINEER,
+    BACKGROUND,
+    HALO,
 };
 
 template <typename Resource, typename Identifier>
 struct ResourceHolder;
 
-typedef ResourceHolder<TexturesID, sf::Texture> TextureHolder;
+using TextureHolder = ResourceHolder<TexturesID, sf::Texture>;
 
 #endif

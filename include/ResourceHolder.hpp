@@ -1,28 +1,36 @@
 #ifndef RESOURCE_HOLDER_HPP_
 #define RESOURCE_HOLDER_HPP_
 
-#include <stdexcept>
-#include <memory>
-#include <map>
-#include <string>
 #include <cassert>
+#include <map>
+#include <memory>
+#include <stdexcept>
+#include <string>
 
-template<typename Identifier, typename Resource>
+template <typename Identifier, typename Resource>
 struct ResourceHolder {
 public:
     void load(Identifier id, const std::string &filename) {
         std::unique_ptr<Resource> resource(new Resource());
         if (!resource->loadFromFile(filename)) {
-            throw std::runtime_error("ResourceHolder::load - failed to load " + filename);
+            throw std::runtime_error(
+                "ResourceHolder::load - failed to load " + filename
+            );
         }
         insert_resource(id, std::move(resource));
     }
 
-    template<typename Parameter>
-    void load(Identifier id, const std::string &filename, const Parameter &second_parameter) {
+    template <typename Parameter>
+    void load(
+        Identifier id,
+        const std::string &filename,
+        const Parameter &second_parameter
+    ) {
         std::unique_ptr<Resource> resource(new Resource());
         if (!resource->loadFromFile(filename, second_parameter)) {
-            throw std::runtime_error("ResourceHolder::load - failed to load " + filename);
+            throw std::runtime_error(
+                "ResourceHolder::load - failed to load " + filename
+            );
         }
         insert_resource(id, std::move(resource));
     }
