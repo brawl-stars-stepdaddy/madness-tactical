@@ -25,6 +25,7 @@ add_executable(madness-tactical
         src/Map.cpp
         src/WeaponEffect.cpp
         src/Character.cpp
+        src/MapBody.cpp
 )
 
 target_link_libraries(madness-tactical
