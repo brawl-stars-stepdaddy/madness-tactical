@@ -26,7 +26,7 @@ int main() {
 
     auto map = std::make_unique<Map>(&world, points);
 
-    std::vector<sf::ConvexShape> sf_triangles = map->get_triangulation();
+    std::vector<sf::ConvexShape> sf_triangles = map->get_body().get_triangulation();
     for (auto &triangle: sf_triangles) {
         for (int i = 0; i < 3; i++) {
             triangle.setPoint(i, {triangle.getPoint(i).x * SCALE, 500 - triangle.getPoint(i).y * SCALE});
@@ -143,4 +143,12 @@ int main() {
 
         window.display();
     }
+/*
+#include "PhysicsTest.hpp"
+#include "Game.hpp"
+
+int main() {
+    Game().run();
+    return 0;
+*/
 }

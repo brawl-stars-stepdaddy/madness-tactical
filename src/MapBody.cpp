@@ -1,10 +1,10 @@
 #include <polypartition.h>
 #include "MapBody.hpp"
 
-MapBody::MapBody(b2World *world, const std::vector<std::vector<std::pair<float, float>>> &chains_) {
+MapBody::MapBody(b2World &world, const std::vector<std::vector<std::pair<float, float>>> &chains_) {
     b2BodyDef map_def;
     map_def.position.Set(0.0f, 0.0f);
-    m_body = world->CreateBody(&map_def);
+    m_body = world.CreateBody(&map_def);
 
     b2ChainShape map_shape;
     b2FixtureDef map_fixture;
@@ -26,6 +26,14 @@ MapBody::MapBody(b2World *world, const std::vector<std::vector<std::pair<float, 
         map_fixture.shape = &map_shape;
         m_body->CreateFixture(&map_fixture);
     }
+}
+
+sf::Vector2f MapBody::get_position() {
+    return {0, 0};
+}
+
+float MapBody::get_rotation() {
+    return 0;
 }
 
 [[nodiscard]] std::vector<sf::ConvexShape> MapBody::get_triangulation() const {
@@ -95,4 +103,3 @@ void MapBody::apply_weapon_effect(const WeaponEffect &weapon_effect) {
         m_body->CreateFixture(&map_fixture);
     }
 }
-

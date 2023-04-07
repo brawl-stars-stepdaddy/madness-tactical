@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpolypartition.a CMakeFiles/polypartition.dir/polypartition.cpp.o
+/usr/bin/ranlib libpolypartition.a

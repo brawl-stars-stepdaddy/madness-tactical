@@ -2,15 +2,12 @@
 #define BODY_HPP_
 
 #include <SFML/Graphics.hpp>
+#include "box2d/box2d.h"
 
 struct Body {
 public:
-    sf::Vector2f get_position();
-    float get_rotation();
-
-private:
-    sf::Vector2f m_position = {0, 0};
-    float m_rotation = 0;
+    virtual sf::Vector2f get_position() = 0;
+    virtual float get_rotation() = 0;
 };
 
 #endif

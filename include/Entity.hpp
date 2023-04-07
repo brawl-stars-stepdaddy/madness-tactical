@@ -1,15 +1,14 @@
 #ifndef ENTITY_HPP_
 #define ENTITY_HPP_
 
-#include "SceneNode.hpp"
 #include "Body.hpp"
+#include "SceneNode.hpp"
 
 struct Entity : SceneNode {
-protected:
-    // Body m_body;
-
+public:
+    virtual Body &get_body() = 0;
 private:
-    virtual void update_current(sf::Time delta_time);
+    void update_current(sf::Time delta_time) override;
 };
 
 #endif

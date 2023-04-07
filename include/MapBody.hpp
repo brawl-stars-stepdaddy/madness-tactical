@@ -9,11 +9,14 @@
 
 struct MapBody : Body {
 public:
-    explicit MapBody(b2World *, const std::vector<std::vector<std::pair<float, float>>> &);
+    explicit MapBody(b2World &, const std::vector<std::vector<std::pair<float, float>>> &);
 
     [[nodiscard]] std::vector<sf::ConvexShape> get_triangulation() const;
 
     void apply_weapon_effect(const WeaponEffect &);
+
+    sf::Vector2f get_position() override;
+    float get_rotation() override;
 private:
     b2Body *m_body;
     std::vector<std::vector<b2Vec2>> m_chains;
