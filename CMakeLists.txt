@@ -16,17 +16,22 @@ add_subdirectory(libs/polypartition)
 include_directories(include)
 
 add_executable(madness-tactical
-        src/main.cpp
-        src/Game.cpp
         src/Body.cpp
+        src/CircleBody.cpp
         src/Entity.cpp
-        src/SceneNode.cpp
-        src/Unit.cpp
-        src/Map.cpp
+        src/EventManager.cpp
         src/Explosion.cpp
-        src/World.cpp
-        src/SpriteNode.cpp
+        src/ExplosionEventData.cpp
+        src/ExplosionEventListener.cpp
+        src/Game.cpp
+        src/main.cpp
+        src/Map.cpp
+        src/MapBody.cpp
         src/RectBody.cpp
+        src/SceneNode.cpp
+        src/SpriteNode.cpp
+        src/Unit.cpp
+        src/World.cpp
 )
 
 target_link_libraries(madness-tactical
