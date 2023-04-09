@@ -2,9 +2,7 @@
 #include <cmath>
 
 Game::Game()
-    : m_window(sf::VideoMode(1080, 1080), "SFML test"),
-      m_world(m_window)
-      {
+    : m_window(sf::VideoMode(1080, 1080), "SFML test"), m_world(m_window) {
     m_statistics_font.loadFromFile("res/Sansation.ttf");
     m_statistics_text.setFont(m_statistics_font);
     m_statistics_text.setPosition(5.f, 5.f);
@@ -36,7 +34,6 @@ void Game::run() {
 }
 
 void Game::handle_player_input(sf::Keyboard::Key key, bool is_pressed) {
-
 }
 
 void Game::process_events() {
@@ -76,7 +73,8 @@ void Game::update_statistics(sf::Time delta_time) {
     m_statistics_num_frames += 1;
     if (m_statistics_update_time >= sf::seconds(1)) {
         m_statistics_text.setString(
-                "Frames / Second = " + std::to_string(m_statistics_num_frames));
+            "Frames / Second = " + std::to_string(m_statistics_num_frames)
+        );
 
         m_statistics_update_time -= sf::seconds(1.0f);
         m_statistics_num_frames = 0;

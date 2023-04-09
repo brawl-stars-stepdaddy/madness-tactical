@@ -8,6 +8,7 @@ struct SpriteNode : SceneNode {
 public:
     explicit SpriteNode(const sf::Texture &texture);
     SpriteNode(const sf::Texture &texture, const sf::IntRect &rect);
+
     sf::Sprite get_sprite() {
         return m_sprite;
     }

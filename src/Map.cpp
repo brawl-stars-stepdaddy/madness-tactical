@@ -1,112 +1,61 @@
-#include <Map.hpp>
+#include "Map.hpp"
 
 Map::Map(
-    b2World *world,
+    World &world,
     const std::vector<std::vector<std::pair<float, float>>> &chains_
-) {
-    b2BodyDef map_def;
-    map_def.position.Set(0.0f, 0.0f);
-    body = world->CreateBody(&map_def);
-
-    b2ChainShape map_shape;
-    b2FixtureDef map_fixture;
-    map_fixture.friction = 1.0f;
-
-    for (const auto &chain : chains_) {
-        chains.emplace_back();
-        paths.emplace_back();
-        chains.back().reserve(chain.size());
-        paths.back().reserve(chain.size());
-
-        for (const auto &[x, y] : chain) {
-            paths.back().emplace_back(x, y);
-            chains.back().emplace_back(x, y);
-        }
-
-        map_shape.Clear();
-        map_shape.CreateLoop(
-            chains.back().data(), static_cast<int>(chains.back().size())
-        );
-        map_fixture.shape = &map_shape;
-        body->CreateFixture(&map_fixture);
-    }
-}
-
-[[nodiscard]] std::vector<sf::ConvexShape> Map::get_triangulation() const {
-    std::vector<sf::ConvexShape> sf_triangles;
-
-    TPPLPartition triangulator;
-    TPPLPolyList polygons, triangles;
-
-    for (const auto &chain : chains) {
-        TPPLPoly polygon;
-        polygon.Init(static_cast<long>(chain.size()));
-        for (int i = 0; i < chain.size(); i++) {
-            polygon[i] = {chain[i].x, chain[i].y};
-        }
-        if (polygon.GetOrientation() == TPPLOrientation::TPPL_ORIENTATION_CW) {
-            polygon.SetHole(true);
-        }
-        polygons.push_back(polygon);
-    }
-
-    triangulator.Triangulate_EC(&polygons, &triangles);
-    auto triangles_ = triangles;
-    triangulator.RemoveHoles(&triangles_, &triangles);
-
-    for (const auto &triangle : triangles) {
-        sf::ConvexShape sf_triangle;
-        sf_triangle.setPointCount(3);
-        for (int i = 0; i < 3; i++) {
-            sf_triangle.setPoint(
-                i, {static_cast<float>(triangle[i].x),
-                    static_cast<float>(triangle[i].y)}
+)
+    : m_body(MapBody(world.get_physics_world(), chains_)) {
+    m_sprites = m_body.get_triangulation();
+    for (auto &triangle : m_sprites) {
+        float min_x = triangle.getPoint(0).x * World::SCALE;
+        float min_y = triangle.getPoint(0).y * World::SCALE;
+        float max_x = triangle.getPoint(0).x * World::SCALE;
+        float max_y = triangle.getPoint(0).y * World::SCALE;
+        for (int j = 0; j < triangle.getPointCount(); j++) {
+            triangle.setPoint(
+                j, {triangle.getPoint(j).x * World::SCALE,
+                    triangle.getPoint(j).y * World::SCALE}
             );
+            min_x = std::min(min_x, triangle.getPoint(j).x);
+            min_y = std::min(min_y, triangle.getPoint(j).y);
+            max_x = std::max(max_x, triangle.getPoint(j).x);
+            max_y = std::max(max_y, triangle.getPoint(j).y);
         }
-        sf_triangles.push_back(sf_triangle);
+        triangle.setTextureRect(sf::IntRect(
+            static_cast<int>(min_x), static_cast<int>(min_y),
+            static_cast<int>(max_x - min_x), static_cast<int>(max_y - min_y)
+        ));
+        triangle.setTexture(
+            &world.get_texture_holder().get(TexturesID::MAP_TEXTURE)
+        );
     }
-
-    return sf_triangles;
 }
 
 void Map::apply_explosion(const Explosion &explosion) {
-    auto [x_explosion, y_explosion] = explosion.get_coordinates();
-    float radius = explosion.get_radius();
-
-    Clipper2Lib::PathsD explosion_area({Clipper2Lib::Ellipse<double>(
-        {x_explosion, y_explosion}, radius, radius, 20
-    )});
-    paths = Clipper2Lib::Difference(
-        paths, explosion_area, Clipper2Lib::FillRule::EvenOdd
+    m_body.apply_explosion(explosion);
+    sf::CircleShape circle(explosion.get_radius() * World::SCALE, 20);
+    circle.setOrigin(
+        explosion.get_radius() * World::SCALE,
+        explosion.get_radius() * World::SCALE
     );
+    circle.setPosition(
+        explosion.get_coordinates().first * World::SCALE,
+        explosion.get_coordinates().second * World::SCALE
+    );
+    m_explosions.emplace_back(circle);
+    // TODO: make shaders
+}
 
-    chains.clear();
-    auto fixture = body->GetFixtureList();
-    while (fixture) {
-        auto old_fixture = fixture;
-        fixture = fixture->GetNext();
-        body->DestroyFixture(old_fixture);
+void Map::draw_current(sf::RenderTarget &target, sf::RenderStates states)
+    const {
+    for (const auto &sprite : m_sprites) {
+        target.draw(sprite, states);
     }
-
-    b2ChainShape map_shape;
-    b2FixtureDef map_fixture;
-    map_fixture.friction = 1.0f;
-
-    for (const auto &path : paths) {
-        chains.emplace_back();
-        chains.back().reserve(path.size());
-
-        for (const auto &[x, y] : path) {
-            chains.back().emplace_back(x, y);
-        }
-
-        map_shape.Clear();
-        map_shape.CreateLoop(
-            chains.back().data(), static_cast<int>(chains.back().size())
-        );
-        map_fixture.shape = &map_shape;
-        body->CreateFixture(&map_fixture);
+    for (const auto &sprite : m_explosions) {
+        target.draw(sprite, states);
     }
+}
 
-    // TODO: graphical part
+MapBody &Map::get_body() {
+    return m_body;
 }

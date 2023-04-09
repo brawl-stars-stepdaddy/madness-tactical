@@ -6,7 +6,7 @@
 
 struct Body {
 public:
-    virtual b2Vec2 get_position() = 0;
+    virtual sf::Vector2f get_position() = 0;
     virtual float get_rotation() = 0;
     virtual b2Body *get_b2Body() = 0;
 };

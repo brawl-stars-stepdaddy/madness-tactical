@@ -46,7 +46,7 @@ struct PhysicsTest {
         points.back().emplace_back(3.5, 2.75);
         points.back().emplace_back(4, 2.75);
 
-        Map map(&world, points);
+        Map map(&world, {points});
 
         std::vector<sf::ConvexShape> sf_triangles = map.get_triangulation();
         for (auto &triangle : sf_triangles) {

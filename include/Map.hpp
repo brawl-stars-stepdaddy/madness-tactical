@@ -4,20 +4,27 @@
 #include <box2d/box2d.h>
 #include <clipper2/clipper.h>
 #include <polypartition.h>
-#include <SFML/Graphics.hpp>
-#include <vector>
+#include "Entity.hpp"
 #include "Explosion.hpp"
+#include "MapBody.hpp"
+#include "World.hpp"
 
-struct Map {
+struct World;
+
+struct Map : Entity {
 public:
-    explicit Map(b2World *, const std::vector<std::vector<std::pair<float, float>>> &);
-    [[nodiscard]] std::vector<sf::ConvexShape> get_triangulation() const;
+    explicit Map(World &, const std::vector<std::vector<std::pair<float, float>>> &);
+
     void apply_explosion(const Explosion &);
 
+    void draw_current(sf::RenderTarget &, sf::RenderStates) const override;
+
+    MapBody &get_body() override;
+
 private:
-    b2Body *body;
-    std::vector<std::vector<b2Vec2>> chains;
-    Clipper2Lib::PathsD paths;
+    MapBody m_body;
+    std::vector<sf::ConvexShape> m_sprites;
+    std::vector<sf::CircleShape> m_explosions;
 };
 
 #endif

@@ -4,10 +4,10 @@
 #include "Body.hpp"
 #include "box2d/box2d.h"
 
-struct RectBody : Body {
+struct CircleBody : Body {
 public:
-    RectBody();
-    RectBody(b2World &world, sf::FloatRect);
+    CircleBody();
+    CircleBody(b2World &world, sf::Vector2f center, float radius);
     sf::Vector2f get_position() override;
     float get_rotation() override;
 
@@ -18,7 +18,7 @@ public:
 private:
     b2BodyDef m_body_def;
     b2Body *m_body = nullptr;
-    b2PolygonShape m_polygon_shape;
+    b2CircleShape m_circle_shape;
     b2FixtureDef m_fixture_def;
 };
 

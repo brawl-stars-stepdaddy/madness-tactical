@@ -11,6 +11,8 @@ enum class TexturesID {
     ENGINEER,
     BACKGROUND,
     HALO,
+    MAP_TEXTURE,
+    WORM,
 };
 
 template <typename Resource, typename Identifier>

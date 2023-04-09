@@ -1,4 +1,3 @@
-#include "PhysicsTest.hpp"
 #include "Game.hpp"
 
 int main() {
