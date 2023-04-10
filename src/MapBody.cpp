@@ -2,11 +2,13 @@
 #include <polypartition.h>
 
 MapBody::MapBody(
+    Map *parent,
     b2World &world,
     const std::vector<std::vector<std::pair<float, float>>> &chains_
 ) {
     b2BodyDef map_def;
     map_def.position.Set(0.0f, 0.0f);
+    map_def.userData.pointer = reinterpret_cast<uintptr_t>(parent);
     m_body = world.CreateBody(&map_def);
 
     b2ChainShape map_shape;
@@ -116,8 +118,4 @@ void MapBody::apply_explosion(const Explosion &explosion) {
         map_fixture.shape = &map_shape;
         m_body->CreateFixture(&map_fixture);
     }
-}
-
-b2Body *MapBody::get_b2Body() {
-    return m_body;
 }

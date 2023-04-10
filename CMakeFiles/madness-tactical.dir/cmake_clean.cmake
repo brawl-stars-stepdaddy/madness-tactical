@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/madness-tactical.dir/src/Body.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Body.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/CircleBody.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/CircleBody.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/Entity.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Entity.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/EventManager.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/EventManager.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/Explosion.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Explosion.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/ExplosionEventData.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/ExplosionEventData.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/ExplosionEventListener.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/ExplosionEventListener.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/Game.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Game.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/Map.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Map.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/MapBody.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/MapBody.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/RectBody.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/RectBody.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/SceneNode.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/SceneNode.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/SpriteNode.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/SpriteNode.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/Unit.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/Unit.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/World.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/World.cpp.o.d"
+  "CMakeFiles/madness-tactical.dir/src/main.cpp.o"
+  "CMakeFiles/madness-tactical.dir/src/main.cpp.o.d"
+  "madness-tactical"
+  "madness-tactical.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/madness-tactical.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

@@ -3,6 +3,7 @@
 
 enum class EventType {
     EXPLOSION,
+    COLLISION
 };
 
 #endif

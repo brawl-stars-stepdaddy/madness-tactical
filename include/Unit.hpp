@@ -4,6 +4,7 @@
 #include "CircleBody.hpp"
 #include "Entity.hpp"
 #include "ResourceIdentifiers.hpp"
+#include "UnitBody.hpp"
 #include "World.hpp"
 
 struct Unit : Entity {
@@ -13,10 +14,13 @@ public:
         WORM,
     };
 
-    Unit(std::nullptr_t);
     Unit(Type type, World &world, sf::Vector2f, float);
 
-    CircleBody &get_body() override;
+    UnitBody &get_body() override;
+    EntityType get_type() override;
+
+    void on_collision(Entity *) override;
+    void on_explosion(const Explosion &) override;
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
@@ -26,7 +30,7 @@ private:
 
     sf::Sprite m_sprite;
     Type m_type;
-    CircleBody m_body;
+    UnitBody m_body;
 };
 
 #endif

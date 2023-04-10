@@ -4,22 +4,14 @@
 #include "Body.hpp"
 #include "box2d/box2d.h"
 
+struct Entity;
+
 struct RectBody : Body {
 public:
     RectBody();
-    RectBody(b2World &world, sf::FloatRect);
+    RectBody(Entity *, b2World &world, sf::FloatRect);
     sf::Vector2f get_position() override;
     float get_rotation() override;
-
-    b2Body *get_b2Body() override {
-        return m_body;
-    }
-
-private:
-    b2BodyDef m_body_def;
-    b2Body *m_body = nullptr;
-    b2PolygonShape m_polygon_shape;
-    b2FixtureDef m_fixture_def;
 };
 
 #endif

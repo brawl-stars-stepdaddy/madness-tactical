@@ -7,9 +7,11 @@
 #include "Body.hpp"
 #include "Explosion.hpp"
 
+struct Map;
+
 struct MapBody : Body {
 public:
-    explicit MapBody(b2World &, const std::vector<std::vector<std::pair<float, float>>> &);
+    explicit MapBody(Map *, b2World &, const std::vector<std::vector<std::pair<float, float>>> &);
 
     [[nodiscard]] std::vector<sf::ConvexShape> get_triangulation() const;
 
@@ -17,10 +19,8 @@ public:
 
     sf::Vector2f get_position() override;
     float get_rotation() override;
-    b2Body *get_b2Body() override;
 
 private:
-    b2Body *m_body;
     std::vector<std::vector<b2Vec2>> m_chains;
     Clipper2Lib::PathsD m_paths;
 };

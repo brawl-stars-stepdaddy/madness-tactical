@@ -1,5 +1,5 @@
-#ifndef EXPLOSION_EVENT_LISTENER_HPP
-#define EXPLOSION_EVENT_LISTENER_HPP
+#ifndef EXPLOSION_EVENT_LISTENER_HPP_
+#define EXPLOSION_EVENT_LISTENER_HPP_
 
 #include "EventListener.hpp"
 #include "ExplosionEventData.hpp"
@@ -7,7 +7,7 @@
 
 struct ExplosionEventListener : EventListener {
 public:
-    ExplosionEventListener(World *world);
+    explicit ExplosionEventListener(World *world);
 
     void process(const EventData &event) override;
 
@@ -15,4 +15,4 @@ private:
     World *m_world;
 };
 
-#endif
+#endif // EXPLOSION_EVENT_LISTENER_HPP_

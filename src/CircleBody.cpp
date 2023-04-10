@@ -1,9 +1,10 @@
 #include "CircleBody.hpp"
 
-CircleBody::CircleBody() {
-}
-
 CircleBody::CircleBody(b2World &world, sf::Vector2f center, float radius) {
+    b2BodyDef m_body_def;
+    b2CircleShape m_circle_shape;
+    b2FixtureDef m_fixture_def;
+
     m_body_def.position.Set(center.x, center.y);
     m_body_def.type = b2_dynamicBody;
     m_body = world.CreateBody(&m_body_def);
@@ -12,6 +13,7 @@ CircleBody::CircleBody(b2World &world, sf::Vector2f center, float radius) {
     m_fixture_def.density = 1;
     m_fixture_def.friction = 0.5;
     m_fixture_def.restitution = 0.5;
+
     m_body->CreateFixture(&m_fixture_def);
 }
 
@@ -23,3 +25,4 @@ sf::Vector2f CircleBody::get_position() {
 float CircleBody::get_rotation() {
     return m_body->GetAngle();
 }
+

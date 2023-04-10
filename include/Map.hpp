@@ -15,11 +15,14 @@ struct Map : Entity {
 public:
     explicit Map(World &, const std::vector<std::vector<std::pair<float, float>>> &);
 
-    void apply_explosion(const Explosion &);
-
     void draw_current(sf::RenderTarget &, sf::RenderStates) const override;
 
     MapBody &get_body() override;
+
+    EntityType get_type() override;
+
+    void on_collision(Entity *) override;
+    void on_explosion(const Explosion &) override;
 
 private:
     MapBody m_body;

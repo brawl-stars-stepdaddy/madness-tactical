@@ -3,9 +3,15 @@
 RectBody::RectBody() {
 }
 
-RectBody::RectBody(b2World &world, sf::FloatRect rect) {
+RectBody::RectBody(Entity *parent, b2World &world, sf::FloatRect rect) {
+    b2BodyDef m_body_def;
+    b2PolygonShape m_polygon_shape;
+    b2FixtureDef m_fixture_def;
+
     m_body_def.position.Set(rect.left, rect.top);
     m_body_def.type = b2_dynamicBody;
+    m_body_def.userData.pointer = reinterpret_cast<uintptr_t>(parent);
+
     m_body = world.CreateBody(&m_body_def);
     m_polygon_shape.SetAsBox(rect.width, rect.height);
     m_fixture_def.shape = &m_polygon_shape;

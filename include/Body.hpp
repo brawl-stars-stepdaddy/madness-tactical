@@ -8,7 +8,10 @@ struct Body {
 public:
     virtual sf::Vector2f get_position() = 0;
     virtual float get_rotation() = 0;
-    virtual b2Body *get_b2Body() = 0;
+    b2Body *get_b2Body();
+
+protected:
+    b2Body *m_body = nullptr;
 };
 
 #endif

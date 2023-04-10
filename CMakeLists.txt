@@ -15,23 +15,10 @@ add_subdirectory(libs/polypartition)
 
 include_directories(include)
 
+file(GLOB SOURCES "src/*.cpp")
+
 add_executable(madness-tactical
-        src/Body.cpp
-        src/CircleBody.cpp
-        src/Entity.cpp
-        src/EventManager.cpp
-        src/Explosion.cpp
-        src/ExplosionEventData.cpp
-        src/ExplosionEventListener.cpp
-        src/Game.cpp
-        src/main.cpp
-        src/Map.cpp
-        src/MapBody.cpp
-        src/RectBody.cpp
-        src/SceneNode.cpp
-        src/SpriteNode.cpp
-        src/Unit.cpp
-        src/World.cpp
+        ${SOURCES}
 )
 
 target_link_libraries(madness-tactical

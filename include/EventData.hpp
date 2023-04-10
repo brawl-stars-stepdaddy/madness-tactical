@@ -14,6 +14,8 @@ public:
     // virtual EventData *copy() const = 0;
 
     // virtual std::string get_name() const = 0;
+
+    virtual ~EventData() = default;
 };
 
 #endif
