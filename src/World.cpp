@@ -6,6 +6,7 @@
 #include "Explosion.hpp"
 #include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
+#include "CollisionEventListener.hpp"
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
 
@@ -21,6 +22,9 @@ World::World(sf::RenderWindow &window)
     build_scene();
     EventManager::get()->add_listener(
         std::make_unique<ExplosionEventListener>(this), EventType::EXPLOSION
+    );
+    EventManager::get()->add_listener(
+            std::make_unique<CollisionEventListener>(this), EventType::COLLISION
     );
     EventManager::get()->queue_event(
         std::make_unique<ExplosionEventData>(Explosion({5, 6}, 2))

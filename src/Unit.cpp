@@ -1,6 +1,8 @@
 #include "Unit.hpp"
 #include <iostream>
 #include "ResourceHolder.hpp"
+#include "EventManager.hpp"
+#include "ExplosionEventData.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -47,6 +49,7 @@ EntityType Unit::get_type() {
     return EntityType::UNIT;
 }
 
-void Unit::on_collision(Entity *) {}
+void Unit::on_collision(Entity *) {
+}
 
 void Unit::on_explosion(const Explosion &) {}
