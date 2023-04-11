@@ -1,10 +1,11 @@
 #include "Map.hpp"
 
 Map::Map(
-    World &world,
+    World *world,
     const std::vector<std::vector<std::pair<float, float>>> &chains_
 )
-    : m_body(MapBody(world.get_physics_world(), chains_)) {
+    : m_world(world),
+      m_body(MapBody(world->get_physics_world(), chains_)) {
     m_sprites = m_body.get_triangulation();
     for (auto &triangle : m_sprites) {
         float min_x = triangle.getPoint(0).x * World::SCALE;
@@ -26,7 +27,7 @@ Map::Map(
             static_cast<int>(max_x - min_x), static_cast<int>(max_y - min_y)
         ));
         triangle.setTexture(
-            &world.get_texture_holder().get(TexturesID::MAP_TEXTURE)
+            &world->get_texture_holder().get(TexturesID::MAP_TEXTURE)
         );
     }
 }
@@ -42,6 +43,12 @@ void Map::apply_explosion(const Explosion &explosion) {
         explosion.get_coordinates().first * World::SCALE,
         explosion.get_coordinates().second * World::SCALE
     );
+    sf::FloatRect bounds = circle.getGlobalBounds();
+    circle.setTextureRect(sf::IntRect(
+            static_cast<int>(bounds.left), static_cast<int>(bounds.top),
+            static_cast<int>(bounds.width), static_cast<int>(bounds.height)
+    ));
+    circle.setTexture(&m_world->get_texture_holder().get(TexturesID::BACKGROUND));
     m_explosions.emplace_back(circle);
     // TODO: make shaders
 }

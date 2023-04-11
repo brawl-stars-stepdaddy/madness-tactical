@@ -25,6 +25,9 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->queue_event(
         std::make_unique<ExplosionEventData>(Explosion({5, 6}, 2))
     );
+    EventManager::get()->queue_event(
+            std::make_unique<ExplosionEventData>(Explosion({5, 8}, 1.5))
+    );
 }
 
 void World::load_textures() {
@@ -62,7 +65,7 @@ void World::build_scene() {
     // body->SetLinearVelocity({3, 0});
     // body->SetAngularVelocity(1);
     std::unique_ptr<Map> map = std::make_unique<Map>(
-        *this,
+        this,
         std::vector<std::vector<std::pair<float, float>>>{
             {{0, 5}, {5, 6}, {10, 5}, {10, 10}, {0, 10}}}
     );
