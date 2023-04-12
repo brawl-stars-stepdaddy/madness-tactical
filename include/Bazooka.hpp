@@ -9,7 +9,7 @@ public:
 
     void charge(sf::Time) override;
     void change_angle(sf::Time, float) override;
-    std::unique_ptr<Projectile> launch(World &) override;
+    void launch(World &) override;
 
 protected:
     void reset() override;
@@ -20,7 +20,7 @@ private:
     const override;
 
     float m_angle = 0.0f;
-    float m_charge_level = 0.2f;
+    float m_charge_level = 0.1f;
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;
 

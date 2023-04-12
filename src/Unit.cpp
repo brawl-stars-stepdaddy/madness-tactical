@@ -93,13 +93,13 @@ void Unit::move(sf::Time delta_time, float direction) {
 
 void Unit::jump_forward() {
     if (m_jump_ability) {
-        m_body.get_b2Body()->SetLinearVelocity({m_direction * 2, -5});
+        m_body.get_b2Body()->SetLinearVelocity({m_direction * 4, -5});
     }
 }
 
 void Unit::jump_backward() {
     if (m_jump_ability) {
-        m_body.get_b2Body()->SetLinearVelocity({-m_direction * 2, -5});
+        m_body.get_b2Body()->SetLinearVelocity({-m_direction * 2, -8});
     }
 }
 

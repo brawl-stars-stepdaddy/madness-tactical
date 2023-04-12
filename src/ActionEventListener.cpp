@@ -61,9 +61,6 @@ void BeginChargeWeaponEventListener::process(const EventData &event) {
 
 void LaunchProjectileEventListener::process(const EventData &event) {
     assert(event.get_event_type() == EventType::LAUNCH_PROJECTILE);
-    m_game_logic->get_current_unit()->get_weapon()->set_currently_charging(false);
     auto launch_event = static_cast<const LaunchProjectileEventData &>(event);
-    auto projectile = m_game_logic->get_current_unit()->get_weapon()->launch(*m_game_logic->get_world());
-    m_game_logic->get_world()->get_layer(World::Layer::ENTITIES)
-            ->attach_child(std::move(projectile));
+    m_game_logic->get_current_unit()->get_weapon()->launch(*m_game_logic->get_world());
 }

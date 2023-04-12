@@ -103,6 +103,9 @@ void World::build_scene() {
         std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{1, 1}, 1);
     m_player_engineer = engie.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(engie));
+    std::unique_ptr<Unit> stupid_worm =
+            std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{10, 1}, 1);
+    m_scene_layers[ENTITIES]->attach_child(std::move(stupid_worm));
     std::unique_ptr<SpriteNode> halo =
         std::make_unique<SpriteNode>(m_textures.get(TexturesID::HALO));
     sf::FloatRect bounds = halo->get_sprite().getLocalBounds();

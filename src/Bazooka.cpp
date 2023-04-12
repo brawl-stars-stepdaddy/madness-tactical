@@ -1,6 +1,8 @@
 #include "Bazooka.hpp"
 #include "Unit.hpp"
 #include <cmath>
+#include "EventManager.hpp"
+#include "ActionEventData.hpp"
 #include "World.hpp"
 #include "GuiUtil.hpp"
 
@@ -32,17 +34,18 @@ const {
     target.draw(m_sprite, states);
     if (m_is_charging) {
         int charge_steps = 20;
-        int steps = static_cast<int>(m_charge_level * charge_steps);
+        int steps = static_cast<int>(m_charge_level * (charge_steps - 0.1f));
         sf::Vector2f direction = {
                 cos(m_angle) * m_parent->get_direction(),
                 sin(m_angle)
         };
         for (int i = 0; i < steps; i++) {
-            sf::Vector2f pos = m_parent->get_body().get_position() + direction * (1.f + 2.f * i / charge_steps);
+            sf::Vector2f pos = m_parent->get_body().get_position() + direction * (2.f + 2.f * i / charge_steps);
             sf::CircleShape circle;
-            circle.setPosition(pos * World::SCALE);
             circle.setRadius((0.25f + 0.25f / charge_steps * i) * World::SCALE);
             circle.setFillColor(sf::Color(255, 255.f / charge_steps * i, 0));
+            circle.setOrigin(circle.getRadius(), circle.getRadius());
+            circle.setPosition(pos * World::SCALE);
             target.draw(circle);
         }
     }
@@ -50,23 +53,30 @@ const {
 
 void Bazooka::charge(sf::Time delta_time) {
     m_charge_level = std::min(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
+    if (m_charge_level == 1.0f) {
+        EventManager().get()->queue_event(std::make_unique<LaunchProjectileEventData>());
+    }
 }
 
 void Bazooka::change_angle(sf::Time delta_time, float direction) {
-    m_angle = std::min(M_PI_2f, std::max(-M_PI_2f, m_angle + delta_time.asSeconds() * 0.5f * -direction));
+    m_angle = std::min(M_PI_2f, std::max(-M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction));
 }
 
-std::unique_ptr<Projectile> Bazooka::launch(World &world) {
-    float impulse_value = m_charge_level * 5;
-    m_charge_level = 0.1f;
+void Bazooka::launch(World &world) {
+    if (!m_is_charging) {
+        return;
+    }
+    m_is_charging = false;
+    float impulse_value = m_charge_level * 10;
+    m_charge_level = 0.2f;
     sf::Vector2f start_position = {
-        m_parent->get_body().get_position().x +
+            m_parent->get_body().get_position().x +
             cos(m_angle) * m_parent->get_direction() * 2,
-        m_parent->get_body().get_position().y + sin(m_angle) * 2};
+            m_parent->get_body().get_position().y + sin(m_angle) * 2};
     sf::Vector2f impulse = {
-        cos(m_angle) * m_parent->get_direction() * impulse_value,
-        sin(m_angle) * impulse_value};
-    return std::make_unique<Projectile>(
-        &world, start_position, impulse, m_projectile_radius, m_explosion_radius
-    );
+            cos(m_angle) * m_parent->get_direction() * impulse_value,
+            sin(m_angle) * impulse_value};
+    world.get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<Projectile>(
+            &world, start_position, impulse, m_projectile_radius, m_explosion_radius
+    ));
 }
