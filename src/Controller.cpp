@@ -9,7 +9,7 @@ Controller::Controller() {
     m_key_is_pressed_binding[sf::Keyboard::Right] = EventType::MOVE_RIGHT;
     m_key_is_pressed_binding[sf::Keyboard::Up] = EventType::CHANGE_ANGLE_UP;
     m_key_is_pressed_binding[sf::Keyboard::Down] = EventType::CHANGE_ANGLE_DOWN;
-    m_key_is_pressed_binding[sf::Keyboard::Space] = EventType::CHARGE_WEAPON;
+    m_key_pressed_binding[sf::Keyboard::Space] = EventType::BEGIN_CHARGE_WEAPON;
     m_key_pressed_binding[sf::Keyboard::Enter] = EventType::JUMP_FORWARD;
     m_key_pressed_binding[sf::Keyboard::BackSpace] = EventType::JUMP_BACKWARD;
     m_key_released_binding[sf::Keyboard::Space] = EventType::LAUNCH_PROJECTILE;
@@ -18,7 +18,7 @@ Controller::Controller() {
     m_action_activation_type[EventType::MOVE_RIGHT] = ActionActivationType::ON_KEY_IS_PRESSED;
     m_action_activation_type[EventType::CHANGE_ANGLE_UP] = ActionActivationType::ON_KEY_IS_PRESSED;
     m_action_activation_type[EventType::CHANGE_ANGLE_DOWN] = ActionActivationType::ON_KEY_IS_PRESSED;
-    m_action_activation_type[EventType::CHARGE_WEAPON] = ActionActivationType::ON_KEY_IS_PRESSED;
+    m_action_activation_type[EventType::BEGIN_CHARGE_WEAPON] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_FORWARD] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_BACKWARD] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::LAUNCH_PROJECTILE] = ActionActivationType::ON_KEY_RELEASED;
@@ -27,7 +27,7 @@ Controller::Controller() {
     m_action_binding[EventType::MOVE_RIGHT] = [](){ EventManager::get()->queue_event(std::make_unique<MoveRightEventData>()); };
     m_action_binding[EventType::CHANGE_ANGLE_UP] = [](){ EventManager::get()->queue_event(std::make_unique<ChangeAngleUpEventData>()); };
     m_action_binding[EventType::CHANGE_ANGLE_DOWN] = [](){ EventManager::get()->queue_event(std::make_unique<ChangeAngleDownEventData>()); };
-    m_action_binding[EventType::CHARGE_WEAPON] = [](){ EventManager::get()->queue_event(std::make_unique<ChargeWeaponEventData>()); };
+    m_action_binding[EventType::BEGIN_CHARGE_WEAPON] = [](){ EventManager::get()->queue_event(std::make_unique<BeginChargeWeaponEventData>()); };
     m_action_binding[EventType::JUMP_FORWARD] = [](){ EventManager::get()->queue_event(std::make_unique<JumpForwardEventData>()); };
     m_action_binding[EventType::JUMP_BACKWARD] = [](){ EventManager::get()->queue_event(std::make_unique<JumpBackwardEventData>()); };
     m_action_binding[EventType::LAUNCH_PROJECTILE] = [](){ EventManager::get()->queue_event(std::make_unique<LaunchProjectileEventData>()); };

@@ -68,7 +68,7 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(std::make_unique<ChangeAngleDownEventListener>(&m_game_logic), EventType::CHANGE_ANGLE_DOWN);
     EventManager::get()->add_listener(std::make_unique<JumpForwardEventListener>(&m_game_logic), EventType::JUMP_FORWARD);
     EventManager::get()->add_listener(std::make_unique<JumpBackwardEventListener>(&m_game_logic), EventType::JUMP_BACKWARD);
-    EventManager::get()->add_listener(std::make_unique<ChargeWeaponEventListener>(&m_game_logic), EventType::CHARGE_WEAPON);
+    EventManager::get()->add_listener(std::make_unique<BeginChargeWeaponEventListener>(&m_game_logic), EventType::BEGIN_CHARGE_WEAPON);
     EventManager::get()->add_listener(std::make_unique<LaunchProjectileEventListener>(&m_game_logic),EventType::LAUNCH_PROJECTILE);
 }
 

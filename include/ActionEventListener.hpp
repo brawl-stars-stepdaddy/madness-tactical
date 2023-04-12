@@ -59,9 +59,9 @@ private:
     GameLogic *m_game_logic;
 };
 
-struct ChargeWeaponEventListener : EventListener {
+struct BeginChargeWeaponEventListener : EventListener {
 public:
-    explicit ChargeWeaponEventListener(GameLogic *game_logic);
+    explicit BeginChargeWeaponEventListener(GameLogic *game_logic);
     void process(const EventData &event) override;
 
 private:

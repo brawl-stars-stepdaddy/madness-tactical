@@ -2,11 +2,16 @@
 #include "Unit.hpp"
 #include <cmath>
 #include "World.hpp"
+#include "GuiUtil.hpp"
 
 Bazooka::Bazooka(World *world, Unit *parent) {
     m_parent = parent;
     m_parent->set_weapon(this);
     m_sprite.setTexture(world->get_texture_holder().get(TexturesID::BAZOOKA));
+    sf::FloatRect bounds = m_sprite.getLocalBounds();
+    m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
+    float width = 1, height = 0.6;
+    GuiUtil::shrink_to_rect_scale(m_sprite, width * 2, height * 2);
 }
 
 void Bazooka::reset() {
@@ -25,10 +30,26 @@ void Bazooka::update_current(sf::Time delta_time) {
 void Bazooka::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 const {
     target.draw(m_sprite, states);
+    if (m_is_charging) {
+        int charge_steps = 20;
+        int steps = static_cast<int>(m_charge_level * charge_steps);
+        sf::Vector2f direction = {
+                cos(m_angle) * m_parent->get_direction(),
+                sin(m_angle)
+        };
+        for (int i = 0; i < steps; i++) {
+            sf::Vector2f pos = m_parent->get_body().get_position() + direction * (1.f + 2.f * i / charge_steps);
+            sf::CircleShape circle;
+            circle.setPosition(pos * World::SCALE);
+            circle.setRadius((0.25f + 0.25f / charge_steps * i) * World::SCALE);
+            circle.setFillColor(sf::Color(255, 255.f / charge_steps * i, 0));
+            target.draw(circle);
+        }
+    }
 }
 
 void Bazooka::charge(sf::Time delta_time) {
-    m_charge_level = std::max(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
+    m_charge_level = std::min(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
 }
 
 void Bazooka::change_angle(sf::Time delta_time, float direction) {
@@ -37,7 +58,7 @@ void Bazooka::change_angle(sf::Time delta_time, float direction) {
 
 std::unique_ptr<Projectile> Bazooka::launch(World &world) {
     float impulse_value = m_charge_level * 5;
-    m_charge_level = 0.2f;
+    m_charge_level = 0.1f;
     sf::Vector2f start_position = {
         m_parent->get_body().get_position().x +
             cos(m_angle) * m_parent->get_direction() * 2,

@@ -12,7 +12,7 @@ enum class EventType {
     CHANGE_ANGLE_DOWN,
     JUMP_FORWARD,
     JUMP_BACKWARD,
-    CHARGE_WEAPON,
+    BEGIN_CHARGE_WEAPON,
 };
 
 #endif

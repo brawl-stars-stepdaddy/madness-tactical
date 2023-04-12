@@ -4,6 +4,7 @@
 #include "ExplosionEventData.hpp"
 #include "ResourceHolder.hpp"
 #include "World.hpp"
+#include "GuiUtil.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -22,12 +23,8 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
       m_sprite(world->get_texture_holder().get(to_texture_id(type))),
       m_body(UnitBody(this, world->get_physics_world(), center, radius)),
       m_jump_sensor(JumpSensor(this, world, {center.x, center.y + radius}, radius / 2)) {
-    m_sprite.setScale(
-            radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
-            radius * World::SCALE * 2 / m_sprite.getLocalBounds().height
-    );
-    sf::FloatRect bounds = m_sprite.getLocalBounds();
-    m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
+    GuiUtil::center(m_sprite);
 
     b2WeldJointDef joint_def;
     joint_def.bodyA = m_body.get_b2Body();

@@ -23,5 +23,4 @@ void Weapon::set_currently_charging(bool is_charging) {
 
 void Weapon::reset() {
     m_current_angle_change_direction = 0;
-    m_is_charging = false;
 }

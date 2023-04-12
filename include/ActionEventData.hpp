@@ -47,10 +47,10 @@ public:
     }
 };
 
-struct ChargeWeaponEventData : EventData {
+struct BeginChargeWeaponEventData : EventData {
 public:
     [[nodiscard]] EventType get_event_type() const override {
-        return EventType::CHARGE_WEAPON;
+        return EventType::BEGIN_CHARGE_WEAPON;
     }
 };
 
