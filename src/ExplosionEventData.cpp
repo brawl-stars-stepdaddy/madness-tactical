@@ -1,6 +1,7 @@
 #include "ExplosionEventData.hpp"
 #include <utility>
 
-ExplosionEventData::ExplosionEventData(Explosion explosion)
-    : m_explosion(std::move(explosion)) {
+ExplosionEventData::ExplosionEventData(Explosion explosion, Entity *object)
+    : m_explosion(std::move(explosion)),
+      m_object(object) {
 }

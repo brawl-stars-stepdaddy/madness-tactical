@@ -1,9 +1,8 @@
 #ifndef UNIT_HPP_
 #define UNIT_HPP_
 
-#include "CircleBody.hpp"
+#include "JumpSensor.hpp"
 #include "Entity.hpp"
-#include "ResourceIdentifiers.hpp"
 #include "UnitBody.hpp"
 #include "World.hpp"
 
@@ -30,6 +29,12 @@ public:
     void on_collision(Entity *) override;
     void on_explosion(const Explosion &) override;
 
+    void set_jump_ability(bool);
+
+    void move(sf::Time, float);
+    void jump_forward();
+    void jump_backward();
+
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
         const override;
@@ -41,6 +46,9 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     float m_direction = 1.0f;
+    bool m_jump_ability = true;
+    JumpSensor m_jump_sensor;
 };
+
 
 #endif

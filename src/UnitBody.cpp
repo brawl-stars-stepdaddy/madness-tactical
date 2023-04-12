@@ -14,20 +14,15 @@ UnitBody::UnitBody(
     m_body = world.CreateBody(&unit_def);
 
     b2CircleShape unit_body_shape;
-    b2PolygonShape unit_sensor_shape;
     unit_body_shape.m_radius = radius;
-    unit_sensor_shape.SetAsBox(0.1f, 0.1f, {-2.0f, 0}, 0.0f);
 
-    b2FixtureDef unit_body_fixture, unit_sensor_fixture;
+    b2FixtureDef unit_body_fixture;
     unit_body_fixture.shape = &unit_body_shape;
     unit_body_fixture.density = 1.0f;
-    unit_body_fixture.friction = 1.0f;
-    unit_body_fixture.restitution = 0.5f;
-    unit_sensor_fixture.isSensor = true;
-    unit_sensor_fixture.shape = &unit_sensor_shape;
+    unit_body_fixture.friction = 0.5f;
+    unit_body_fixture.restitution = 0.1f;
 
     m_body->CreateFixture(&unit_body_fixture);
-    m_body->CreateFixture(&unit_sensor_fixture);
 }
 
 sf::Vector2f UnitBody::get_position() {

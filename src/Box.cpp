@@ -1,4 +1,6 @@
 #include "Box.hpp"
+#include "EventManager.hpp"
+#include "DestructionEventData.hpp"
 
 void Box::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
@@ -25,4 +27,8 @@ void Box::on_collision(Entity *) {
 }
 
 void Box::on_explosion(const Explosion &) {
+    m_body.get_b2Body()->SetEnabled(false);
+    EventManager::get()->queue_event(
+            std::make_unique<DestructionEventData>(this)
+    );
 }

@@ -7,12 +7,7 @@
 
 struct ExplosionEventListener : EventListener {
 public:
-    explicit ExplosionEventListener(World *world);
-
     void process(const EventData &event) override;
-
-private:
-    World *m_world;
 };
 
 #endif  // EXPLOSION_EVENT_LISTENER_HPP_

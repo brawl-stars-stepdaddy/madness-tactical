@@ -51,14 +51,14 @@ void Projectile::on_collision(Entity *other_object) {
         m_body = CircleBody(this, *world, center, explosion_radius, true);
         return;
     }
+    if (m_body.get_b2Body())
     EventManager::get()->queue_event(
         std::make_unique<ExplosionEventData>(Explosion(
             {m_body.get_position().x, m_body.get_position().y}, explosion_radius
-        ))
+        ), other_object)
     );
     m_body.get_b2Body()->SetEnabled(false);
-    EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this
-    ));
+    EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
 }
 
 void Projectile::on_explosion(const Explosion &) {

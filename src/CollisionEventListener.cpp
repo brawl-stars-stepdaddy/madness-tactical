@@ -16,12 +16,26 @@ void CollisionEventListener::process(const EventData &event) {
             {collision_event.get_second_object(),
              collision_event.get_first_object()}
         ) == processed_collisions.end()) {
-        collision_event.get_first_object()->on_collision(
-            collision_event.get_second_object()
-        );
-        collision_event.get_second_object()->on_collision(
-            collision_event.get_first_object()
-        );
+        if (collision_event.get_collision_type() == CollisionEventData::CollisionType::BEGIN_CONTACT) {
+            collision_event.get_first_object()->on_collision(
+                    collision_event.get_second_object()
+            );
+            collision_event.get_second_object()->on_collision(
+                    collision_event.get_first_object()
+            );
+        }
+        else {
+            if (collision_event.get_first_object()->get_type() == EntityType::JUMP_SENSOR) {
+                static_cast<JumpSensor *>(collision_event.get_first_object())->end_collision(
+                        collision_event.get_second_object()
+                );
+            }
+            if (collision_event.get_second_object()->get_type() == EntityType::JUMP_SENSOR) {
+                static_cast<JumpSensor *>(collision_event.get_second_object())->end_collision(
+                        collision_event.get_first_object()
+                );
+            }
+        }
         processed_collisions.insert(
             {collision_event.get_first_object(),
              collision_event.get_second_object()}

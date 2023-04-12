@@ -13,7 +13,7 @@ MapBody::MapBody(
 
     b2ChainShape map_shape;
     b2FixtureDef map_fixture;
-    map_fixture.friction = 1.0f;
+    map_fixture.friction = 0.5f;
 
     for (const auto &chain : chains_) {
         m_chains.emplace_back();
