@@ -46,6 +46,7 @@ void Projectile::on_collision(Entity *other_object) {
     EventManager::get()->queue_event(std::make_unique<ExplosionEventData>(
             Explosion({m_body.get_position().x, m_body.get_position().y}, explosion_radius)));
     m_body.get_b2Body()->SetEnabled(false);
+    EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
 
 }
 

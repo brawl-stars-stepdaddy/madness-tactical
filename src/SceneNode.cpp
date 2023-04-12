@@ -22,6 +22,18 @@ SceneNode::Ptr SceneNode::detach_child(const SceneNode &node) {
     return res;
 }
 
+SceneNode::Ptr SceneNode::detach() {
+    auto found = std::find_if(
+            m_parent->m_children.begin(), m_parent->m_children.end(),
+            [this](const Ptr &p) { return p.get() == this; }
+    );
+    assert(found != m_parent->m_children.end());
+    Ptr res = std::move(*found);
+    m_parent->m_children.erase(found);
+    m_parent = nullptr;
+    return res;
+}
+
 void SceneNode::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
     draw_current(target, states);

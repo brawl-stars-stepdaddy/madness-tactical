@@ -8,6 +8,7 @@
 #include "ExplosionEventListener.hpp"
 #include "CollisionEventListener.hpp"
 #include "LaunchProjectileEventListener.hpp"
+#include "DestructionEventListener.hpp"
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
 #include "Bazooka.hpp"
@@ -29,6 +30,11 @@ World::World(sf::RenderWindow &window)
     m_collision_listener = listener.get();
     EventManager::get()->add_listener(
             std::move(listener), EventType::COLLISION
+    );
+    auto destruction_listener = std::make_unique<DestructionEventListener>();
+    m_destruction_listener = destruction_listener.get();
+    EventManager::get()->add_listener(
+            std::move(destruction_listener), EventType::DESTRUCTION
     );
     EventManager::get()->add_listener(
             std::make_unique<LaunchProjectileEventListener>(this), EventType::LAUNCH_PROJECTILE
@@ -99,5 +105,6 @@ void World::update(sf::Time delta_time) {
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
     m_collision_listener->reset();
+    m_destruction_listener->reset();
 
 }

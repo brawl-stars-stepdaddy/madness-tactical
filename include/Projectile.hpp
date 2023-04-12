@@ -6,6 +6,7 @@
 #include "World.hpp"
 #include "EventManager.hpp"
 #include "ExplosionEventData.hpp"
+#include "DestructionEventData.hpp"
 
 struct Projectile : Entity {
     Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);

@@ -13,6 +13,7 @@
 
 struct Map;
 struct CollisionEventListener;
+struct DestructionEventListener;
 
 struct World {
 public:
@@ -65,6 +66,7 @@ private:
     b2World m_physics_world;
     Map *m_map;
     CollisionEventListener *m_collision_listener;
+    DestructionEventListener *m_destruction_listener;
 };
 
 #endif

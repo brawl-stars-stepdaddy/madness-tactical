@@ -13,6 +13,7 @@ public:
 
     void attach_child(Ptr child);
     Ptr detach_child(const SceneNode &node);
+    Ptr detach();
 
     void update(sf::Time delta_time);
 
