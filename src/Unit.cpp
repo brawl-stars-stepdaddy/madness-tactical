@@ -21,7 +21,7 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
     : m_type(type),
       m_sprite(world->get_texture_holder().get(to_texture_id(type))),
       m_body(UnitBody(this, world->get_physics_world(), center, radius)),
-      m_jump_sensor(JumpSensor(this, world, {center.x, center.y + radius}, radius / 4)) {
+      m_jump_sensor(JumpSensor(this, world, {center.x, center.y + radius}, radius / 2)) {
     m_sprite.setScale(
             radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
             radius * World::SCALE * 2 / m_sprite.getLocalBounds().height

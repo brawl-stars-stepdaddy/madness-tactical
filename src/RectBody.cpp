@@ -15,9 +15,9 @@ RectBody::RectBody(Entity *parent, b2World &world, sf::FloatRect rect) {
     m_body = world.CreateBody(&m_body_def);
     m_polygon_shape.SetAsBox(rect.width, rect.height);
     m_fixture_def.shape = &m_polygon_shape;
-    m_fixture_def.density = 1;
-    m_fixture_def.friction = 0.5;
-    m_fixture_def.restitution = 0.5;
+    m_fixture_def.density = 1e9;
+    m_fixture_def.friction = 1.0f;
+    m_fixture_def.restitution = 0.0f;
     m_body->CreateFixture(&m_fixture_def);
 }
 

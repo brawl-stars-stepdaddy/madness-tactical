@@ -20,7 +20,7 @@ private:
     const override;
 
     float m_angle = 0.0f;
-    float m_charge_level = 0.0f;
+    float m_charge_level = 0.2f;
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;
 

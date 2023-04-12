@@ -1,7 +1,7 @@
 #include "World.hpp"
-#include <iostream>
+#include <random>
+#include <chrono>
 #include <vector>
-#include <cmath>
 #include "Bazooka.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
@@ -17,10 +17,21 @@
 #include "Unit.hpp"
 
 std::vector<std::pair<float, float>> generate_naive_map() {
+    std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
+    std::normal_distribution <float> gen_real (0, 0.4);
+
     std::vector<std::pair<float, float>> points;
+    float prev_y = 8.0f;
     for (int i = 0; i <= 192; i++) {
         float x = static_cast<float>(i) / 10;
-        points.emplace_back(x, sin(x) / 2 + 8.);
+        prev_y += gen_real(rng);
+        points.emplace_back(x, prev_y);
+    }
+    prev_y = 8.0f;
+    for (int i = 0; i <= 192; i++) {
+        float cur_y = points[i].second;
+        prev_y = prev_y + 0.02 * (cur_y - prev_y);
+        points[i].second = prev_y;
     }
     points.emplace_back(19.2, 10.8);
     points.emplace_back(0, 10.8);
@@ -58,13 +69,7 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(std::make_unique<JumpForwardEventListener>(&m_game_logic), EventType::JUMP_FORWARD);
     EventManager::get()->add_listener(std::make_unique<JumpBackwardEventListener>(&m_game_logic), EventType::JUMP_BACKWARD);
     EventManager::get()->add_listener(std::make_unique<ChargeWeaponEventListener>(&m_game_logic), EventType::CHARGE_WEAPON);
-    EventManager::get()->add_listener(
-        std::make_unique<LaunchProjectileEventListener>(&m_game_logic),
-        EventType::LAUNCH_PROJECTILE
-    );
-    EventManager::get()->queue_event(
-        std::make_unique<LaunchProjectileEventData>()
-    );
+    EventManager::get()->add_listener(std::make_unique<LaunchProjectileEventListener>(&m_game_logic),EventType::LAUNCH_PROJECTILE);
 }
 
 void World::load_textures() {
@@ -75,7 +80,7 @@ void World::load_textures() {
     m_textures.load(TexturesID::WORM, "res/Worm.png");
     m_textures.load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_textures.load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
-    m_textures.load(TexturesID::BAZOOKA, "res/bazooka.jpeg");
+    m_textures.load(TexturesID::BAZOOKA, "res/bazooka.png");
     m_textures.get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_textures.get(TexturesID::BACKGROUND).setRepeated(true);
 }

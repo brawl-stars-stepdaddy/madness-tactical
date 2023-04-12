@@ -28,7 +28,7 @@ const {
 }
 
 void Bazooka::charge(sf::Time delta_time) {
-    m_charge_level += delta_time.asSeconds() * 2.0f;
+    m_charge_level = std::max(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
 }
 
 void Bazooka::change_angle(sf::Time delta_time, float direction) {
@@ -37,7 +37,7 @@ void Bazooka::change_angle(sf::Time delta_time, float direction) {
 
 std::unique_ptr<Projectile> Bazooka::launch(World &world) {
     float impulse_value = m_charge_level * 5;
-    m_charge_level = 0.0f;
+    m_charge_level = 0.2f;
     sf::Vector2f start_position = {
         m_parent->get_body().get_position().x +
             cos(m_angle) * m_parent->get_direction() * 2,

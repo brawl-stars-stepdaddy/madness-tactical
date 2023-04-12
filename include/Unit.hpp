@@ -49,7 +49,7 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     float m_direction = 1.0f;
-    bool m_jump_ability = true;
+    bool m_jump_ability = false;
     bool m_is_moving = false;
     JumpSensor m_jump_sensor;
 };
