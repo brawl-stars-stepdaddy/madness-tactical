@@ -5,6 +5,7 @@
 #include "ResourceHolder.hpp"
 #include "World.hpp"
 #include "GuiUtil.hpp"
+#include <cmath>
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -62,7 +63,20 @@ EntityType Unit::get_type() {
 void Unit::on_collision(Entity *) {
 }
 
-void Unit::on_explosion(const Explosion &) {
+float sign(float value) {
+    return static_cast<float>((value > 0) - (value < 0));
+}
+
+void Unit::on_explosion(const Explosion &explosion) {
+    auto [x, y] = m_body.get_position();
+    auto [x_explosion, y_explosion] = explosion.get_coordinates();
+    auto physic_body = m_body.get_b2Body();
+    float x_vector = x - x_explosion;
+    float y_vector = y - y_explosion;
+    float distance = sqrt(pow(x_vector, 2) + pow(y_vector, 2));
+    float x_impulse = 100 * x_vector / pow(distance, 2);
+    float y_impulse = 100 * y_vector / pow(distance, 2);
+    physic_body->ApplyLinearImpulseToCenter({x_impulse, y_impulse}, true);
 }
 
 float Unit::get_direction() const {
