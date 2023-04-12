@@ -13,6 +13,7 @@ enum class TexturesID {
     HALO,
     MAP_TEXTURE,
     WORM,
+    CANON_BALL,
 };
 
 template <typename Resource, typename Identifier>

@@ -7,8 +7,10 @@
 #include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
 #include "CollisionEventListener.hpp"
+#include "LaunchProjectileEventListener.hpp"
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
+#include "Bazooka.hpp"
 
 World::World(sf::RenderWindow &window)
     : m_window(window),
@@ -23,20 +25,29 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(
         std::make_unique<ExplosionEventListener>(this), EventType::EXPLOSION
     );
+    auto listener = std::make_unique<CollisionEventListener>(this);
+    m_collision_listener = listener.get();
     EventManager::get()->add_listener(
-            std::make_unique<CollisionEventListener>(this), EventType::COLLISION
+            std::move(listener), EventType::COLLISION
+    );
+    EventManager::get()->add_listener(
+            std::make_unique<LaunchProjectileEventListener>(this), EventType::LAUNCH_PROJECTILE
     );
     EventManager::get()->queue_event(
         std::make_unique<ExplosionEventData>(Explosion({5, 6}, 2))
     );
+    EventManager::get()->queue_event(
+            std::make_unique<LaunchProjectileEventData>()
+    );
 }
 
 void World::load_textures() {
-    m_textures.load(TexturesID::BACKGROUND, "res/bg.png");
+    m_textures.load(TexturesID::BACKGROUND, "res/sky.jpg");
     m_textures.load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_textures.load(TexturesID::HALO, "res/HaloRender.jpg");
-    m_textures.load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
+    m_textures.load(TexturesID::MAP_TEXTURE, "res/dirt.png");
     m_textures.load(TexturesID::WORM, "res/Worm.jpg");
+    m_textures.load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_textures.get(TexturesID::MAP_TEXTURE).setRepeated(true);
 }
 
@@ -51,7 +62,7 @@ void World::build_scene() {
     background_sprite->setPosition(m_world_bounds.left, m_world_bounds.top);
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
     std::unique_ptr<Unit> engie =
-        std::make_unique<Unit>(Unit::Type::WORM, *this, sf::Vector2f{1, 1}, 1);
+        std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{1, 1}, 1);
     m_player_engineer = engie.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(engie));
     std::unique_ptr<SpriteNode> halo =
@@ -66,12 +77,16 @@ void World::build_scene() {
     // body->SetLinearVelocity({3, 0});
     // body->SetAngularVelocity(1);
     std::unique_ptr<Map> map = std::make_unique<Map>(
-        *this,
+        this,
         std::vector<std::vector<std::pair<float, float>>>{
-            {{0, 5}, {5, 6}, {10, 5}, {10, 10}, {0, 10}}}
+            {{0, 5}, {5, 6}, {11, 1}, {10.8, 10.8}, {0, 10.8}}}
     );
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
+
+    auto bazooka = std::make_unique<Bazooka>(m_player_engineer);
+    m_player_engineer->set_weapon(bazooka.get());
+    m_scene_layers[ENTITIES]->attach_child(std::move(bazooka));
 }
 
 void World::draw() {
@@ -83,4 +98,6 @@ void World::update(sf::Time delta_time) {
     EventManager::get()->update();
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
+    m_collision_listener->reset();
+
 }

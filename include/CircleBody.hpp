@@ -4,9 +4,11 @@
 #include "Body.hpp"
 #include "box2d/box2d.h"
 
+struct Entity;
+
 struct CircleBody : Body {
 public:
-    CircleBody(b2World &world, sf::Vector2f center, float radius);
+    CircleBody(Entity *, b2World &, sf::Vector2f, float, bool);
     sf::Vector2f get_position() override;
     float get_rotation() override;
 };

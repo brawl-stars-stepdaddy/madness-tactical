@@ -1,18 +1,21 @@
 #include "CircleBody.hpp"
 
-CircleBody::CircleBody(b2World &world, sf::Vector2f center, float radius) {
+CircleBody::CircleBody(Entity *parent, b2World &world, sf::Vector2f center, float radius, bool is_sensor) {
     b2BodyDef m_body_def;
     b2CircleShape m_circle_shape;
     b2FixtureDef m_fixture_def;
 
     m_body_def.position.Set(center.x, center.y);
     m_body_def.type = b2_dynamicBody;
+    m_body_def.userData.pointer = reinterpret_cast<uintptr_t>(parent);
+
     m_body = world.CreateBody(&m_body_def);
     m_circle_shape.m_radius = radius;
     m_fixture_def.shape = &m_circle_shape;
     m_fixture_def.density = 1;
     m_fixture_def.friction = 0.5;
     m_fixture_def.restitution = 0.5;
+    m_fixture_def.isSensor = is_sensor;
 
     m_body->CreateFixture(&m_fixture_def);
 }

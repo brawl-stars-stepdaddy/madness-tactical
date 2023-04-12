@@ -8,12 +8,21 @@
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
+#include "Unit.hpp"
 #include "box2d/box2d.h"
 
 struct Map;
+struct CollisionEventListener;
 
 struct World {
 public:
+    enum Layer {
+        BACKGROUND,
+        MAP,
+        ENTITIES,
+        LAYER_COUNT,
+    };
+
     explicit World(sf::RenderWindow &window);
     void update(sf::Time delta_time);
     void draw();
@@ -30,18 +39,19 @@ public:
         return m_textures;
     }
 
+    Unit *get_player() {
+        return m_player_engineer;
+    }
+
+    SceneNode *get_layer(Layer layer) {
+        return m_scene_layers[layer];
+    }
+
     static constexpr float SCALE = 100.f;
 
 private:
     void load_textures();
     void build_scene();
-
-    enum Layer {
-        BACKGROUND,
-        MAP,
-        ENTITIES,
-        LAYER_COUNT,
-    };
 
     sf::RenderWindow &m_window;
     sf::View m_world_view;
@@ -51,9 +61,10 @@ private:
 
     sf::FloatRect m_world_bounds;
     sf::Vector2f m_spawn_position;
-    Entity *m_player_engineer;
+    Unit *m_player_engineer;
     b2World m_physics_world;
     Map *m_map;
+    CollisionEventListener *m_collision_listener;
 };
 
 #endif

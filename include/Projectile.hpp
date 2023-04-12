@@ -3,8 +3,13 @@
 
 #include "Entity.hpp"
 #include "CircleBody.hpp"
+#include "World.hpp"
+#include "EventManager.hpp"
+#include "ExplosionEventData.hpp"
 
 struct Projectile : Entity {
+    Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);
+
     CircleBody &get_body() override;
     EntityType get_type() override;
 
@@ -19,6 +24,8 @@ private:
 
     sf::Sprite m_sprite;
     CircleBody m_body;
+    bool is_exploded = false;
+    float explosion_radius;
 };
 
 #endif // PROJECTILE_HPP_

@@ -15,10 +15,6 @@ public:
 
 private:
     void update_current(sf::Time delta_time) override;
-
-    void draw_current(sf::RenderTarget &target, sf::RenderStates states)
-        const override {
-    }
 };
 
 #endif

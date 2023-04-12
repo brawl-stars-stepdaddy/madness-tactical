@@ -16,10 +16,10 @@ TexturesID to_texture_id(Unit::Type type) {
     }
 }
 
-Unit::Unit(Unit::Type type, World &world, sf::Vector2f center, float radius)
+Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
     : m_type(type),
-      m_sprite(world.get_texture_holder().get(to_texture_id(type))),
-      m_body(UnitBody(this, world.get_physics_world(), center, radius)) {
+      m_sprite(world->get_texture_holder().get(to_texture_id(type))),
+      m_body(UnitBody(this, world->get_physics_world(), center, radius)) {
     m_sprite.setScale(
         radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
         radius * World::SCALE * 2 / m_sprite.getLocalBounds().height
@@ -53,3 +53,15 @@ void Unit::on_collision(Entity *) {
 }
 
 void Unit::on_explosion(const Explosion &) {}
+
+float Unit::get_direction() const {
+    return m_direction;
+}
+
+void Unit::set_weapon(Weapon *weapon) {
+    m_weapon = weapon;
+}
+
+Weapon *Unit::get_weapon() const {
+    return m_weapon;
+}
