@@ -48,6 +48,8 @@ public:
         return m_scene_layers[layer];
     }
 
+    void add_entity(std::unique_ptr<Entity>);
+
     static constexpr float SCALE = 100.f;
 
 private:

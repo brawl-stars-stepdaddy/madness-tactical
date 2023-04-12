@@ -1,14 +1,16 @@
 #include "Projectile.hpp"
+#include "ExplosionEntity.hpp"
 
 Projectile::Projectile(
-    World &world,
+    World *world,
     sf::Vector2f center,
     sf::Vector2f impulse,
     float radius,
     float explosion_radius
 )
-    : m_sprite(world.get_texture_holder().get(TexturesID::CANON_BALL)),
-      m_body(CircleBody(this, world.get_physics_world(), center, radius, true)),
+    : m_sprite(world->get_texture_holder().get(TexturesID::CANON_BALL)),
+      m_body(CircleBody(this, world->get_physics_world(), center, radius, true)),
+      m_world(world),
       explosion_radius(explosion_radius) {
     m_sprite.setScale(
         radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
@@ -45,20 +47,13 @@ EntityType Projectile::get_type() {
 void Projectile::on_collision(Entity *other_object) {
     if (!is_exploded) {
         is_exploded = true;
-        auto world = m_body.get_b2Body()->GetWorld();
-        auto center = m_body.get_position();
-        world->DestroyBody(m_body.get_b2Body());
-        m_body = CircleBody(this, *world, center, explosion_radius, true);
-        return;
+        m_world->add_entity(std::make_unique<ExplosionEntity>(
+                m_world,
+                Explosion({m_body.get_position().x, m_body.get_position().y}, explosion_radius))
+        );
+        m_world->get_physics_world().DestroyBody(m_body.get_b2Body());
+        EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
     }
-    if (m_body.get_b2Body())
-    EventManager::get()->queue_event(
-        std::make_unique<ExplosionEventData>(Explosion(
-            {m_body.get_position().x, m_body.get_position().y}, explosion_radius
-        ), other_object)
-    );
-    m_body.get_b2Body()->SetEnabled(false);
-    EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
 }
 
 void Projectile::on_explosion(const Explosion &) {

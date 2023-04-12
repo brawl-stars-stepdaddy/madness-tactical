@@ -27,6 +27,6 @@ std::unique_ptr<Projectile> Bazooka::launch(World &world) {
         cos(m_angle) * m_parent->get_direction() * impulse_value,
         sin(m_angle) * impulse_value};
     return std::make_unique<Projectile>(
-        world, start_position, impulse, m_projectile_radius, m_explosion_radius
+        &world, start_position, impulse, m_projectile_radius, m_explosion_radius
     );
 }

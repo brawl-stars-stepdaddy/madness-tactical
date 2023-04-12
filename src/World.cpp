@@ -109,8 +109,6 @@ void World::build_scene() {
     auto bazooka = std::make_unique<Bazooka>(m_player_engineer);
     m_player_engineer->set_weapon(bazooka.get());
     m_scene_layers[ENTITIES]->attach_child(std::move(bazooka));
-
-    m_player_engineer->get_body().get_b2Body()->SetLinearVelocity({0, -100});
 }
 
 void World::draw() {
@@ -133,4 +131,8 @@ void World::update(sf::Time delta_time) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
         m_player_engineer->jump_forward();
     }
+}
+
+void World::add_entity(std::unique_ptr<Entity> ptr) {
+    m_scene_layers[ENTITIES]->attach_child(std::move(ptr));
 }
