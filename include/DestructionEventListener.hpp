@@ -2,9 +2,9 @@
 #define DESTRUCTION_EVENT_LISTENER_HPP_
 
 #include <set>
+#include <cassert>
 #include "DestructionEventData.hpp"
 #include "EventListener.hpp"
-#include "World.hpp"
 
 struct DestructionEventListener : EventListener {
 public:
