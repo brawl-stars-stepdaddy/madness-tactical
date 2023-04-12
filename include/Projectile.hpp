@@ -2,11 +2,9 @@
 #define PROJECTILE_HPP_
 
 #include "CircleBody.hpp"
-#include "DestructionEventData.hpp"
 #include "Entity.hpp"
-#include "EventManager.hpp"
-#include "ExplosionEventData.hpp"
-#include "World.hpp"
+
+struct World;
 
 struct Projectile : Entity {
     Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);

@@ -5,7 +5,7 @@
 #include "Entity.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "UnitBody.hpp"
-#include "World.hpp"
+#include "JumpSensor.hpp"
 
 struct Weapon;
 struct World;
@@ -22,6 +22,7 @@ public:
     UnitBody &get_body() override;
     EntityType get_type() override;
 
+    void set_direction(float direction);
     float get_direction() const;
 
     void set_weapon(Weapon *);
@@ -29,6 +30,14 @@ public:
 
     void on_collision(Entity *) override;
     void on_explosion(const Explosion &) override;
+
+    void set_jump_ability(bool);
+    void set_is_moving(bool);
+    void reset();
+
+    void move(sf::Time, float);
+    void jump_forward();
+    void jump_backward();
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
@@ -41,6 +50,9 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     float m_direction = 1.0f;
+    bool m_jump_ability = true;
+    bool m_is_moving = false;
+    JumpSensor m_jump_sensor;
 };
 
 #endif
