@@ -1,6 +1,8 @@
 #include "Bazooka.hpp"
 #include "Unit.hpp"
 #include <cmath>
+#include "EventManager.hpp"
+#include "ActionEventData.hpp"
 #include "World.hpp"
 
 Bazooka::Bazooka(World *world, Unit *parent) {
@@ -28,7 +30,10 @@ const {
 }
 
 void Bazooka::charge(sf::Time delta_time) {
-    m_charge_level = std::max(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
+    m_charge_level = std::min(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
+    if (m_charge_level == 1.0f) {
+        EventManager().get()->queue_event(std::make_unique<LaunchProjectileEventData>());
+    }
 }
 
 void Bazooka::change_angle(sf::Time delta_time, float direction) {
@@ -36,7 +41,7 @@ void Bazooka::change_angle(sf::Time delta_time, float direction) {
 }
 
 std::unique_ptr<Projectile> Bazooka::launch(World &world) {
-    float impulse_value = m_charge_level * 5;
+    float impulse_value = m_charge_level * 10 ;
     m_charge_level = 0.2f;
     sf::Vector2f start_position = {
         m_parent->get_body().get_position().x +
