@@ -3,6 +3,7 @@
 
 Game::Game()
     : m_window(sf::VideoMode(1920, 1080), "SFML test", sf::Style::Fullscreen), m_world(m_window) {
+    m_window.setKeyRepeatEnabled(false);
     m_statistics_font.loadFromFile("res/Sansation.ttf");
     m_statistics_text.setFont(m_statistics_font);
     m_statistics_text.setPosition(5.f, 5.f);
