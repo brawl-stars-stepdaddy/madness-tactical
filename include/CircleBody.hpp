@@ -13,4 +13,4 @@ public:
     float get_rotation() override;
 };
 
-#endif // CIRCLE_BODY_HPP_
+#endif  // CIRCLE_BODY_HPP_

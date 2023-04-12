@@ -16,4 +16,4 @@ private:
     SceneNode *m_object;
 };
 
-#endif // DESTRUCTION_EVENT_DATA_HPP_
+#endif  // DESTRUCTION_EVENT_DATA_HPP_

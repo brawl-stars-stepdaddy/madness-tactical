@@ -15,7 +15,7 @@ public:
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
-    const override;
+        const override;
 
     void update_current(sf::Time delta_time) override;
 
@@ -23,4 +23,4 @@ private:
     RectBody m_body;
 };
 
-#endif // BOX_HPP_
+#endif  // BOX_HPP_

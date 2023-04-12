@@ -1,12 +1,12 @@
 #ifndef PROJECTILE_HPP_
 #define PROJECTILE_HPP_
 
-#include "Entity.hpp"
 #include "CircleBody.hpp"
-#include "World.hpp"
+#include "DestructionEventData.hpp"
+#include "Entity.hpp"
 #include "EventManager.hpp"
 #include "ExplosionEventData.hpp"
-#include "DestructionEventData.hpp"
+#include "World.hpp"
 
 struct Projectile : Entity {
     Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);
@@ -19,7 +19,7 @@ struct Projectile : Entity {
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
-    const override;
+        const override;
 
     void update_current(sf::Time delta_time) override;
 
@@ -29,4 +29,4 @@ private:
     float explosion_radius;
 };
 
-#endif // PROJECTILE_HPP_
+#endif  // PROJECTILE_HPP_

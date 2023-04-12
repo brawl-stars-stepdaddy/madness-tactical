@@ -1,6 +1,11 @@
 #include "UnitBody.hpp"
 
-UnitBody::UnitBody(Unit *parent, b2World &world, sf::Vector2f center, float radius) {
+UnitBody::UnitBody(
+    Unit *parent,
+    b2World &world,
+    sf::Vector2f center,
+    float radius
+) {
     b2BodyDef unit_def;
     unit_def.position.Set(center.x, center.y);
     unit_def.fixedRotation = true;
@@ -33,4 +38,3 @@ sf::Vector2f UnitBody::get_position() {
 float UnitBody::get_rotation() {
     return m_body->GetAngle();
 }
-

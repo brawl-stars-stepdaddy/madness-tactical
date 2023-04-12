@@ -1,8 +1,8 @@
 #ifndef COLLISION_EVENT_DATA_HPP_
 #define COLLISION_EVENT_DATA_HPP_
 
-#include "EventData.hpp"
 #include "Entity.hpp"
+#include "EventData.hpp"
 
 struct CollisionEventData : EventData {
 public:
@@ -18,4 +18,4 @@ private:
     Entity *m_second_object;
 };
 
-#endif // COLLISION_EVENT_DATA_HPP_
+#endif  // COLLISION_EVENT_DATA_HPP_

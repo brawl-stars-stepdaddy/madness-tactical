@@ -1,17 +1,17 @@
 #include "World.hpp"
 #include <iostream>
 #include <vector>
+#include "Bazooka.hpp"
+#include "CollisionEventListener.hpp"
+#include "DestructionEventListener.hpp"
 #include "EventManager.hpp"
 #include "EventType.hpp"
 #include "Explosion.hpp"
 #include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
-#include "CollisionEventListener.hpp"
 #include "LaunchProjectileEventListener.hpp"
-#include "DestructionEventListener.hpp"
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
-#include "Bazooka.hpp"
 
 World::World(sf::RenderWindow &window)
     : m_window(window),
@@ -29,21 +29,22 @@ World::World(sf::RenderWindow &window)
     auto listener = std::make_unique<CollisionEventListener>(this);
     m_collision_listener = listener.get();
     EventManager::get()->add_listener(
-            std::move(listener), EventType::COLLISION
+        std::move(listener), EventType::COLLISION
     );
     auto destruction_listener = std::make_unique<DestructionEventListener>();
     m_destruction_listener = destruction_listener.get();
     EventManager::get()->add_listener(
-            std::move(destruction_listener), EventType::DESTRUCTION
+        std::move(destruction_listener), EventType::DESTRUCTION
     );
     EventManager::get()->add_listener(
-            std::make_unique<LaunchProjectileEventListener>(this), EventType::LAUNCH_PROJECTILE
+        std::make_unique<LaunchProjectileEventListener>(this),
+        EventType::LAUNCH_PROJECTILE
     );
     EventManager::get()->queue_event(
         std::make_unique<ExplosionEventData>(Explosion({5, 6}, 2))
     );
     EventManager::get()->queue_event(
-            std::make_unique<LaunchProjectileEventData>()
+        std::make_unique<LaunchProjectileEventData>()
     );
 }
 
@@ -106,5 +107,4 @@ void World::update(sf::Time delta_time) {
     m_scene_graph.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
-
 }

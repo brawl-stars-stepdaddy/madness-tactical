@@ -2,8 +2,8 @@
 #define DESTRUCTION_EVENT_LISTENER_HPP_
 
 #include <set>
-#include "EventListener.hpp"
 #include "DestructionEventData.hpp"
+#include "EventListener.hpp"
 #include "World.hpp"
 
 struct DestructionEventListener : EventListener {
@@ -15,4 +15,4 @@ private:
     std::set<SceneNode *> deleted_objects;
 };
 
-#endif // DESTRUCTION_EVENT_LISTENER_HPP_
+#endif  // DESTRUCTION_EVENT_LISTENER_HPP_

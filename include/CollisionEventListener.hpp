@@ -2,9 +2,9 @@
 #define COLLISION_EVENT_LISTENER_HPP_
 
 #include <set>
-#include "EventListener.hpp"
 #include "CollisionEventData.hpp"
 #include "ContactListener.hpp"
+#include "EventListener.hpp"
 #include "World.hpp"
 
 struct CollisionEventListener : EventListener {
@@ -18,4 +18,4 @@ private:
     std::set<std::pair<Entity *, Entity *>> processed_collisions;
 };
 
-#endif // COLLISION_EVENT_LISTENER_HPP_
+#endif  // COLLISION_EVENT_LISTENER_HPP_

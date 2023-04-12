@@ -15,4 +15,4 @@ private:
     World *m_world;
 };
 
-#endif // LAUNCH_PROJECTILE_EVENT_LISTENER_HPP_
+#endif  // LAUNCH_PROJECTILE_EVENT_LISTENER_HPP_

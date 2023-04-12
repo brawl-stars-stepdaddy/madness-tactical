@@ -13,4 +13,4 @@ public:
     float get_rotation() override;
 };
 
-#endif // UNIT_BODY_HPP_
+#endif  // UNIT_BODY_HPP_

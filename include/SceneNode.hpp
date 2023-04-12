@@ -24,8 +24,7 @@ private:
     std::vector<Ptr> m_children;
     SceneNode *m_parent;
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states)
-        const final;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const final;
     virtual void draw_current(sf::RenderTarget &target, sf::RenderStates states)
         const;
 

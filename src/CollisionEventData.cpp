@@ -1,8 +1,10 @@
 #include "CollisionEventData.hpp"
 
-CollisionEventData::CollisionEventData(Entity *first_object, Entity *second_object)
-    : m_first_object(first_object),
-      m_second_object(second_object) {
+CollisionEventData::CollisionEventData(
+    Entity *first_object,
+    Entity *second_object
+)
+    : m_first_object(first_object), m_second_object(second_object) {
 }
 
 EventType CollisionEventData::get_event_type() const {

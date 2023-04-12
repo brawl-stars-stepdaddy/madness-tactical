@@ -3,8 +3,8 @@
 
 #include "Body.hpp"
 #include "EntityType.hpp"
-#include "SceneNode.hpp"
 #include "Explosion.hpp"
+#include "SceneNode.hpp"
 
 struct Entity : SceneNode {
 public:

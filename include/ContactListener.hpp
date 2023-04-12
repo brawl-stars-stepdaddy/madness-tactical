@@ -8,4 +8,4 @@ struct ContactListener : b2ContactListener {
     void EndContact(b2Contact *) override;
 };
 
-#endif // CONTACT_LISTENER_HPP_
+#endif  // CONTACT_LISTENER_HPP_

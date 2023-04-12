@@ -1,6 +1,12 @@
 #include "CircleBody.hpp"
 
-CircleBody::CircleBody(Entity *parent, b2World &world, sf::Vector2f center, float radius, bool is_sensor) {
+CircleBody::CircleBody(
+    Entity *parent,
+    b2World &world,
+    sf::Vector2f center,
+    float radius,
+    bool is_sensor
+) {
     b2BodyDef m_body_def;
     b2CircleShape m_circle_shape;
     b2FixtureDef m_fixture_def;
@@ -28,4 +34,3 @@ sf::Vector2f CircleBody::get_position() {
 float CircleBody::get_rotation() {
     return m_body->GetAngle();
 }
-
