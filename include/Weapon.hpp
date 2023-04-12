@@ -15,17 +15,18 @@ struct Weapon : SceneNode {
     virtual void set_currently_charging(bool is_charging);
 
 protected:
-    Unit *m_parent;
-
     virtual void reset();
 
+    Unit *m_parent;
+
+    float m_current_angle_change_direction = 0;
+    bool m_is_charging = false;
 private:
     void update_current(sf::Time delta_time) override;
     void draw_current(sf::RenderTarget &target, sf::RenderStates states)
         const override;
 
-    float m_current_angle_change_direction = 0;
-    bool m_is_charging = false;
+
 };
 
 #endif  // WEAPON_HPP_

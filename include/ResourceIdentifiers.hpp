@@ -14,7 +14,8 @@ enum class TexturesID {
     MAP_TEXTURE,
     WORM,
     CANON_BALL,
-    WEAPON_BOX
+    WEAPON_BOX,
+    BAZOOKA,
 };
 
 template <typename Resource, typename Identifier>

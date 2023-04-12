@@ -75,6 +75,7 @@ void World::load_textures() {
     m_textures.load(TexturesID::WORM, "res/Worm.png");
     m_textures.load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_textures.load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
+    m_textures.load(TexturesID::BAZOOKA, "res/bazooka.jpeg");
     m_textures.get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_textures.get(TexturesID::BACKGROUND).setRepeated(true);
 }
@@ -115,9 +116,8 @@ void World::build_scene() {
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
-    auto bazooka = std::make_unique<Bazooka>(m_player_engineer);
-    m_player_engineer->set_weapon(bazooka.get());
-    m_scene_layers[ENTITIES]->attach_child(std::move(bazooka));
+    auto bazooka = std::make_unique<Bazooka>(this, m_player_engineer);
+    m_player_engineer->attach_child(std::move(bazooka));
 }
 
 void World::draw() {
