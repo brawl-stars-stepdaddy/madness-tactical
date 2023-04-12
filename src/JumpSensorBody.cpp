@@ -31,4 +31,3 @@ sf::Vector2f JumpSensorBody::get_position() {
 float JumpSensorBody::get_rotation() {
     return m_body->GetAngle();
 }
-

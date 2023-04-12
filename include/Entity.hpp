@@ -1,10 +1,11 @@
 #ifndef ENTITY_HPP_
 #define ENTITY_HPP_
 
-#include "Body.hpp"
 #include "EntityType.hpp"
-#include "Explosion.hpp"
 #include "SceneNode.hpp"
+
+struct Explosion;
+struct Body;
 
 struct Entity : SceneNode {
 public:

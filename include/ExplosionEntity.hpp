@@ -2,6 +2,7 @@
 #define EXPLOSION_ENTITY_HPP_
 
 #include "Entity.hpp"
+#include "Explosion.hpp"
 #include "CircleBody.hpp"
 
 struct World;

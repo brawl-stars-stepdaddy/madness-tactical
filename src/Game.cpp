@@ -18,7 +18,7 @@ void Game::run() {
         sf::Time elapsed_time = clock.restart();
         unprocessed += elapsed_time;
         prev_render += elapsed_time;
-        process_events();
+        process_input();
         bool updated = false;
         while (unprocessed >= time_per_frame) {
             updated = true;
@@ -33,26 +33,20 @@ void Game::run() {
     }
 }
 
-void Game::handle_player_input(sf::Keyboard::Key key, bool is_pressed) {
-}
-
-void Game::process_events() {
+void Game::process_input() {
     sf::Event event;
     while (m_window.pollEvent(event)) {
+        m_controller.handle_event(event);
         switch (event.type) {
             case sf::Event::Closed:
                 m_window.close();
-                break;
-            case sf::Event::KeyPressed:
-                handle_player_input(event.key.code, true);
-                break;
-            case sf::Event::KeyReleased:
-                handle_player_input(event.key.code, false);
                 break;
             default:
                 break;
         }
     }
+
+    m_controller.handle_realtime_input();
 }
 
 void Game::update(sf::Time delta_time) {

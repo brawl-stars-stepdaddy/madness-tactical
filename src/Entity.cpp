@@ -1,4 +1,5 @@
 #include "Entity.hpp"
+#include "Body.hpp"
 
 void Entity::update_current(sf::Time delta_time) {
     setPosition(

@@ -1,0 +1,80 @@
+#ifndef MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
+#define MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
+
+#include "EventListener.hpp"
+
+struct GameLogic;
+
+struct ChangeAngleDownEventListener : EventListener {
+public:
+    explicit ChangeAngleDownEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct ChangeAngleUpEventListener : EventListener {
+public:
+    explicit ChangeAngleUpEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct MoveLeftEventListener : EventListener {
+public:
+    explicit MoveLeftEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct MoveRightEventListener : EventListener {
+public:
+    explicit MoveRightEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct JumpForwardEventListener : EventListener {
+public:
+    explicit JumpForwardEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct JumpBackwardEventListener : EventListener {
+public:
+    explicit JumpBackwardEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct ChargeWeaponEventListener : EventListener {
+public:
+    explicit ChargeWeaponEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+struct LaunchProjectileEventListener : EventListener {
+public:
+    explicit LaunchProjectileEventListener(GameLogic *game_logic);
+    void process(const EventData &event) override;
+
+private:
+    GameLogic *m_game_logic;
+};
+
+#endif //MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP

@@ -25,4 +25,3 @@ void JumpSensor::end_collision(Entity *other_object) {
 EntityType JumpSensor::get_type() {
     return EntityType::JUMP_SENSOR;
 }
-

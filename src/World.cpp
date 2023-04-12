@@ -10,7 +10,8 @@
 #include "Explosion.hpp"
 #include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
-#include "LaunchProjectileEventListener.hpp"
+#include "ActionEventListener.hpp"
+#include "ActionEventData.hpp"
 #include "SpriteNode.hpp"
 #include "WeaponBox.hpp"
 #include "Unit.hpp"
@@ -33,7 +34,8 @@ World::World(sf::RenderWindow &window)
       m_spawn_position(5.f, 5.f),
       m_player_engineer(nullptr),
       m_physics_world({0, 10}),
-      m_map(nullptr) {
+      m_map(nullptr),
+      m_game_logic(this) {
     load_textures();
     build_scene();
     EventManager::get()->add_listener(
@@ -49,8 +51,15 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(
         std::move(destruction_listener), EventType::DESTRUCTION
     );
+    EventManager::get()->add_listener(std::make_unique<MoveRightEventListener>(&m_game_logic), EventType::MOVE_RIGHT);
+    EventManager::get()->add_listener(std::make_unique<MoveLeftEventListener>(&m_game_logic), EventType::MOVE_LEFT);
+    EventManager::get()->add_listener(std::make_unique<ChangeAngleUpEventListener>(&m_game_logic), EventType::CHANGE_ANGLE_UP);
+    EventManager::get()->add_listener(std::make_unique<ChangeAngleDownEventListener>(&m_game_logic), EventType::CHANGE_ANGLE_DOWN);
+    EventManager::get()->add_listener(std::make_unique<JumpForwardEventListener>(&m_game_logic), EventType::JUMP_FORWARD);
+    EventManager::get()->add_listener(std::make_unique<JumpBackwardEventListener>(&m_game_logic), EventType::JUMP_BACKWARD);
+    EventManager::get()->add_listener(std::make_unique<ChargeWeaponEventListener>(&m_game_logic), EventType::CHARGE_WEAPON);
     EventManager::get()->add_listener(
-        std::make_unique<LaunchProjectileEventListener>(this),
+        std::make_unique<LaunchProjectileEventListener>(&m_game_logic),
         EventType::LAUNCH_PROJECTILE
     );
     EventManager::get()->queue_event(
@@ -122,15 +131,6 @@ void World::update(sf::Time delta_time) {
     m_scene_graph.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        m_player_engineer->move(delta_time, 1);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        m_player_engineer->move(delta_time, -1);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
-        m_player_engineer->jump_forward();
-    }
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {

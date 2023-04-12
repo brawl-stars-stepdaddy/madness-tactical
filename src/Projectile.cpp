@@ -1,5 +1,8 @@
 #include "Projectile.hpp"
 #include "ExplosionEntity.hpp"
+#include "World.hpp"
+#include "EventManager.hpp"
+#include "DestructionEventData.hpp"
 
 Projectile::Projectile(
     World *world,

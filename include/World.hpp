@@ -10,6 +10,7 @@
 #include "SceneNode.hpp"
 #include "Unit.hpp"
 #include "box2d/box2d.h"
+#include "GameLogic.hpp"
 
 struct Map;
 struct CollisionEventListener;
@@ -69,6 +70,7 @@ private:
     Map *m_map;
     CollisionEventListener *m_collision_listener;
     DestructionEventListener *m_destruction_listener;
+    GameLogic m_game_logic;
 };
 
 #endif

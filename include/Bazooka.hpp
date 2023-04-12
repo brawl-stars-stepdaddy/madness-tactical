@@ -7,7 +7,7 @@ struct Bazooka : Weapon {
     explicit Bazooka(Unit *);
 
     void charge(sf::Time) override;
-    void change_angle(sf::Time, bool) override;
+    void change_angle(sf::Time, float) override;
     std::unique_ptr<Projectile> launch(World &) override;
 
 private:

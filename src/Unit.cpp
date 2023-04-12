@@ -3,6 +3,7 @@
 #include "EventManager.hpp"
 #include "ExplosionEventData.hpp"
 #include "ResourceHolder.hpp"
+#include "World.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -22,8 +23,8 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
       m_body(UnitBody(this, world->get_physics_world(), center, radius)),
       m_jump_sensor(JumpSensor(this, world, {center.x, center.y + radius}, radius / 4)) {
     m_sprite.setScale(
-        radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
-        radius * World::SCALE * 2 / m_sprite.getLocalBounds().height
+            radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
+            radius * World::SCALE * 2 / m_sprite.getLocalBounds().height
     );
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -37,17 +38,20 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
     world->get_physics_world().CreateJoint(&joint_def);
 }
 
+
 void Unit::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
     target.draw(m_sprite, states);
 }
 
 void Unit::update_current(sf::Time delta_time) {
+    move(delta_time, m_direction);
     setPosition(
         {m_body.get_position().x * World::SCALE,
          m_body.get_position().y * World::SCALE}
     );
     setRotation(m_body.get_rotation() * 60);
+    reset();
 }
 
 UnitBody &Unit::get_body() {
@@ -76,13 +80,18 @@ Weapon *Unit::get_weapon() const {
     return m_weapon;
 }
 
-void Unit::move(sf::Time delta_time, float direction) {
+void Unit::set_direction(float direction) {
     if (direction != m_direction) {
         m_direction = direction;
         scale(-1, 1);
     }
-    auto vertical_velocity = m_body.get_b2Body()->GetLinearVelocity().y;
-    m_body.get_b2Body()->SetLinearVelocity({100 * direction * delta_time.asSeconds(), vertical_velocity});
+}
+
+void Unit::move(sf::Time delta_time, float direction) {
+    if (m_is_moving) {
+        auto vertical_velocity = m_body.get_b2Body()->GetLinearVelocity().y;
+        m_body.get_b2Body()->SetLinearVelocity({100 * direction * delta_time.asSeconds(), vertical_velocity});
+    }
 }
 
 void Unit::jump_forward() {
@@ -99,4 +108,12 @@ void Unit::jump_backward() {
 
 void Unit::set_jump_ability(bool new_value) {
     m_jump_ability = new_value;
+}
+
+void Unit::set_is_moving(bool is_moving) {
+    m_is_moving = is_moving;
+}
+
+void Unit::reset() {
+    m_is_moving = false;
 }
