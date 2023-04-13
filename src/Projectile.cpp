@@ -44,21 +44,19 @@ CircleBody &Projectile::get_body() {
 }
 
 EntityType Projectile::get_type() {
-    return EntityType::BOX;
+    return EntityType::PROJECTILE;
 }
 
 void Projectile::on_collision(Entity *other_object) {
     if (!is_exploded) {
-        is_exploded = true;
         m_world->add_entity(std::make_unique<ExplosionEntity>(
                 m_world,
                 Explosion({m_body.get_position().x, m_body.get_position().y}, explosion_radius))
         );
-        m_world->get_physics_world().DestroyBody(m_body.get_b2Body());
+        is_exploded = true;
+        m_body.get_b2Body()->SetEnabled(false);
         EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
     }
 }
 
-void Projectile::on_explosion(const Explosion &) {
-    // TODO
-}
+void Projectile::on_explosion(const Explosion &) {}

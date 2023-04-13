@@ -12,9 +12,11 @@ ExplosionEntity::ExplosionEntity(World *world, Explosion explosion)
 }
 
 void ExplosionEntity::on_collision(Entity *other_object) {
-    EventManager::get()->queue_event(
-            std::make_unique<ExplosionEventData>(m_explosion, other_object)
-    );
+    if (other_object->get_type() != EntityType::EXPLOSION && other_object->get_type() != EntityType::PROJECTILE) {
+        EventManager::get()->queue_event(
+                std::make_unique<ExplosionEventData>(m_explosion, other_object)
+        );
+    }
     m_body.get_b2Body()->SetEnabled(false);
     EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
 }

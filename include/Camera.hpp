@@ -2,6 +2,7 @@
 #define CAMERA_HPP_
 
 #include "SFML/Graphics.hpp"
+#include <memory>
 
 struct Entity;
 struct Camera;

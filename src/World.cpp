@@ -79,10 +79,10 @@ World::World(sf::RenderWindow &window)
 }
 
 void World::load_textures() {
-    m_textures.load(TexturesID::BACKGROUND, "res/bg.jpg");
+    m_textures.load(TexturesID::BACKGROUND, "res/sky.jpg");
     m_textures.load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_textures.load(TexturesID::HALO, "res/HaloRender.jpg");
-    m_textures.load(TexturesID::MAP_TEXTURE, "res/dirt.png");
+    m_textures.load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
     m_textures.load(TexturesID::WORM, "res/Worm.png");
     m_textures.load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_textures.load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
