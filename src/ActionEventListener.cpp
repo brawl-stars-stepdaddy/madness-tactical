@@ -4,6 +4,7 @@
 #include "ActionEventData.hpp"
 #include "Unit.hpp"
 #include "World.hpp"
+#include "Camera.hpp"
 
 ChangeAngleDownEventListener::ChangeAngleDownEventListener(GameLogic *game_logic) : m_game_logic(game_logic) {
 }
@@ -27,6 +28,12 @@ BeginChargeWeaponEventListener::BeginChargeWeaponEventListener(GameLogic *game_l
 }
 
 LaunchProjectileEventListener::LaunchProjectileEventListener(GameLogic *game_logic) : m_game_logic(game_logic) {
+}
+
+ZoomInEventListener::ZoomInEventListener(Camera *camera) : m_camera(camera) {
+}
+
+ZoomOutEventListener::ZoomOutEventListener(Camera *camera) : m_camera(camera) {
 }
 
 void ChangeAngleDownEventListener::process(const EventData &event) {
@@ -63,4 +70,12 @@ void LaunchProjectileEventListener::process(const EventData &event) {
     assert(event.get_event_type() == EventType::LAUNCH_PROJECTILE);
     auto launch_event = static_cast<const LaunchProjectileEventData &>(event);
     m_game_logic->get_current_unit()->get_weapon()->launch(*m_game_logic->get_world());
+}
+
+void ZoomInEventListener::process(const EventData &event) {
+    m_camera->zoom_in();
+}
+
+void ZoomOutEventListener::process(const EventData &event) {
+    m_camera->zoom_out();
 }

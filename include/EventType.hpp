@@ -13,6 +13,8 @@ enum class EventType {
     JUMP_FORWARD,
     JUMP_BACKWARD,
     BEGIN_CHARGE_WEAPON,
+    ZOOM_IN,
+    ZOOM_OUT,
 };
 
 #endif

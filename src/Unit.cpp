@@ -63,10 +63,6 @@ EntityType Unit::get_type() {
 void Unit::on_collision(Entity *) {
 }
 
-float sign(float value) {
-    return static_cast<float>((value > 0) - (value < 0));
-}
-
 void Unit::on_explosion(const Explosion &explosion) {
     auto [x, y] = m_body.get_position();
     auto [x_explosion, y_explosion] = explosion.get_coordinates();

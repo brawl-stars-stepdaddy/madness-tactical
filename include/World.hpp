@@ -11,6 +11,7 @@
 #include "Unit.hpp"
 #include "box2d/box2d.h"
 #include "GameLogic.hpp"
+#include "Camera.hpp"
 
 struct Map;
 struct CollisionEventListener;
@@ -71,6 +72,7 @@ private:
     CollisionEventListener *m_collision_listener;
     DestructionEventListener *m_destruction_listener;
     GameLogic m_game_logic;
+    Camera m_camera;
 };
 
 #endif

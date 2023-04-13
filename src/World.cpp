@@ -22,31 +22,35 @@ std::vector<std::pair<float, float>> generate_naive_map() {
 
     std::vector<std::pair<float, float>> points;
     float prev_y = 8.0f;
-    for (int i = 0; i <= 192; i++) {
+    for (int i = 0; i <= 3000; i++) {
         float x = static_cast<float>(i) / 10;
         prev_y += gen_real(rng);
         points.emplace_back(x, prev_y);
     }
     prev_y = 8.0f;
-    for (int i = 0; i <= 192; i++) {
+    for (int i = 0; i <= 3000; i++) {
         float cur_y = points[i].second;
         prev_y = prev_y + 0.02 * (cur_y - prev_y);
         points[i].second = prev_y;
     }
-    points.emplace_back(19.2, 10.8);
-    points.emplace_back(0, 10.8);
+    points.emplace_back(300, 100);
+    points.emplace_back(0, 100);
+    for (int i = 0; i < points.size(); i++) {
+        points[i].first -= 150;
+    }
     return points;
 }
 
 World::World(sf::RenderWindow &window)
     : m_window(window),
       m_world_view(window.getDefaultView()),
-      m_world_bounds(0.f, 0.f, m_world_view.getSize().x / World::SCALE, m_world_view.getSize().y / World::SCALE),
+      m_world_bounds(-150, -30, 300, 60),
       m_spawn_position(5.f, 5.f),
       m_player_engineer(nullptr),
       m_physics_world({0, 10}),
       m_map(nullptr),
-      m_game_logic(this) {
+      m_game_logic(this),
+      m_camera(nullptr) {
     load_textures();
     build_scene();
     EventManager::get()->add_listener(
@@ -70,6 +74,8 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(std::make_unique<JumpBackwardEventListener>(&m_game_logic), EventType::JUMP_BACKWARD);
     EventManager::get()->add_listener(std::make_unique<BeginChargeWeaponEventListener>(&m_game_logic), EventType::BEGIN_CHARGE_WEAPON);
     EventManager::get()->add_listener(std::make_unique<LaunchProjectileEventListener>(&m_game_logic),EventType::LAUNCH_PROJECTILE);
+    EventManager::get()->add_listener(std::make_unique<ZoomInEventListener>(&m_camera), EventType::ZOOM_IN);
+    EventManager::get()->add_listener(std::make_unique<ZoomOutEventListener>(&m_camera),EventType::ZOOM_OUT);
 }
 
 void World::load_textures() {
@@ -96,7 +102,7 @@ void World::build_scene() {
                                                                                          m_world_bounds.top * World::SCALE,
                                                                                          m_world_bounds.width * World::SCALE,
                                                                                          m_world_bounds.height * World::SCALE));
-    background_sprite->setPosition(m_world_bounds.left, m_world_bounds.top);
+    background_sprite->setPosition(m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE);
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
     m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
     std::unique_ptr<Unit> engie =
@@ -113,10 +119,8 @@ void World::build_scene() {
     halo->setPosition(20, -120);
     halo->setScale({0.4, 0.4});
     m_player_engineer->attach_child(std::move(halo));
-    m_player_engineer->setRotation(1);
-    b2Body *body = m_player_engineer->get_body().get_b2Body();
-    // body->SetLinearVelocity({3, 0});
-    // body->SetAngularVelocity(1);
+    m_camera = Camera(m_player_engineer->get_body().get_position(), 2);
+    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_player_engineer, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(
         this,
         std::vector<std::vector<std::pair<float, float>>> {generate_naive_map()}
@@ -129,6 +133,9 @@ void World::build_scene() {
 }
 
 void World::draw() {
+    m_world_view = m_window.getDefaultView();
+    m_world_view.setCenter(m_camera.get_offset() * SCALE);
+    m_world_view.zoom(m_camera.get_zoom());
     m_window.setView(m_world_view);
     m_window.draw(m_scene_graph);
 }
@@ -137,6 +144,7 @@ void World::update(sf::Time delta_time) {
     EventManager::get()->update();
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
+    m_camera.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
 }

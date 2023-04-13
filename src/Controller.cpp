@@ -12,6 +12,8 @@ Controller::Controller() {
     m_key_pressed_binding[sf::Keyboard::Space] = EventType::BEGIN_CHARGE_WEAPON;
     m_key_pressed_binding[sf::Keyboard::Enter] = EventType::JUMP_FORWARD;
     m_key_pressed_binding[sf::Keyboard::BackSpace] = EventType::JUMP_BACKWARD;
+    m_key_pressed_binding[sf::Keyboard::Equal] = EventType::ZOOM_IN;
+    m_key_pressed_binding[sf::Keyboard::Hyphen] = EventType::ZOOM_OUT;
     m_key_released_binding[sf::Keyboard::Space] = EventType::LAUNCH_PROJECTILE;
 
     m_action_activation_type[EventType::MOVE_LEFT] = ActionActivationType::ON_KEY_IS_PRESSED;
@@ -21,6 +23,8 @@ Controller::Controller() {
     m_action_activation_type[EventType::BEGIN_CHARGE_WEAPON] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_FORWARD] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_BACKWARD] = ActionActivationType::ON_KEY_PRESSED;
+    m_action_activation_type[EventType::ZOOM_IN] = ActionActivationType::ON_KEY_PRESSED;
+    m_action_activation_type[EventType::ZOOM_OUT] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::LAUNCH_PROJECTILE] = ActionActivationType::ON_KEY_RELEASED;
 
     m_action_binding[EventType::MOVE_LEFT] = [](){ EventManager::get()->queue_event(std::make_unique<MoveLeftEventData>()); };
@@ -30,6 +34,8 @@ Controller::Controller() {
     m_action_binding[EventType::BEGIN_CHARGE_WEAPON] = [](){ EventManager::get()->queue_event(std::make_unique<BeginChargeWeaponEventData>()); };
     m_action_binding[EventType::JUMP_FORWARD] = [](){ EventManager::get()->queue_event(std::make_unique<JumpForwardEventData>()); };
     m_action_binding[EventType::JUMP_BACKWARD] = [](){ EventManager::get()->queue_event(std::make_unique<JumpBackwardEventData>()); };
+    m_action_binding[EventType::ZOOM_IN] = [](){ EventManager::get()->queue_event(std::make_unique<ZoomInEventData>()); };
+    m_action_binding[EventType::ZOOM_OUT] = [](){ EventManager::get()->queue_event(std::make_unique<ZoomOutEventData>()); };
     m_action_binding[EventType::LAUNCH_PROJECTILE] = [](){ EventManager::get()->queue_event(std::make_unique<LaunchProjectileEventData>()); };
 }
 

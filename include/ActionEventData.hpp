@@ -61,4 +61,18 @@ public:
     }
 };
 
+struct ZoomInEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::ZOOM_IN;
+    }
+};
+
+struct ZoomOutEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::ZOOM_OUT;
+    }
+};
+
 #endif // ACTION_EVENT_DATA_HPP_

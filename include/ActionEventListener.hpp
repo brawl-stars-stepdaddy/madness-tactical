@@ -77,4 +77,24 @@ private:
     GameLogic *m_game_logic;
 };
 
+struct Camera;
+
+struct ZoomInEventListener : EventListener {
+public:
+    explicit ZoomInEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
+struct ZoomOutEventListener : EventListener {
+public:
+    explicit ZoomOutEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
 #endif //MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
