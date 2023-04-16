@@ -12,13 +12,13 @@ Body &JumpSensor::get_body() {
 
 void JumpSensor::on_collision(Entity *other_object) {
     if (other_object->get_type() == EntityType::MAP) {
-        m_parent->set_jump_ability(true);
+        m_parent->set_jump_ability(++contact_numbers > 0);
     }
 }
 
 void JumpSensor::end_collision(Entity *other_object) {
     if (other_object->get_type() == EntityType::MAP) {
-        m_parent->set_jump_ability(false);
+        m_parent->set_jump_ability(--contact_numbers > 0);
     }
 }
 

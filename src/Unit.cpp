@@ -23,14 +23,14 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
     : m_type(type),
       m_sprite(world->get_texture_holder().get(to_texture_id(type))),
       m_body(UnitBody(this, world->get_physics_world(), center, radius)),
-      m_jump_sensor(JumpSensor(this, world, {center.x, center.y + radius}, radius / 2)) {
+      m_jump_sensor(JumpSensor(this, world, {center.x, center.y}, radius)) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
 
     b2WeldJointDef joint_def;
     joint_def.bodyA = m_body.get_b2Body();
     joint_def.bodyB = m_jump_sensor.get_body().get_b2Body();
-    joint_def.localAnchorA = {0, radius};
+    joint_def.localAnchorA = {0, 0};
     joint_def.localAnchorB = {0, 0};
     joint_def.collideConnected = false;
     world->get_physics_world().CreateJoint(&joint_def);
@@ -44,6 +44,7 @@ void Unit::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 
 void Unit::update_current(sf::Time delta_time) {
     move(delta_time, m_direction);
+    stop_move(delta_time);
     setPosition(
         {m_body.get_position().x * World::SCALE,
          m_body.get_position().y * World::SCALE}
@@ -96,20 +97,36 @@ void Unit::set_direction(float direction) {
 
 void Unit::move(sf::Time delta_time, float direction) {
     if (m_is_moving) {
-        auto vertical_velocity = m_body.get_b2Body()->GetLinearVelocity().y;
-        m_body.get_b2Body()->SetLinearVelocity({100 * direction * delta_time.asSeconds(), vertical_velocity});
+        auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
+        float horizontal_change = direction * b2Max(abs(current_velocity.x + 0.1f * direction), 5.0f) - current_velocity.x;
+        auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse, 0}, true);
+
+        //auto vertical_velocity = m_body.get_b2Body()->GetLinearVelocity().y;
+        //m_body.get_b2Body()->ApplyLinearImpulseToCenter({1000 * direction * delta_time.asSeconds(), 0}, true);
+        //m_body.get_b2Body()->SetLinearDamping(10);
+        //m_body.get_b2Body()->SetLinearVelocity({300 * direction * delta_time.asSeconds(), vertical_velocity});
+    }
+}
+
+void Unit::stop_move(sf::Time delta_time) {
+    if (!m_is_moving) {
+        auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
+        float horizontal_change = -current_velocity.x / 2;
+        auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse, 0}, true);
     }
 }
 
 void Unit::jump_forward() {
     if (m_jump_ability) {
-        m_body.get_b2Body()->SetLinearVelocity({m_direction * 4, -5});
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({m_direction * 8, -10}, true);
     }
 }
 
 void Unit::jump_backward() {
     if (m_jump_ability) {
-        m_body.get_b2Body()->SetLinearVelocity({-m_direction * 2, -8});
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({-m_direction * 4, -16}, true);
     }
 }
 

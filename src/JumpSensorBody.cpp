@@ -13,12 +13,18 @@ JumpSensorBody::JumpSensorBody(
     m_body = world.CreateBody(&sensor_def);
 
     b2CircleShape unit_sensor_shape;
-    unit_sensor_shape.m_radius = radius;
+    unit_sensor_shape.m_radius = radius / 4;
+    unit_sensor_shape.m_p = {0, radius};
 
     b2FixtureDef unit_sensor_fixture;
-    unit_sensor_fixture.density = 1.0f;
     unit_sensor_fixture.isSensor = true;
     unit_sensor_fixture.shape = &unit_sensor_shape;
+
+    m_body->CreateFixture(&unit_sensor_fixture);
+
+    unit_sensor_shape.m_radius = radius / 10;
+    unit_sensor_fixture.shape = &unit_sensor_shape;
+    unit_sensor_fixture.density = 1.0f;
 
     m_body->CreateFixture(&unit_sensor_fixture);
 }

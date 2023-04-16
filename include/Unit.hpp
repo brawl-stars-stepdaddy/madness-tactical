@@ -35,6 +35,7 @@ public:
     void reset();
 
     void move(sf::Time, float);
+    void stop_move(sf::Time);
     void jump_forward();
     void jump_backward();
 

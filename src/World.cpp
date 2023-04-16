@@ -44,10 +44,10 @@ std::vector<std::pair<float, float>> generate_naive_map() {
 World::World(sf::RenderWindow &window)
     : m_window(window),
       m_world_view(window.getDefaultView()),
-      m_world_bounds(-150, -30, 300, 60),
+      m_world_bounds(-150, -30, 300, 100),
       m_spawn_position(5.f, 5.f),
       m_player_engineer(nullptr),
-      m_physics_world({0, 10}),
+      m_physics_world({0, 20}),
       m_map(nullptr),
       m_game_logic(this),
       m_camera(nullptr) {

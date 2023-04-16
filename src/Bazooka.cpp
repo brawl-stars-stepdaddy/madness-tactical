@@ -67,7 +67,7 @@ void Bazooka::launch(World &world) {
         return;
     }
     m_is_charging = false;
-    float impulse_value = m_charge_level * 10;
+    float impulse_value = m_charge_level * 20;
     m_charge_level = 0.2f;
     sf::Vector2f start_position = {
             m_parent->get_body().get_position().x +
