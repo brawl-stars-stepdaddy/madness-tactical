@@ -30,8 +30,8 @@ public:
     void on_collision(Entity *) override;
     void on_explosion(const Explosion &) override;
 
-    void set_jump_ability(bool);
-    void set_is_moving(bool);
+    void set_moving_active(bool);
+    void set_dumping_active(bool);
     void reset();
 
     void move(sf::Time, float);
@@ -50,9 +50,9 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     float m_direction = 1.0f;
-    bool m_jump_ability = false;
-    bool m_is_moving = false;
-    JumpSensor m_jump_sensor;
+    bool m_jumping_active = false;
+    bool m_moving_active = false;
+    bool m_dumping_active = false;
 };
 
 

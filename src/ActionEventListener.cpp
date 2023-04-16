@@ -45,12 +45,14 @@ void ChangeAngleUpEventListener::process(const EventData &event) {
 }
 
 void MoveLeftEventListener::process(const EventData &event) {
-    m_game_logic->get_current_unit()->set_is_moving(true);
+    m_game_logic->get_current_unit()->set_dumping_active(true);
+    m_game_logic->get_current_unit()->set_moving_active(true);
     m_game_logic->get_current_unit()->set_direction(-1);
 }
 
 void MoveRightEventListener::process(const EventData &event) {
-    m_game_logic->get_current_unit()->set_is_moving(true);
+    m_game_logic->get_current_unit()->set_dumping_active(true);
+    m_game_logic->get_current_unit()->set_moving_active(true);
     m_game_logic->get_current_unit()->set_direction(1);
 }
 

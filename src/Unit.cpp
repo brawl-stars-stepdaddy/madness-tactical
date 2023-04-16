@@ -22,18 +22,9 @@ TexturesID to_texture_id(Unit::Type type) {
 Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
     : m_type(type),
       m_sprite(world->get_texture_holder().get(to_texture_id(type))),
-      m_body(UnitBody(this, world->get_physics_world(), center, radius)),
-      m_jump_sensor(JumpSensor(this, world, {center.x, center.y}, radius)) {
+      m_body(UnitBody(this, world->get_physics_world(), center, radius)) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
-
-    b2WeldJointDef joint_def;
-    joint_def.bodyA = m_body.get_b2Body();
-    joint_def.bodyB = m_jump_sensor.get_body().get_b2Body();
-    joint_def.localAnchorA = {0, 0};
-    joint_def.localAnchorB = {0, 0};
-    joint_def.collideConnected = false;
-    world->get_physics_world().CreateJoint(&joint_def);
 }
 
 
@@ -43,6 +34,13 @@ void Unit::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Unit::update_current(sf::Time delta_time) {
+    if (m_body.get_b2Body()->GetLinearVelocity().LengthSquared() < 1e-1) {
+        m_jumping_active = true;
+        m_dumping_active = false;
+    }
+    else {
+        m_jumping_active = false;
+    }
     move(delta_time, m_direction);
     stop_move(delta_time);
     setPosition(
@@ -61,7 +59,10 @@ EntityType Unit::get_type() {
     return EntityType::UNIT;
 }
 
-void Unit::on_collision(Entity *) {
+void Unit::on_collision(Entity *other_object) {
+    if (other_object->get_type() == EntityType::MAP) {
+        m_dumping_active = true;
+    }
 }
 
 void Unit::on_explosion(const Explosion &explosion) {
@@ -96,48 +97,47 @@ void Unit::set_direction(float direction) {
 }
 
 void Unit::move(sf::Time delta_time, float direction) {
-    if (m_is_moving) {
+    if (m_moving_active) {
         auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_change = direction * b2Max(abs(current_velocity.x + 0.1f * direction), 5.0f) - current_velocity.x;
+        float horizontal_change = direction * b2Min(abs(current_velocity.x + 5.0f * direction), 5.0f) - current_velocity.x;
         auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
         m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse, 0}, true);
-
-        //auto vertical_velocity = m_body.get_b2Body()->GetLinearVelocity().y;
-        //m_body.get_b2Body()->ApplyLinearImpulseToCenter({1000 * direction * delta_time.asSeconds(), 0}, true);
-        //m_body.get_b2Body()->SetLinearDamping(10);
-        //m_body.get_b2Body()->SetLinearVelocity({300 * direction * delta_time.asSeconds(), vertical_velocity});
     }
 }
 
 void Unit::stop_move(sf::Time delta_time) {
-    if (!m_is_moving) {
+    if (!m_moving_active && m_dumping_active) {
         auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_change = -current_velocity.x / 2;
-        auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse, 0}, true);
+        float horizontal_change = -current_velocity.x * 0.9;
+        float vertical_change = -current_velocity.y * 0.9;
+        b2Vec2 impulse = {
+                m_body.get_b2Body()->GetMass() * horizontal_change,
+                m_body.get_b2Body()->GetMass() * vertical_change,
+        };
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(impulse, true);
     }
 }
 
 void Unit::jump_forward() {
-    if (m_jump_ability) {
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({m_direction * 8, -10}, true);
+    if (m_jumping_active) {
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({m_direction * 25, -30}, true);
     }
 }
 
 void Unit::jump_backward() {
-    if (m_jump_ability) {
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({-m_direction * 4, -16}, true);
+    if (m_jumping_active) {
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({-m_direction * 20, -40}, true);
     }
 }
 
-void Unit::set_jump_ability(bool new_value) {
-    m_jump_ability = new_value;
+void Unit::set_moving_active(bool new_value) {
+    m_moving_active = new_value;
 }
 
-void Unit::set_is_moving(bool is_moving) {
-    m_is_moving = is_moving;
+void Unit::set_dumping_active(bool new_value) {
+    m_dumping_active = new_value;
 }
 
 void Unit::reset() {
-    m_is_moving = false;
+    m_moving_active = false;
 }
