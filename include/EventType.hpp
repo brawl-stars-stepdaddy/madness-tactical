@@ -15,6 +15,8 @@ enum class EventType {
     BEGIN_CHARGE_WEAPON,
     ZOOM_IN,
     ZOOM_OUT,
+    MOVE_TRANSITION,
+    GAME_OVER
 };
 
 #endif

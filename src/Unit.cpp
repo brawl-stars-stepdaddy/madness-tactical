@@ -3,8 +3,9 @@
 #include "EventManager.hpp"
 #include "ExplosionEventData.hpp"
 #include "ResourceHolder.hpp"
-#include "World.hpp"
 #include "GuiUtil.hpp"
+#include <World.hpp>
+#include <DestructionEventData.hpp>
 #include <cmath>
 
 TexturesID to_texture_id(Unit::Type type) {
@@ -19,10 +20,12 @@ TexturesID to_texture_id(Unit::Type type) {
     }
 }
 
-Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius)
+Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius, int player_id)
     : m_type(type),
       m_sprite(world->get_texture_holder().get(to_texture_id(type))),
-      m_body(UnitBody(this, world->get_physics_world(), center, radius)) {
+      m_body(UnitBody(this, world->get_physics_world(), center, radius)),
+      m_world(world),
+      m_player_id(player_id) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
 }
@@ -75,6 +78,14 @@ void Unit::on_explosion(const Explosion &explosion) {
     float x_impulse = 100 * x_vector / pow(distance, 2);
     float y_impulse = 100 * y_vector / pow(distance, 2);
     physic_body->ApplyLinearImpulseToCenter({x_impulse, y_impulse}, true);
+
+    m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
+    if (m_health <= 0) {
+        m_body.get_b2Body()->SetEnabled(false);
+        EventManager::get()->queue_event(
+                std::make_unique<DestructionEventData>(this)
+        );
+    }
 }
 
 float Unit::get_direction() const {

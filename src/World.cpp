@@ -5,11 +5,12 @@
 #include "Bazooka.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
+#include "GameOverEventListener.hpp"
 #include "EventManager.hpp"
 #include "EventType.hpp"
-#include "Explosion.hpp"
 #include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
+#include "MoveTransitionEventListener.hpp"
 #include "ActionEventListener.hpp"
 #include "ActionEventData.hpp"
 #include "SpriteNode.hpp"
@@ -46,7 +47,7 @@ World::World(sf::RenderWindow &window)
       m_world_view(window.getDefaultView()),
       m_world_bounds(-150, -30, 300, 100),
       m_spawn_position(5.f, 5.f),
-      m_player_engineer(nullptr),
+      m_active_unit(nullptr),
       m_physics_world({0, 20}),
       m_map(nullptr),
       m_game_logic(this),
@@ -58,14 +59,10 @@ World::World(sf::RenderWindow &window)
     );
     auto listener = std::make_unique<CollisionEventListener>(this);
     m_collision_listener = listener.get();
-    EventManager::get()->add_listener(
-        std::move(listener), EventType::COLLISION
-    );
+    EventManager::get()->add_listener(std::move(listener), EventType::COLLISION);
     auto destruction_listener = std::make_unique<DestructionEventListener>();
     m_destruction_listener = destruction_listener.get();
-    EventManager::get()->add_listener(
-        std::move(destruction_listener), EventType::DESTRUCTION
-    );
+    EventManager::get()->add_listener(std::move(destruction_listener), EventType::DESTRUCTION);
     EventManager::get()->add_listener(std::make_unique<MoveRightEventListener>(&m_game_logic), EventType::MOVE_RIGHT);
     EventManager::get()->add_listener(std::make_unique<MoveLeftEventListener>(&m_game_logic), EventType::MOVE_LEFT);
     EventManager::get()->add_listener(std::make_unique<ChangeAngleUpEventListener>(&m_game_logic), EventType::CHANGE_ANGLE_UP);
@@ -76,6 +73,8 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(std::make_unique<LaunchProjectileEventListener>(&m_game_logic),EventType::LAUNCH_PROJECTILE);
     EventManager::get()->add_listener(std::make_unique<ZoomInEventListener>(&m_camera), EventType::ZOOM_IN);
     EventManager::get()->add_listener(std::make_unique<ZoomOutEventListener>(&m_camera),EventType::ZOOM_OUT);
+    EventManager::get()->add_listener(std::make_unique<MoveTransitionEventListener>(this), EventType::MOVE_TRANSITION);
+    EventManager::get()->add_listener(std::make_unique<GameOverEventListener>(), EventType::GAME_OVER);
 }
 
 void World::load_textures() {
@@ -105,22 +104,29 @@ void World::build_scene() {
     background_sprite->setPosition(m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE);
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
     m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
-    std::unique_ptr<Unit> engie =
-        std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{1, 1}, 1);
-    m_player_engineer = engie.get();
-    m_scene_layers[ENTITIES]->attach_child(std::move(engie));
-    std::unique_ptr<Unit> stupid_worm =
-            std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{10, 1}, 1);
-    m_scene_layers[ENTITIES]->attach_child(std::move(stupid_worm));
+    std::unique_ptr<Unit> worm1 =
+        std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{1, 1}, 1, 0);
+    m_active_unit = worm1.get();
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
+    std::unique_ptr<Unit> worm2 =
+            std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{10, 1}, 1, 1);
+    auto second_unit = worm2.get();
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
     std::unique_ptr<SpriteNode> halo =
         std::make_unique<SpriteNode>(m_textures.get(TexturesID::HALO));
+
+    m_last_active_units.resize(2);
+    m_playable_units.resize(2);
+    m_playable_units[0].push_back(m_active_unit);
+    m_playable_units[1].push_back(second_unit);
+
     sf::FloatRect bounds = halo->get_sprite().getLocalBounds();
     halo->setOrigin(bounds.width / 2.f, bounds.height / 2.f);
     halo->setPosition(20, -120);
     halo->setScale({0.4, 0.4});
-    m_player_engineer->attach_child(std::move(halo));
-    m_camera = Camera(m_player_engineer->get_body().get_position(), 2);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_player_engineer, .5f, 3.f));
+    m_active_unit->attach_child(std::move(halo));
+    m_camera = Camera(m_active_unit->get_body().get_position(), 2);
+    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(
         this,
         std::vector<std::vector<std::pair<float, float>>> {generate_naive_map()}
@@ -128,8 +134,8 @@ void World::build_scene() {
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
-    auto bazooka = std::make_unique<Bazooka>(this, m_player_engineer);
-    m_player_engineer->attach_child(std::move(bazooka));
+    auto bazooka = std::make_unique<Bazooka>(this, m_active_unit);
+    m_active_unit->attach_child(std::move(bazooka));
 }
 
 void World::draw() {
@@ -141,14 +147,44 @@ void World::draw() {
 }
 
 void World::update(sf::Time delta_time) {
+    m_moves_timer -= delta_time.asSeconds();
+    if (m_moves_timer <= 0) {
+        EventManager::get()->queue_event(
+                std::make_unique<MoveTransitionEventData>(MoveTransitionEventData::TransitionType::OTHER_PLAYER));
+        m_moves_timer = 5;
+    }
     EventManager::get()->update();
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
     m_camera.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
+    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {
     m_scene_layers[ENTITIES]->attach_child(std::move(ptr));
+}
+
+void World::activate_next_unit() {
+    m_last_active_units[m_current_player]++;
+    m_last_active_units[m_current_player] %= m_playable_units[m_current_player].size();
+    m_active_unit = m_playable_units[m_current_player][m_last_active_units[m_current_player]];
+}
+
+void World::activate_next_player() {
+    while (m_playable_units[(++m_current_player) % m_players_number].empty()) {}
+    m_current_player %= m_players_number;
+    activate_next_unit();
+}
+
+void World::remove_playable_unit(int player_id, Unit *unit) {
+    auto deleted_object = std::find(m_playable_units[player_id].begin(), m_playable_units[player_id].end(), unit);
+    if (deleted_object != m_playable_units[player_id].end()) {
+        m_playable_units[player_id].erase(deleted_object);
+        m_units_number--;
+    }
+    if (m_units_number == 0) {
+        EventManager::get()->queue_event(std::make_unique<GameOverEventData>());
+    }
 }

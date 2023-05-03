@@ -16,7 +16,7 @@ public:
         WORM,
     };
 
-    Unit(Type type, World *world, sf::Vector2f, float);
+    Unit(Type type, World *world, sf::Vector2f, float, int);
 
     UnitBody &get_body() override;
     EntityType get_type() override;
@@ -49,7 +49,10 @@ private:
     Type m_type;
     UnitBody m_body;
     Weapon *m_weapon;
+    World *m_world;
     float m_direction = 1.0f;
+    int m_health = 100;
+    int m_player_id;
     bool m_jumping_active = false;
     bool m_moving_active = false;
     bool m_dumping_active = false;

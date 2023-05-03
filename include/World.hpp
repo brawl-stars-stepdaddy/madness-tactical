@@ -8,10 +8,10 @@
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
-#include "Unit.hpp"
 #include "box2d/box2d.h"
 #include "GameLogic.hpp"
 #include "Camera.hpp"
+#include "Unit.hpp"
 
 struct Map;
 struct CollisionEventListener;
@@ -43,8 +43,12 @@ public:
     }
 
     Unit *get_player() {
-        return m_player_engineer;
+        return m_active_unit;
     }
+
+    void activate_next_unit();
+    void activate_next_player();
+    void remove_playable_unit(int player_id, Unit *unit);
 
     SceneNode *get_layer(Layer layer) {
         return m_scene_layers[layer];
@@ -66,13 +70,22 @@ private:
 
     sf::FloatRect m_world_bounds;
     sf::Vector2f m_spawn_position;
-    Unit *m_player_engineer;
+    Unit *m_active_unit;
     b2World m_physics_world;
     Map *m_map;
     CollisionEventListener *m_collision_listener;
     DestructionEventListener *m_destruction_listener;
     GameLogic m_game_logic;
     Camera m_camera;
+
+    std::vector<std::vector<Unit *>> m_playable_units;
+    std::vector<int> m_last_active_units;
+    int m_current_player = 0;
+    int m_players_number = 2;
+    int m_units_number = 2;
+
+    float m_moves_timer = 5;
+
 };
 
 #endif
