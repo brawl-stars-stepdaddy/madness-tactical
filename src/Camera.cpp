@@ -31,6 +31,7 @@ Camera::Camera(sf::Vector2f offset, float zoom) : m_offset(offset), m_current_zo
 
 void Camera::update(sf::Time delta_time) {
     m_follow_strategy->update(delta_time);
+    m_expected_zoom *= pow(m_zooming, delta_time.asSeconds());
     float delta_zoom = m_expected_zoom - m_current_zoom;
     float zoom_speed = delta_zoom * m_zoom_convergence_factor;
     if (zoom_speed < 0) {
@@ -43,6 +44,7 @@ void Camera::update(sf::Time delta_time) {
         final_delta = delta_zoom;
     }
     m_current_zoom += final_delta;
+    m_zooming = 1;
 }
 
 sf::Vector2f Camera::get_offset() const {
@@ -67,9 +69,9 @@ void Camera::set_zoom(float zoom) {
 }
 
 void Camera::zoom_in() {
-    m_expected_zoom /= m_zoom_factor;
+    m_zooming = 1 / m_zoom_factor;
 }
 
 void Camera::zoom_out() {
-    m_expected_zoom *= m_zoom_factor;
+    m_zooming = m_zoom_factor;
 }

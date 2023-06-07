@@ -47,12 +47,13 @@ public:
 
 private:
     sf::Vector2f m_offset;
-    float m_zoom_factor = 1.2f;
+    float m_zoom_factor = 2.5f;
     float m_min_zoom_speed = .5f;
     float m_zoom_convergence_factor = 5.f;
     float m_current_zoom;
     float m_expected_zoom;
     std::unique_ptr<FollowStrategy> m_follow_strategy;
+    float m_zooming = 1;
 };
 
 #endif

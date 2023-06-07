@@ -8,6 +8,7 @@
 
 struct Weapon;
 struct World;
+struct Team;
 
 struct Unit : Entity {
 public:
@@ -20,6 +21,10 @@ public:
 
     UnitBody &get_body() override;
     EntityType get_type() override;
+
+    void set_team(Team *);
+    Team *get_team() const;
+    int get_health() const;
 
     void set_direction(float direction);
     float get_direction() const;
@@ -50,6 +55,7 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     World *m_world;
+    Team *m_team;
     float m_direction = 1.0f;
     int m_health = 100;
     int m_player_id;

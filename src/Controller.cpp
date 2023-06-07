@@ -12,8 +12,8 @@ Controller::Controller() {
     m_key_pressed_binding[sf::Keyboard::Space] = EventType::BEGIN_CHARGE_WEAPON;
     m_key_pressed_binding[sf::Keyboard::Enter] = EventType::JUMP_FORWARD;
     m_key_pressed_binding[sf::Keyboard::BackSpace] = EventType::JUMP_BACKWARD;
-    m_key_pressed_binding[sf::Keyboard::Equal] = EventType::ZOOM_IN;
-    m_key_pressed_binding[sf::Keyboard::Hyphen] = EventType::ZOOM_OUT;
+    m_key_is_pressed_binding[sf::Keyboard::Equal] = EventType::ZOOM_IN;
+    m_key_is_pressed_binding[sf::Keyboard::Hyphen] = EventType::ZOOM_OUT;
     m_key_released_binding[sf::Keyboard::Space] = EventType::LAUNCH_PROJECTILE;
 
     m_action_activation_type[EventType::MOVE_LEFT] = ActionActivationType::ON_KEY_IS_PRESSED;
@@ -23,8 +23,8 @@ Controller::Controller() {
     m_action_activation_type[EventType::BEGIN_CHARGE_WEAPON] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_FORWARD] = ActionActivationType::ON_KEY_PRESSED;
     m_action_activation_type[EventType::JUMP_BACKWARD] = ActionActivationType::ON_KEY_PRESSED;
-    m_action_activation_type[EventType::ZOOM_IN] = ActionActivationType::ON_KEY_PRESSED;
-    m_action_activation_type[EventType::ZOOM_OUT] = ActionActivationType::ON_KEY_PRESSED;
+    m_action_activation_type[EventType::ZOOM_IN] = ActionActivationType::ON_KEY_IS_PRESSED;
+    m_action_activation_type[EventType::ZOOM_OUT] = ActionActivationType::ON_KEY_IS_PRESSED;
     m_action_activation_type[EventType::LAUNCH_PROJECTILE] = ActionActivationType::ON_KEY_RELEASED;
 
     m_action_binding[EventType::MOVE_LEFT] = [](){ EventManager::get()->queue_event(std::make_unique<MoveLeftEventData>()); };

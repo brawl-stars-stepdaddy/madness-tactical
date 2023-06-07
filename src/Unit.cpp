@@ -152,3 +152,15 @@ void Unit::set_dumping_active(bool new_value) {
 void Unit::reset() {
     m_moving_active = false;
 }
+
+int Unit::get_health() const {
+    return m_health;
+}
+
+void Unit::set_team(Team *team) {
+    m_team = team;
+}
+
+Team *Unit::get_team() const {
+    return m_team;
+}
