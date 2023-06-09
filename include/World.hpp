@@ -42,6 +42,10 @@ public:
         return m_textures;
     }
 
+    FontHolder &get_font_holder() {
+        return m_fonts;
+    }
+
     Unit *get_player() {
         return m_active_unit;
     }
@@ -58,12 +62,13 @@ public:
     static constexpr float SCALE = 100.f;
 
 private:
-    void load_textures();
+    void load_resources();
     void build_scene();
 
     sf::RenderWindow &m_window;
     sf::View m_world_view;
     TextureHolder m_textures;
+    FontHolder m_fonts;
     SceneNode m_scene_graph;
     std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
 

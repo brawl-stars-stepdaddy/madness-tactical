@@ -17,6 +17,7 @@
 #include "WeaponBox.hpp"
 #include "HealingBox.hpp"
 #include "Unit.hpp"
+#include "UnitHealthBar.hpp"
 
 std::vector<std::pair<float, float>> generate_naive_map() {
     std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
@@ -53,7 +54,7 @@ World::World(sf::RenderWindow &window)
       m_map(nullptr),
       m_game_logic(this),
       m_camera(nullptr) {
-    load_textures();
+    load_resources();
     build_scene();
     EventManager::get()->add_listener(
         std::make_unique<ExplosionEventListener>(), EventType::EXPLOSION
@@ -78,7 +79,7 @@ World::World(sf::RenderWindow &window)
     EventManager::get()->add_listener(std::make_unique<GameOverEventListener>(), EventType::GAME_OVER);
 }
 
-void World::load_textures() {
+void World::load_resources() {
     m_textures.load(TexturesID::BACKGROUND, "res/sky.jpg");
     m_textures.load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_textures.load(TexturesID::HALO, "res/HaloRender.jpg");
@@ -90,6 +91,8 @@ void World::load_textures() {
     m_textures.load(TexturesID::BAZOOKA, "res/bazooka.png");
     m_textures.get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_textures.get(TexturesID::BACKGROUND).setRepeated(true);
+
+    m_fonts.load(FontsID::BAGEL_FONT, "res/BagelFatOne-Regular.ttf");
 }
 
 void World::build_scene() {
@@ -108,8 +111,8 @@ void World::build_scene() {
     m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(20, 1, 1.5, 1)));
     m_scene_layers[ENTITIES]->attach_child(std::make_unique<HealingBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
 
-    Team *team1 = m_team_manager.create_team();
-    Team *team2 = m_team_manager.create_team();
+    Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
+    Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
 
 
     std::unique_ptr<Unit> worm1 =
@@ -121,7 +124,6 @@ void World::build_scene() {
     auto bazooka = std::make_unique<Bazooka>(this, m_active_unit);
     m_active_unit->attach_child(std::move(bazooka));
 
-
     std::unique_ptr<Unit> worm2 =
             std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{10, 1}, 1, 1);
     auto second_unit = worm2.get();
@@ -129,16 +131,17 @@ void World::build_scene() {
     team2->add_weapon(BAZOOKA);
     bazooka = std::make_unique<Bazooka>(this, second_unit);
     second_unit->attach_child(std::move(bazooka));
-
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
-    std::unique_ptr<SpriteNode> halo =
-        std::make_unique<SpriteNode>(m_textures.get(TexturesID::HALO));
 
-    sf::FloatRect bounds = halo->get_sprite().getLocalBounds();
-    halo->setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    halo->setPosition(20, -120);
-    halo->setScale({0.4, 0.4});
-    m_active_unit->attach_child(std::move(halo));
+    std::unique_ptr<Unit> worm3 =
+            std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{7, 1}, 1, 1);
+    auto third_unit = worm3.get();
+    team2->add_unit(third_unit);
+    team2->add_weapon(BAZOOKA);
+    bazooka = std::make_unique<Bazooka>(this, third_unit);
+    third_unit->attach_child(std::move(bazooka));
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm3));
+
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(

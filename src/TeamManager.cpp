@@ -1,15 +1,15 @@
 #include "TeamManager.hpp"
 #include "Team.hpp"
 
-Team *TeamManager::create_team() {
-    m_teams.push_back(std::make_unique<Team>());
+Team *TeamManager::create_team(sf::Color color) {
+    m_teams.push_back(std::make_unique<Team>(color));
     m_team_number++;
     return m_teams[m_team_number - 1].get();
 }
 
 void TeamManager::move_transition() {
-    remove_empty_teams();
     m_teams[m_active_team]->deactivate_team();
+    remove_empty_teams();
     m_active_team = (m_active_team + 1) % m_team_number;
     m_teams[m_active_team]->activate_team();
 }

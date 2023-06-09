@@ -9,6 +9,8 @@
 struct Unit;
 
 struct Team {
+    explicit Team(sf::Color);
+
     void add_unit(Unit *);
     void remove_unit(Unit *);
 
@@ -16,6 +18,7 @@ struct Team {
     void remove_weapon(WeaponType);
 
     int get_available_number(WeaponType);
+    sf::Color get_team_color();
 
     void activate_team();
     void deactivate_team();
@@ -26,6 +29,7 @@ struct Team {
     [[nodiscard]] int get_team_size() const;
 
 private:
+    sf::Color m_team_color;
     std::vector<Unit *> m_team_units;
     std::map<WeaponType, int> m_available_weapons;
     int m_active_unit = 0;

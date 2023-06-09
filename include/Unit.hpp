@@ -59,7 +59,7 @@ private:
     UnitBody m_body;
     Weapon *m_weapon;
     World *m_world;
-    Team *m_team;
+    Team *m_team = nullptr;
     float m_direction = 1.0f;
     int m_health = 100;
     int m_player_id;

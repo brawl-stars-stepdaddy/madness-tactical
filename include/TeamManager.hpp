@@ -9,7 +9,7 @@
 struct Unit;
 
 struct TeamManager {
-    Team *create_team();
+    Team *create_team(sf::Color);
 
     void move_transition();
 

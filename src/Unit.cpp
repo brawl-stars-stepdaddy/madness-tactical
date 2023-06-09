@@ -8,6 +8,7 @@
 #include <DestructionEventData.hpp>
 #include "Weapon.hpp"
 #include <cmath>
+#include "UnitHealthBar.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -29,6 +30,10 @@ Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius, int
       m_player_id(player_id) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
+
+
+    auto health_bar = std::make_unique<UnitHealthBar>(this, world->get_font_holder().get(FontsID::BAGEL_FONT));
+    this->attach_child(std::move(health_bar));
 }
 
 
@@ -82,6 +87,7 @@ void Unit::on_explosion(const Explosion &explosion) {
 
     m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
     if (m_health <= 0) {
+        m_health = 0;
         m_team->remove_unit(this);
         m_body.get_b2Body()->SetEnabled(false);
         EventManager::get()->queue_event(

@@ -3,6 +3,7 @@
 
 namespace sf {
 class Texture;
+class Font;
 }
 
 enum class TexturesID {
@@ -19,9 +20,16 @@ enum class TexturesID {
     BAZOOKA,
 };
 
+enum class FontsID {
+    BAGEL_FONT
+};
+
 template <typename Resource, typename Identifier>
 struct ResourceHolder;
 
 using TextureHolder = ResourceHolder<TexturesID, sf::Texture>;
+
+using FontHolder = ResourceHolder<FontsID, sf::Font>;
+
 
 #endif

@@ -1,6 +1,8 @@
 #include "Team.hpp"
 #include "Unit.hpp"
 
+Team::Team(sf::Color color) : m_team_color(color) {}
+
 void Team::add_unit(Unit *unit) {
     auto unit_position = std::find(m_team_units.begin(), m_team_units.end(), unit);
     if (unit_position == m_team_units.end()) {
@@ -60,4 +62,8 @@ void Team::remove_weapon(WeaponType type) {
 
 int Team::get_available_number(WeaponType type) {
     return m_available_weapons[type];
+}
+
+sf::Color Team::get_team_color() {
+    return m_team_color;
 }
