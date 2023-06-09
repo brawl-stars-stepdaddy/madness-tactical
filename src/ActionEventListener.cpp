@@ -1,6 +1,6 @@
 #include "ActionEventListener.hpp"
 #include "GameLogic.hpp"
-#include "Weapon.hpp"
+#include "ChargeableWeapon.hpp"
 #include "ActionEventData.hpp"
 #include "Unit.hpp"
 #include "World.hpp"
@@ -37,11 +37,13 @@ ZoomOutEventListener::ZoomOutEventListener(Camera *camera) : m_camera(camera) {
 }
 
 void ChangeAngleDownEventListener::process(const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_angle_change_direction(-1);
+    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_angle_change_direction(-1);
 }
 
 void ChangeAngleUpEventListener::process(const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_angle_change_direction(1);
+    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_angle_change_direction(1);
 }
 
 void MoveLeftEventListener::process(const EventData &event) {
@@ -65,7 +67,8 @@ void JumpBackwardEventListener::process(const EventData &event) {
 }
 
 void BeginChargeWeaponEventListener::process(const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_currently_charging(true);
+    auto weapon = static_cast<ChargeableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_currently_charging(true);
 }
 
 void LaunchProjectileEventListener::process(const EventData &event) {
