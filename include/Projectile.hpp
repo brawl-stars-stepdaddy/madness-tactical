@@ -15,10 +15,8 @@ struct Projectile : Entity {
     void on_collision(Entity *) override;
     void on_explosion(const Explosion &) override;
 
-private:
-    void draw_current(sf::RenderTarget &target, sf::RenderStates)
-        const override;
-
+protected:
+    void draw_current(sf::RenderTarget &target, sf::RenderStates) const override;
     void update_current(sf::Time delta_time) override;
 
     sf::Sprite m_sprite;

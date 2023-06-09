@@ -3,6 +3,7 @@
 #include <chrono>
 #include <vector>
 #include "Bazooka.hpp"
+#include "Grenade.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
 #include "GameOverEventListener.hpp"
@@ -17,7 +18,6 @@
 #include "WeaponBox.hpp"
 #include "HealingBox.hpp"
 #include "Unit.hpp"
-#include "UnitHealthBar.hpp"
 
 std::vector<std::pair<float, float>> generate_naive_map() {
     std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
@@ -89,6 +89,7 @@ void World::load_resources() {
     m_textures.load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
     m_textures.load(TexturesID::HEALING_BOX, "res/healing_box.png");
     m_textures.load(TexturesID::BAZOOKA, "res/bazooka.png");
+    m_textures.load(TexturesID::GRENADE, "res/grenade.png");
     m_textures.get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_textures.get(TexturesID::BACKGROUND).setRepeated(true);
 
@@ -128,9 +129,9 @@ void World::build_scene() {
             std::make_unique<Unit>(Unit::Type::WORM, this, sf::Vector2f{10, 1}, 1, 1);
     auto second_unit = worm2.get();
     team2->add_unit(second_unit);
-    team2->add_weapon(BAZOOKA);
-    bazooka = std::make_unique<Bazooka>(this, second_unit);
-    second_unit->attach_child(std::move(bazooka));
+    team2->add_weapon(GRENADE);
+    auto grenade = std::make_unique<Grenade>(this, second_unit);
+    second_unit->attach_child(std::move(grenade));
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
 
     std::unique_ptr<Unit> worm3 =
