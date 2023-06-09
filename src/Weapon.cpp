@@ -24,3 +24,7 @@ void Weapon::set_currently_charging(bool is_charging) {
 void Weapon::reset() {
     m_current_angle_change_direction = 0;
 }
+
+void Weapon::set_hidden(bool new_value) {
+    m_is_hidden = new_value;
+}

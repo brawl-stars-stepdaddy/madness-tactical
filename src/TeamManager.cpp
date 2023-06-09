@@ -2,7 +2,6 @@
 #include "Team.hpp"
 
 Team *TeamManager::create_team() {
-    remove_empty_teams();
     m_teams.push_back(std::make_unique<Team>());
     m_team_number++;
     return m_teams[m_team_number - 1].get();
@@ -10,7 +9,9 @@ Team *TeamManager::create_team() {
 
 void TeamManager::move_transition() {
     remove_empty_teams();
+    m_teams[m_active_team]->deactivate_team();
     m_active_team = (m_active_team + 1) % m_team_number;
+    m_teams[m_active_team]->activate_team();
 }
 
 Team *TeamManager::get_active_team() const {

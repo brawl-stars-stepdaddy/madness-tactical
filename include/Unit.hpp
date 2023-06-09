@@ -24,6 +24,8 @@ public:
 
     void set_team(Team *);
     Team *get_team() const;
+
+    void change_health(int);
     int get_health() const;
 
     void set_direction(float direction);
@@ -44,6 +46,8 @@ public:
     void jump_forward();
     void jump_backward();
 
+    void set_activeness(bool);
+
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
         const override;
@@ -62,6 +66,7 @@ private:
     bool m_jumping_active = false;
     bool m_moving_active = false;
     bool m_dumping_active = false;
+    bool m_is_active = false;
 };
 
 

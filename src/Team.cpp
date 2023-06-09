@@ -18,9 +18,21 @@ void Team::remove_unit(Unit *unit) {
     }
 }
 
-void Team::move_transition() {
+void Team::activate_team() {
     update_health();
     m_active_unit = (m_active_unit + 1) % m_team_size;
+    m_team_units[m_active_unit]->set_activeness(true);
+}
+
+void Team::deactivate_team() {
+    update_health();
+    m_team_units[m_active_unit]->set_activeness(false);
+}
+
+Unit *Team::activate_next_unit() {
+    deactivate_team();
+    activate_team();
+    return m_team_units[m_active_unit];
 }
 
 Unit *Team::get_active_unit() const {
@@ -36,4 +48,16 @@ void Team::update_health() {
     for (auto unit : m_team_units) {
         m_summary_health += unit->get_health();
     }
+}
+
+void Team::add_weapon(WeaponType type) {
+    m_available_weapons[type]++;
+}
+
+void Team::remove_weapon(WeaponType type) {
+    m_available_weapons[type]--;
+}
+
+int Team::get_available_number(WeaponType type) {
+    return m_available_weapons[type];
 }

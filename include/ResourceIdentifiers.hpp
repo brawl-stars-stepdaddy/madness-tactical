@@ -15,6 +15,7 @@ enum class TexturesID {
     WORM,
     CANON_BALL,
     WEAPON_BOX,
+    HEALING_BOX,
     BAZOOKA,
 };
 

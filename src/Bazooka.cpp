@@ -31,22 +31,24 @@ void Bazooka::update_current(sf::Time delta_time) {
 
 void Bazooka::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 const {
-    target.draw(m_sprite, states);
-    if (m_is_charging) {
-        int charge_steps = 20;
-        int steps = static_cast<int>(m_charge_level * (charge_steps - 0.1f));
-        sf::Vector2f direction = {
-                cos(m_angle) * m_parent->get_direction(),
-                sin(m_angle)
-        };
-        for (int i = 0; i < steps; i++) {
-            sf::Vector2f pos = m_parent->get_body().get_position() + direction * (2.f + 2.f * i / charge_steps);
-            sf::CircleShape circle;
-            circle.setRadius((0.25f + 0.25f / charge_steps * i) * World::SCALE);
-            circle.setFillColor(sf::Color(255, 255.f / charge_steps * i, 0));
-            circle.setOrigin(circle.getRadius(), circle.getRadius());
-            circle.setPosition(pos * World::SCALE);
-            target.draw(circle);
+    if (!m_is_hidden) {
+        target.draw(m_sprite, states);
+        if (m_is_charging) {
+            int charge_steps = 20;
+            int steps = static_cast<int>(m_charge_level * (charge_steps - 0.1f));
+            sf::Vector2f direction = {
+                    cos(m_angle) * m_parent->get_direction(),
+                    sin(m_angle)
+            };
+            for (int i = 0; i < steps; i++) {
+                sf::Vector2f pos = m_parent->get_body().get_position() + direction * (2.f + 2.f * i / charge_steps);
+                sf::CircleShape circle;
+                circle.setRadius((0.25f + 0.25f / charge_steps * i) * World::SCALE);
+                circle.setFillColor(sf::Color(255, 255.f / charge_steps * i, 0));
+                circle.setOrigin(circle.getRadius(), circle.getRadius());
+                circle.setPosition(pos * World::SCALE);
+                target.draw(circle);
+            }
         }
     }
 }
