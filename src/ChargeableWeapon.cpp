@@ -14,9 +14,14 @@ void ChargeableWeapon::draw_current(sf::RenderTarget &target, sf::RenderStates s
     if (!m_is_hidden && m_is_charging) {
         int charge_steps = 20;
         int steps = static_cast<int>(m_charge_level * (charge_steps - 0.1f));
+        float angle = m_angle ;
+        if (Weapon::m_parent->get_direction() == -1) {
+            angle = M_PI - angle;
+        }
+        angle += Weapon::m_parent->getRotation() / (180 / M_PI);
         sf::Vector2f direction = {
-                cos(m_angle) * m_parent->get_direction(),
-                sin(m_angle)
+                cos(angle),
+                sin(angle)
         };
         for (int i = 0; i < steps; i++) {
             sf::Vector2f pos = m_parent->get_body().get_position() + direction * (2.f + 2.f * i / charge_steps);

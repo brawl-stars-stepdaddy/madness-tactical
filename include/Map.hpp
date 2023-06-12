@@ -16,6 +16,7 @@ public:
     explicit Map(World &world, const std::vector<std::vector<std::pair<float, float>>> &);
 
     void draw_current(sf::RenderTarget &, sf::RenderStates) const override;
+    void update_current(sf::Time delta_time) override;
 
     MapBody &get_body() override;
 

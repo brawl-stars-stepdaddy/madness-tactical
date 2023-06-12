@@ -18,28 +18,28 @@
 #include "WeaponBox.hpp"
 #include "HealingBox.hpp"
 #include "Unit.hpp"
+#include <cmath>
 
 std::vector<std::pair<float, float>> generate_naive_map() {
     std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
     std::normal_distribution <float> gen_real (0, 0.4);
 
     std::vector<std::pair<float, float>> points;
-    float prev_y = 8.0f;
-    for (int i = 0; i <= 3000; i++) {
-        float x = static_cast<float>(i) / 10;
-        prev_y += gen_real(rng);
-        points.emplace_back(x, prev_y);
+    float prev_value = 30.0f;
+    for (int i = 0; i < 360; i++) {
+        float angle = static_cast<float>(i) / (180 / M_PI);
+        prev_value += gen_real(rng);
+        b2Vec2 vec = {cos(angle), sin(angle)};
+        vec *= prev_value;
+        points.emplace_back(vec.x, vec.y);
     }
-    prev_y = 8.0f;
-    for (int i = 0; i <= 3000; i++) {
-        float cur_y = points[i].second;
-        prev_y = prev_y + 0.02 * (cur_y - prev_y);
-        points[i].second = prev_y;
-    }
-    points.emplace_back(300, 100);
-    points.emplace_back(0, 100);
-    for (int i = 0; i < points.size(); i++) {
-        points[i].first -= 150;
+    prev_value = 30.0f;
+    for (int i = 0; i < 360; i++) {
+        b2Vec2 vec = {points[i].first, points[i].second};
+        float value = vec.Normalize();
+        prev_value = prev_value + 0.3 * (value - prev_value);
+        vec *= prev_value;
+        points[i] = {vec.x, vec.y};
     }
     return points;
 }
@@ -48,10 +48,10 @@ World::World(State::Context &context, EventManager &event_manager)
     : m_context(context),
       m_event_manager(&event_manager),
       m_world_view(context.window->getDefaultView()),
-      m_world_bounds(-150, -30, 300, 100),
+      m_world_bounds(-200, -200, 400, 400),
       m_spawn_position(5.f, 5.f),
       m_active_unit(nullptr),
-      m_physics_world({0, 20}),
+      m_physics_world({0, 1e-3}),
       m_map(nullptr),
       m_game_logic(this),
       m_camera(nullptr),
@@ -111,15 +111,15 @@ void World::build_scene() {
                                                                                          m_world_bounds.height * World::SCALE));
     background_sprite->setPosition(m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE);
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
-    m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(20, 1, 1.5, 1)));
-    m_scene_layers[ENTITIES]->attach_child(std::make_unique<HealingBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
+    m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(50, -50, 1.5, 1)));
+    m_scene_layers[ENTITIES]->attach_child(std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1)));
 
     Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
 
 
     std::unique_ptr<Unit> worm1 =
-        std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{1, 1}, 1, 0);
+        std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0);
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
@@ -128,7 +128,7 @@ void World::build_scene() {
     m_active_unit->attach_child(std::move(bazooka));
 
     std::unique_ptr<Unit> worm2 =
-            std::make_unique<Unit>(*this, Unit::Type::ENGINEER, sf::Vector2f{10, 1}, 1, 1);
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
     auto second_unit = worm2.get();
     team2->add_unit(second_unit);
     team2->add_weapon(GRENADE);
@@ -137,7 +137,7 @@ void World::build_scene() {
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
 
     std::unique_ptr<Unit> worm3 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{7, 1}, 1, 1);
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{50, 50}, 1, 1);
     auto third_unit = worm3.get();
     team2->add_unit(third_unit);
     team2->add_weapon(BAZOOKA);
@@ -161,6 +161,7 @@ void World::draw() {
     m_world_view = m_context.window->getDefaultView();
     m_world_view.setCenter(m_camera.get_offset() * SCALE);
     m_world_view.zoom(m_camera.get_zoom());
+    m_world_view.setRotation(m_camera.get_angle() * 180 / M_PI);
     m_context.window->setView(m_world_view);
     m_context.window->draw(m_scene_graph);
 }
@@ -175,9 +176,9 @@ void World::update(sf::Time delta_time) {
     m_event_manager->update();
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
-    m_camera.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
+    m_camera.update(delta_time);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
 }
 

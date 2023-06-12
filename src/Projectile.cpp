@@ -31,11 +31,7 @@ void Projectile::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Projectile::update_current(sf::Time delta_time) {
-    setPosition(
-        {m_body.get_position().x * World::SCALE,
-         m_body.get_position().y * World::SCALE}
-    );
-    setRotation(m_body.get_rotation() * 60);
+    Entity::update_current(delta_time);
 }
 
 CircleBody &Projectile::get_body() {

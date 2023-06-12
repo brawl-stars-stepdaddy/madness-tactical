@@ -16,7 +16,7 @@ public:
     virtual void on_collision(Entity *) = 0;
     virtual void on_explosion(const Explosion &) = 0;
 
-private:
+protected:
     void update_current(sf::Time delta_time) override;
 };
 

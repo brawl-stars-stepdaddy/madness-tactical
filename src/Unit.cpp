@@ -43,6 +43,7 @@ void Unit::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Unit::update_current(sf::Time delta_time) {
+    Entity::update_current(delta_time);
     if (m_body.get_b2Body()->GetLinearVelocity().LengthSquared() < 1e-1) {
         m_jumping_active = true;
         m_dumping_active = false;
@@ -52,11 +53,6 @@ void Unit::update_current(sf::Time delta_time) {
     }
     move(delta_time, m_direction);
     stop_move(delta_time);
-    setPosition(
-        {m_body.get_position().x * World::SCALE,
-         m_body.get_position().y * World::SCALE}
-    );
-    setRotation(m_body.get_rotation() * 60);
     reset();
 }
 
@@ -117,10 +113,15 @@ void Unit::set_direction(float direction) {
 
 void Unit::move(sf::Time delta_time, float direction) {
     if (m_jumping_active && m_moving_active) {
-        auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_change = direction * b2Min(abs(current_velocity.x + 5.0f * direction), 5.0f) - current_velocity.x;
-        auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse, 0}, true);
+        b2Vec2 position = m_body.get_b2Body()->GetPosition();
+        b2Vec2 normal = {-position.y, position.x};
+        b2Vec2 current_velocity = m_body.get_b2Body()->GetLinearVelocity();
+        float horizontal_projection = (b2Dot(current_velocity, normal) /  b2Dot(normal, normal) * normal).Length();
+        float horizontal_change = direction * b2Min(abs(horizontal_projection + 5.0f * direction), 5.0f) - horizontal_projection;
+        float impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
+        float angle = atan2(normal.x, normal.y);
+
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse * sin(angle), impulse * cos(angle)}, true);
     }
 }
 
@@ -139,13 +140,25 @@ void Unit::stop_move(sf::Time delta_time) {
 
 void Unit::jump_forward() {
     if (m_jumping_active) {
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({m_direction * 25, -30}, true);
+        b2Vec2 vertical = m_body.get_b2Body()->GetPosition();
+        b2Vec2 horizontal = {-vertical.y, vertical.x};
+        vertical.Normalize();
+        horizontal.Normalize();
+        horizontal *= m_direction * 30;
+        vertical *= 30;
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(horizontal + vertical, true);
     }
 }
 
 void Unit::jump_backward() {
     if (m_jumping_active) {
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({-m_direction * 20, -40}, true);
+        b2Vec2 vertical = m_body.get_b2Body()->GetPosition();
+        b2Vec2 horizontal = {-vertical.y, vertical.x};
+        vertical.Normalize();
+        horizontal.Normalize();
+        horizontal *= -m_direction * 20;
+        vertical *= 40;
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(horizontal + vertical, true);
     }
 }
 

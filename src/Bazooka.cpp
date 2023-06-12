@@ -35,14 +35,18 @@ void Bazooka::launch() {
     }
     m_is_charging = false;
     float impulse_value = m_charge_level * 20;
+    float angle = m_angle;
+    if (Weapon::m_parent->get_direction() == -1) {
+        angle = M_PI - angle;
+    }
+    angle += Weapon::m_parent->getRotation() / (180 / M_PI);
     m_charge_level = m_init_charge_level;
     sf::Vector2f start_position = {
-            m_parent->get_body().get_position().x +
-            cos(m_angle) * m_parent->get_direction() * 2,
-            m_parent->get_body().get_position().y + sin(m_angle) * 2};
+            m_parent->get_body().get_position().x + cos(angle) * 2,
+            m_parent->get_body().get_position().y + sin(angle) * 2};
     sf::Vector2f impulse = {
-            cos(m_angle) * m_parent->get_direction() * impulse_value,
-            sin(m_angle) * impulse_value};
+            cos(angle) * impulse_value,
+            sin(angle) * impulse_value};
     m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<CollisionProjectile>(
             *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius
     ));
