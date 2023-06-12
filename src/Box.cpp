@@ -12,11 +12,7 @@ void Box::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Box::update_current([[maybe_unused]] sf::Time delta_time) {
-    setPosition(
-        {m_body.get_position().x * World::SCALE,
-         m_body.get_position().y * World::SCALE}
-    );
-    setRotation(m_body.get_rotation() * 60);
+    Entity::update_current(delta_time);
 }
 
 RectBody &Box::get_body() {

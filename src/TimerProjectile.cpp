@@ -29,16 +29,12 @@ void TimerProjectile::explode() {
 }
 
 void TimerProjectile::update_current(sf::Time delta_time) {
+    Projectile::update_current(delta_time);
     m_activation_timer -= delta_time.asSeconds();
     if (m_activation_timer <= 0) {
         m_explosion_timer -= delta_time.asSeconds();
     }
     explode();
-    setPosition(
-            {m_body.get_position().x * World::SCALE,
-             m_body.get_position().y * World::SCALE}
-    );
-    setRotation(m_body.get_rotation() * 60);
 }
 
 void TimerProjectile::on_collision(Entity *) {

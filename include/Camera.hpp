@@ -37,16 +37,19 @@ public:
 
     [[nodiscard]] sf::Vector2f get_offset() const;
     [[nodiscard]] float get_zoom() const;
+    [[nodiscard]] float get_angle() const;
 
     void set_follow_strategy(std::unique_ptr<FollowStrategy> follow_strategy);
     void set_offset(sf::Vector2f offset);
     void set_zoom(float zoom);
+    void set_angle(float angle);
 
     void zoom_in();
     void zoom_out();
 
 private:
-    sf::Vector2f m_offset;
+    sf::Vector2f m_offset = {0, 0};
+    float m_angle;
     float m_zoom_factor = 2.5f;
     float m_min_zoom_speed = .5f;
     float m_zoom_convergence_factor = 5.f;
