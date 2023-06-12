@@ -1,7 +1,6 @@
 #include "Projectile.hpp"
 #include "ExplosionEntity.hpp"
 #include "World.hpp"
-#include "EventManager.hpp"
 #include "DestructionEventData.hpp"
 
 Projectile::Projectile(
@@ -13,7 +12,7 @@ Projectile::Projectile(
 )
     : Entity(world),
       m_sprite(m_world->get_texture_holder().get(TexturesID::CANON_BALL)),
-      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, true)),
+      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, false)),
       explosion_radius(explosion_radius) {
     m_sprite.setScale(
         radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
@@ -47,16 +46,6 @@ EntityType Projectile::get_type() {
     return EntityType::PROJECTILE;
 }
 
-void Projectile::on_collision(Entity *other_object) {
-    if (!is_exploded) {
-        m_world->add_entity(std::make_unique<ExplosionEntity>(
-                *m_world,
-                Explosion({m_body.get_position().x, m_body.get_position().y}, explosion_radius))
-        );
-        is_exploded = true;
-        m_body.get_b2Body()->SetEnabled(false);
-        m_world->get_event_manager()->queue_event(std::make_unique<DestructionEventData>(this));
-    }
-}
+void Projectile::on_collision(Entity *other_object) {}
 
 void Projectile::on_explosion(const Explosion &) {}

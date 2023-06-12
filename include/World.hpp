@@ -44,13 +44,16 @@ public:
         return *m_context.textures;
     }
 
+    FontHolder &get_font_holder() {
+        return *m_context.fonts;
+    }
+
     Unit *get_player() {
         return m_active_unit;
     }
 
-    void activate_next_unit();
-    void activate_next_player();
-    void remove_playable_unit(int player_id, Unit *unit);
+    void go_to_next_team();
+    void go_to_next_unit();
 
     SceneNode *get_layer(Layer layer) {
         return m_scene_layers[layer];
@@ -65,7 +68,7 @@ public:
     static constexpr float SCALE = 100.f;
 
 private:
-    void load_textures();
+    void load_resources();
     void build_scene();
 
     State::Context m_context;
@@ -82,13 +85,8 @@ private:
     DestructionEventListener *m_destruction_listener;
     GameLogic m_game_logic;
     Camera m_camera;
+    TeamManager m_team_manager;
     EventManager *m_event_manager;
-
-    std::vector<std::vector<Unit *>> m_playable_units;
-    std::vector<int> m_last_active_units;
-    int m_current_player = 0;
-    int m_players_number = 2;
-    int m_units_number = 2;
 
     float m_moves_timer = 5;
 

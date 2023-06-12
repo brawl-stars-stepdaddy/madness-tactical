@@ -1,6 +1,6 @@
 #include "ActionEventListener.hpp"
 #include "GameLogic.hpp"
-#include "Weapon.hpp"
+#include "ChargeableWeapon.hpp"
 #include "ActionEventData.hpp"
 #include "Unit.hpp"
 #include "World.hpp"
@@ -12,8 +12,9 @@ ZoomInEventListener::ZoomInEventListener(Camera *camera) : m_camera(camera) {
 ZoomOutEventListener::ZoomOutEventListener(Camera *camera) : m_camera(camera) {
 }
 
-void ChangeAngleDownEventListener::process([[maybe_unused]] const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_angle_change_direction(-1);
+void ChangeAngleDownEventListener::process(const EventData &event) {
+    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_angle_change_direction(-1);
 }
 
 ChangeAngleDownEventListener::ChangeAngleDownEventListener(World &world, GameLogic &game_logic) : ActionEventListener(
@@ -21,8 +22,9 @@ ChangeAngleDownEventListener::ChangeAngleDownEventListener(World &world, GameLog
 
 }
 
-void ChangeAngleUpEventListener::process([[maybe_unused]] const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_angle_change_direction(1);
+void ChangeAngleUpEventListener::process(const EventData &event) {
+    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_angle_change_direction(1);
 }
 
 ChangeAngleUpEventListener::ChangeAngleUpEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
@@ -70,8 +72,9 @@ JumpBackwardEventListener::JumpBackwardEventListener(World &world, GameLogic &ga
 
 }
 
-void BeginChargeWeaponEventListener::process([[maybe_unused]] const EventData &event) {
-    m_game_logic->get_current_unit()->get_weapon()->set_currently_charging(true);
+void BeginChargeWeaponEventListener::process(const EventData &event) {
+    auto weapon = static_cast<ChargeableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    weapon->set_currently_charging(true);
 }
 
 BeginChargeWeaponEventListener::BeginChargeWeaponEventListener(World &world, GameLogic &game_logic)

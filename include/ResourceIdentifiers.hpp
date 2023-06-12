@@ -16,11 +16,13 @@ enum class TexturesID {
     WORM,
     CANON_BALL,
     WEAPON_BOX,
+    HEALING_BOX,
     BAZOOKA,
+    GRENADE
 };
 
 enum class FontsID {
-
+    BAGEL_FONT
 };
 
 template <typename Resource, typename Identifier>
@@ -28,5 +30,8 @@ struct ResourceHolder;
 
 using TextureHolder = ResourceHolder<TexturesID, sf::Texture>;
 using FontHolder = ResourceHolder<FontsID, sf::Font>;
+
+using FontHolder = ResourceHolder<FontsID, sf::Font>;
+
 
 #endif

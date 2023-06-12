@@ -6,7 +6,9 @@
 #include "GuiUtil.hpp"
 #include <World.hpp>
 #include <DestructionEventData.hpp>
+#include "Weapon.hpp"
 #include <cmath>
+#include "UnitHealthBar.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -28,6 +30,10 @@ Unit::Unit(World &world, Unit::Type type, sf::Vector2f center, float radius, int
       m_player_id(player_id) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
+
+
+    auto health_bar = std::make_unique<UnitHealthBar>(*m_world, this, m_world->get_font_holder().get(FontsID::BAGEL_FONT));
+    this->attach_child(std::move(health_bar));
 }
 
 
@@ -81,6 +87,8 @@ void Unit::on_explosion(const Explosion &explosion) {
 
     m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
     if (m_health <= 0) {
+        m_health = 0;
+        m_team->remove_unit(this);
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(
                 std::make_unique<DestructionEventData>(this)
@@ -108,7 +116,7 @@ void Unit::set_direction(float direction) {
 }
 
 void Unit::move(sf::Time delta_time, float direction) {
-    if (m_moving_active) {
+    if (m_jumping_active && m_moving_active) {
         auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
         float horizontal_change = direction * b2Min(abs(current_velocity.x + 5.0f * direction), 5.0f) - current_velocity.x;
         auto impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
@@ -146,7 +154,9 @@ void Unit::set_moving_active(bool new_value) {
 }
 
 void Unit::set_dumping_active(bool new_value) {
-    m_dumping_active = new_value;
+    if (m_jumping_active) {
+        m_dumping_active = new_value;
+    }
 }
 
 void Unit::reset() {
@@ -163,4 +173,13 @@ void Unit::set_team(Team *team) {
 
 Team *Unit::get_team() const {
     return m_team;
+}
+
+void Unit::set_activeness(bool new_value) {
+    m_is_active = new_value;
+    m_weapon->set_hidden(!new_value);
+}
+
+void Unit::change_health(int value) {
+    m_health += value;
 }

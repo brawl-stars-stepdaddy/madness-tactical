@@ -3,20 +3,35 @@
 
 #include <vector>
 #include <algorithm>
+#include <map>
+#include "Weapon.hpp"
 
 struct Unit;
 
 struct Team {
+    explicit Team(sf::Color);
+
     void add_unit(Unit *);
     void remove_unit(Unit *);
 
-    void move_transition();
+    void add_weapon(WeaponType);
+    void remove_weapon(WeaponType);
 
-    Unit *get_active_unit() const;
-    int get_team_size() const;
+    int get_available_number(WeaponType);
+    sf::Color get_team_color();
+
+    void activate_team();
+    void deactivate_team();
+
+    Unit *activate_next_unit();
+
+    [[nodiscard]] Unit *get_active_unit() const;
+    [[nodiscard]] int get_team_size() const;
 
 private:
+    sf::Color m_team_color;
     std::vector<Unit *> m_team_units;
+    std::map<WeaponType, int> m_available_weapons;
     int m_active_unit = 0;
     int m_team_size = 0;
     int m_summary_health = 0;

@@ -3,6 +3,7 @@
 #include <chrono>
 #include <vector>
 #include "Bazooka.hpp"
+#include "Grenade.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
 #include "GameOverEventListener.hpp"
@@ -15,6 +16,7 @@
 #include "ActionEventData.hpp"
 #include "SpriteNode.hpp"
 #include "WeaponBox.hpp"
+#include "HealingBox.hpp"
 #include "Unit.hpp"
 
 std::vector<std::pair<float, float>> generate_naive_map() {
@@ -54,7 +56,7 @@ World::World(State::Context &context, EventManager &event_manager)
       m_game_logic(this),
       m_camera(nullptr),
       m_scene_graph(*this) {
-    load_textures();
+    load_resources();
     build_scene();
     m_event_manager->add_listener(
         std::make_unique<ExplosionEventListener>(), EventType::EXPLOSION
@@ -79,7 +81,7 @@ World::World(State::Context &context, EventManager &event_manager)
     m_event_manager->add_listener(std::make_unique<GameOverEventListener>(), EventType::GAME_OVER);
 }
 
-void World::load_textures() {
+void World::load_resources() {
     m_context.textures->load(TexturesID::BACKGROUND, "res/sky.jpg");
     m_context.textures->load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_context.textures->load(TexturesID::HALO, "res/HaloRender.jpg");
@@ -87,9 +89,13 @@ void World::load_textures() {
     m_context.textures->load(TexturesID::WORM, "res/Worm.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_context.textures->load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
+    m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
     m_context.textures->load(TexturesID::BAZOOKA, "res/bazooka.png");
+    m_context.textures->load(TexturesID::GRENADE, "res/grenade.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
+
+    m_context.fonts->load(FontsID::BAGEL_FONT, "res/BagelFatOne-Regular.ttf");
 }
 
 void World::build_scene() {
@@ -105,28 +111,40 @@ void World::build_scene() {
                                                                                          m_world_bounds.height * World::SCALE));
     background_sprite->setPosition(m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE);
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
-    m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
+    m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(20, 1, 1.5, 1)));
+    m_scene_layers[ENTITIES]->attach_child(std::make_unique<HealingBox>(*this, sf::FloatRect(15, 1, 1.5, 1)));
+
+    Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
+    Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
+
+
     std::unique_ptr<Unit> worm1 =
         std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{1, 1}, 1, 0);
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
+    team1->add_unit(m_active_unit);
+    team1->add_weapon(BAZOOKA);
+    auto bazooka = std::make_unique<Bazooka>(*this, m_active_unit);
+    m_active_unit->attach_child(std::move(bazooka));
+
     std::unique_ptr<Unit> worm2 =
             std::make_unique<Unit>(*this, Unit::Type::ENGINEER, sf::Vector2f{10, 1}, 1, 1);
     auto second_unit = worm2.get();
+    team2->add_unit(second_unit);
+    team2->add_weapon(GRENADE);
+    auto grenade = std::make_unique<Grenade>(*this, second_unit);
+    second_unit->attach_child(std::move(grenade));
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
-    std::unique_ptr<SpriteNode> halo =
-        std::make_unique<SpriteNode>(*this, m_context.textures->get(TexturesID::HALO));
 
-    m_last_active_units.resize(2);
-    m_playable_units.resize(2);
-    m_playable_units[0].push_back(m_active_unit);
-    m_playable_units[1].push_back(second_unit);
+    std::unique_ptr<Unit> worm3 =
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{7, 1}, 1, 1);
+    auto third_unit = worm3.get();
+    team2->add_unit(third_unit);
+    team2->add_weapon(BAZOOKA);
+    bazooka = std::make_unique<Bazooka>(*this, third_unit);
+    third_unit->attach_child(std::move(bazooka));
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm3));
 
-    sf::FloatRect bounds = halo->get_sprite().getLocalBounds();
-    halo->setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    halo->setPosition(20, -120);
-    halo->setScale({0.4, 0.4});
-    m_active_unit->attach_child(std::move(halo));
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(
@@ -136,8 +154,7 @@ void World::build_scene() {
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
-    auto bazooka = std::make_unique<Bazooka>(*this, m_active_unit);
-    m_active_unit->attach_child(std::move(bazooka));
+    m_active_unit->set_activeness(true);
 }
 
 void World::draw() {
@@ -168,25 +185,11 @@ void World::add_entity(std::unique_ptr<Entity> ptr) {
     m_scene_layers[ENTITIES]->attach_child(std::move(ptr));
 }
 
-void World::activate_next_unit() {
-    m_last_active_units[m_current_player]++;
-    m_last_active_units[m_current_player] %= m_playable_units[m_current_player].size();
-    m_active_unit = m_playable_units[m_current_player][m_last_active_units[m_current_player]];
+void World::go_to_next_team() {
+    m_team_manager.move_transition();
+    m_active_unit = m_team_manager.get_active_team()->get_active_unit();
 }
 
-void World::activate_next_player() {
-    while (m_playable_units[(++m_current_player) % m_players_number].empty()) {}
-    m_current_player %= m_players_number;
-    activate_next_unit();
-}
-
-void World::remove_playable_unit(int player_id, Unit *unit) {
-    auto deleted_object = std::find(m_playable_units[player_id].begin(), m_playable_units[player_id].end(), unit);
-    if (deleted_object != m_playable_units[player_id].end()) {
-        m_playable_units[player_id].erase(deleted_object);
-        m_units_number--;
-    }
-    if (m_units_number == 0) {
-        m_event_manager->queue_event(std::make_unique<GameOverEventData>());
-    }
+void World::go_to_next_unit() {
+    m_active_unit = m_team_manager.get_active_team()->activate_next_unit();
 }

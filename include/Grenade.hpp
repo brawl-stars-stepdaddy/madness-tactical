@@ -1,11 +1,11 @@
-#ifndef BAZOOKA_HPP_
-#define BAZOOKA_HPP_
+#ifndef GRENADE_HPP_
+#define GRENADE_HPP_
 
 #include "ChargeableWeapon.hpp"
 
-struct Bazooka : ChargeableWeapon {
+struct Grenade : ChargeableWeapon {
 public:
-    explicit Bazooka(World &, Unit *);
+    explicit Grenade(World &, Unit *);
 
     void launch() override;
 
@@ -15,8 +15,9 @@ private:
 
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;
+    float m_explosion_timer = 3.0f;
 
     sf::Sprite m_sprite;
 };
 
-#endif  // BAZOOKA_HPP_
+#endif // GRENADE_HPP_

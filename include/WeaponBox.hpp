@@ -2,12 +2,11 @@
 #define WEAPON_BOX_HPP_
 
 #include "Box.hpp"
+#include "Weapon.hpp"
 
 struct WeaponBox : Box {
     WeaponBox(World &, sf::FloatRect);
-
-private:
-
+    void on_collision(Entity *) override;
 };
 
 #endif // WEAPON_BOX_HPP_

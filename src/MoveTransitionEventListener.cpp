@@ -9,10 +9,10 @@ void MoveTransitionEventListener::process(const EventData &event) {
     auto move_transition_event = static_cast<const MoveTransitionEventData &>(event);
     switch (move_transition_event.get_transition_type()) {
         case MoveTransitionEventData::TransitionType::OTHER_UNIT:
-            m_world->activate_next_unit();
+            m_world->go_to_next_unit();
             break;
         case MoveTransitionEventData::TransitionType::OTHER_PLAYER:
-            m_world->activate_next_player();
+            m_world->go_to_next_team();
             break;
     }
 }
