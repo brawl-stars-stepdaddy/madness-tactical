@@ -41,7 +41,7 @@ void ChargeableWeapon::set_currently_charging(bool is_charging) {
 
 void ChargeableWeapon::charge(sf::Time delta_time) {
     m_charge_level = std::min(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
-    if (m_charge_level == 1.0f) {
+    if (m_charge_level >= 1.0f) {
         m_world->get_event_manager()->queue_event(std::make_unique<LaunchProjectileEventData>());
     }
 }

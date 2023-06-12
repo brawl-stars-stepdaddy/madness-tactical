@@ -12,4 +12,11 @@ namespace GuiUtil {
     void center(sf::Sprite &sprite) {
         sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     }
+
+    void resize(sf::Sprite &sprite, sf::Vector2<unsigned int> size) {
+        sprite.setScale(
+                size.x / sprite.getLocalBounds().width,
+                size.y / sprite.getLocalBounds().height
+        );
+    }
 }
