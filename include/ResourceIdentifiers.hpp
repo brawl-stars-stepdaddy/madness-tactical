@@ -18,7 +18,8 @@ enum class TexturesID {
     WEAPON_BOX,
     HEALING_BOX,
     BAZOOKA,
-    GRENADE
+    GRENADE,
+    TITLE,
 };
 
 enum class FontsID {

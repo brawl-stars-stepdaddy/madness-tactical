@@ -1,5 +1,6 @@
 #include "Application.hpp"
 #include "GameState.hpp"
+#include "TitleState.hpp"
 #include <cmath>
 
 Application::Application()
@@ -13,11 +14,11 @@ Application::Application()
 }
 
 void Application::register_states() {
-    //m_state_stack.register_state<TitleState>(StatesID::Title);
+    m_state_stack.register_state<TitleState>(StatesID::Title);
     //m_state_stack.register_state<MenuState>(StatesID::Menu);
     m_state_stack.register_state<GameState>(StatesID::Game);
     //m_state_stack.register_state<PauseState>(StatesID::Pause);
-    m_state_stack.push_state(StatesID::Game);
+    m_state_stack.push_state(StatesID::Title);
 }
 
 void Application::run() {
