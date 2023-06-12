@@ -1,5 +1,6 @@
 #include "MapBody.hpp"
-#include <polypartition.h>
+#include <CDT.h>
+#include "clipper2/clipper.h"
 
 MapBody::MapBody(
     Map *parent,
@@ -44,37 +45,33 @@ float MapBody::get_rotation() {
 }
 
 [[nodiscard]] std::vector<sf::ConvexShape> MapBody::get_triangulation() const {
+
     std::vector<sf::ConvexShape> sf_triangles;
 
-    TPPLPartition triangulator;
-    TPPLPolyList polygons, triangles;
-
-    for (const auto &chain : m_chains) {
-        TPPLPoly polygon;
-        polygon.Init(static_cast<long>(chain.size()));
+    for (const auto &chain: m_chains) {
+        CDT::Triangulation<double> cdt;
+        cdt.insertVertices(
+                chain.begin(),
+                chain.end(),
+                [](const auto& p){ return p.x; },
+                [](const auto& p){ return p.y; }
+        );
+        std::vector<CDT::Edge> edges;
         for (int i = 0; i < chain.size(); i++) {
-            polygon[i] = {chain[i].x, chain[i].y};
+            edges.emplace_back(i, (i + 1) % chain.size());
         }
-        if (polygon.GetOrientation() == TPPLOrientation::TPPL_ORIENTATION_CW) {
-            polygon.SetHole(true);
-        }
-        polygons.push_back(polygon);
-    }
+        cdt.insertEdges(edges);
+        cdt.eraseOuterTrianglesAndHoles();
 
-    triangulator.Triangulate_EC(&polygons, &triangles);
-    auto triangles_ = triangles;
-    triangulator.RemoveHoles(&triangles_, &triangles);
-
-    for (const auto &triangle : triangles) {
-        sf::ConvexShape sf_triangle;
-        sf_triangle.setPointCount(3);
-        for (int i = 0; i < 3; i++) {
-            sf_triangle.setPoint(
-                i, {static_cast<float>(triangle[i].x),
-                    static_cast<float>(triangle[i].y)}
-            );
+        for (const auto &cdt_triangle: cdt.triangles) {
+            sf::ConvexShape sf_triangle;
+            sf_triangle.setPointCount(3);
+            for (int i = 0; i < 3; i++) {
+                auto point = chain[cdt_triangle.vertices[i]];
+                sf_triangle.setPoint(i, {static_cast<float>(point.x), static_cast<float>(point.y)});
+            }
+            sf_triangles.push_back(sf_triangle);
         }
-        sf_triangles.push_back(sf_triangle);
     }
 
     return sf_triangles;

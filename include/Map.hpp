@@ -3,7 +3,6 @@
 
 #include <box2d/box2d.h>
 #include <clipper2/clipper.h>
-#include <polypartition.h>
 #include "Entity.hpp"
 #include "Explosion.hpp"
 #include "MapBody.hpp"

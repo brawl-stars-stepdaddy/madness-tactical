@@ -19,12 +19,79 @@
 #include "HealingBox.hpp"
 #include "Unit.hpp"
 #include <cmath>
+#include "SimplexNoise.h"
+#include <opencv2/imgproc.hpp>
+#include "opencv2/highgui.hpp"
+#include "algorithm"
+#include <set>
+
+bool check_collinear(std::pair<float, float> first, std::pair<float, float> second, std::pair<float, float> third) {
+    auto [x1, y1] = first;
+    auto [x2, y2] = second;
+    auto [x3, y3] = third;
+    float dx1 = x2 - x1;
+    float dy1 = y2 - y1;
+    float dx2 = x3 - x2;
+    float dy2 = y3 - y2;
+    return abs(dx1 / dy1 - dx2 / dy2) > 1e-6;
+
+}
+
+std::vector<std::vector<std::pair<float, float>>> map_generation() {
+    float scale     = 20.f;
+    float lacunarity    = 1.0f;
+    float persistance   = 1.0f;
+
+    const SimplexNoise simplex(0.1f/scale, 0.5f, lacunarity, persistance); // Amplitude of 0.5 for the 1st octave : sum ~1.0f
+    const int octaves = static_cast<int>(-1 + std::log(scale));
+
+    float map_size = 1000;
+    cv::Mat image(map_size, map_size, CV_8UC1);
+    for (int row = 0; row < image.rows; ++row) {
+        const float y = static_cast<float>(row - map_size/2);
+        for (int col = 0; col < image.cols; ++col) {
+            const float x = static_cast<float>(col - map_size/2);
+            float noise = simplex.fractal(octaves, x, y);
+            image.at<uchar>(row, col) = noise * 100;
+            image.at<uchar>(row, col) = image.at<uchar>(row, col) / (std::max(1.f, (x * x + y * y) / 10000));
+        }
+    }
+    cv::threshold(image, image, 10, 255, cv::THRESH_BINARY);
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(image, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    std::vector<std::vector<std::pair<float, float>>> chains;
+    std::set<std::pair<int, int>> used;
+    for (const auto &contour : contours) {
+        if (contour.size() < 100) {
+            continue;
+        }
+        chains.emplace_back();
+        int i = 0;
+        for (const auto &[row, col] : contour) {
+            if (i++ % 2 || used.find({row, col}) != used.end()) {
+                continue;
+            }
+            used.insert({row, col});
+            float x = static_cast<float>(col - map_size / 2) / 10;
+            float y = static_cast<float>(row - map_size / 2) / 10;
+            if (chains.back().size() < 2
+                || check_collinear(chains.back()[chains.back().size() - 2], chains.back()[chains.back().size()- 1], {x, y})) {
+                    chains.back().emplace_back(x, y);
+            }
+        }
+    }
+    return chains;
+}
+
 
 std::vector<std::pair<float, float>> generate_naive_map() {
     std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
     std::normal_distribution <float> gen_real (0, 0.4);
 
     std::vector<std::pair<float, float>> points;
+    points = {{20, 20}, {-20, 20}, {-20, -20}, {20, -20}};
+    std::reverse(points.begin(), points.end());
     float prev_value = 30.0f;
     for (int i = 0; i < 360; i++) {
         float angle = static_cast<float>(i) / (180 / M_PI);
@@ -51,7 +118,7 @@ World::World(State::Context &context, EventManager &event_manager)
       m_world_bounds(-200, -200, 400, 400),
       m_spawn_position(5.f, 5.f),
       m_active_unit(nullptr),
-      m_physics_world({0, 1e-3}),
+      m_physics_world({0, 0}),
       m_map(nullptr),
       m_game_logic(this),
       m_camera(nullptr),
@@ -149,7 +216,7 @@ void World::build_scene() {
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(
         *this,
-        std::vector<std::vector<std::pair<float, float>>> {generate_naive_map()}
+        map_generation()
     );
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));

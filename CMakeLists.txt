@@ -6,14 +6,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH 2.5.1 "${SFML_DIR}/lib/cmake/SFML" ${CMAKE_MODULE_PATH})
 find_package(SFML COMPONENTS graphics window system)
 
+set("OpenCV_DIR" "/home/dmitry_malikov/libs/opencv/build")
+find_package(OpenCV REQUIRED )
+
 include_directories(${PROJECT_SOURCE_DIR}/libs/box2d/include)
 link_directories(libs/box2d)
 
 include_directories(include)
 add_subdirectory(libs/clipper2)
-add_subdirectory(libs/polypartition)
-
-include_directories(include)
+add_subdirectory(libs/CDT)
+add_subdirectory(libs/SimplexNoise)
+#add_subdirectory(libs/opencv)
 
 file(GLOB SOURCES "src/*.cpp")
 
@@ -25,5 +28,7 @@ target_link_libraries(madness-tactical
         sfml-graphics sfml-system sfml-window
         box2d
         clipper2
-        polypartition
+        CDT
+        SimplexNoise
+        ${OpenCV_LIBS}
         )
