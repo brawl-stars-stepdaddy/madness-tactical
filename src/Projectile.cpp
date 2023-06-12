@@ -1,19 +1,18 @@
 #include "Projectile.hpp"
 #include "ExplosionEntity.hpp"
 #include "World.hpp"
-#include "EventManager.hpp"
 #include "DestructionEventData.hpp"
 
 Projectile::Projectile(
-    World *world,
+    World &world,
     sf::Vector2f center,
     sf::Vector2f impulse,
     float radius,
     float explosion_radius
 )
-    : m_sprite(world->get_texture_holder().get(TexturesID::CANON_BALL)),
-      m_body(CircleBody(this, world->get_physics_world(), center, radius, false)),
-      m_world(world),
+    : Entity(world),
+      m_sprite(m_world->get_texture_holder().get(TexturesID::CANON_BALL)),
+      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, false)),
       explosion_radius(explosion_radius) {
     m_sprite.setScale(
         radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,

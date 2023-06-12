@@ -1,6 +1,7 @@
 #ifndef EVENT_MANAGER_HPP
 #define EVENT_MANAGER_HPP
 
+#include <unordered_map>
 #include <list>
 #include <memory>
 #include "EventListener.hpp"
@@ -23,8 +24,6 @@ public:
     bool queue_event(EventDataPtr event);
 
     bool update();
-
-    static EventManager *get();
 
 private:
     typedef std::list<std::unique_ptr<EventListener>> EventListenerList;

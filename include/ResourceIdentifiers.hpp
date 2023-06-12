@@ -29,6 +29,7 @@ template <typename Resource, typename Identifier>
 struct ResourceHolder;
 
 using TextureHolder = ResourceHolder<TexturesID, sf::Texture>;
+using FontHolder = ResourceHolder<FontsID, sf::Font>;
 
 using FontHolder = ResourceHolder<FontsID, sf::Font>;
 

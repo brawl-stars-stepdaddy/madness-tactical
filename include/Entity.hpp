@@ -6,9 +6,11 @@
 
 struct Explosion;
 struct Body;
+struct World;
 
 struct Entity : SceneNode {
 public:
+    Entity(World &world);
     virtual Body &get_body() = 0;
     virtual EntityType get_type() = 0;
     virtual void on_collision(Entity *) = 0;

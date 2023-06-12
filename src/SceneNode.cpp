@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cassert>
 
-SceneNode::SceneNode() : m_parent(nullptr) {
+SceneNode::SceneNode(World &world) : m_world(&world), m_parent(nullptr) {
 }
 
 void SceneNode::attach_child(SceneNode::Ptr child) {

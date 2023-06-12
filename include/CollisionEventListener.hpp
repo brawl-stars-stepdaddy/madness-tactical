@@ -5,15 +5,17 @@
 #include "CollisionEventData.hpp"
 #include "ContactListener.hpp"
 #include "EventListener.hpp"
-#include "World.hpp"
+
+struct World;
 
 struct CollisionEventListener : EventListener {
 public:
-    explicit CollisionEventListener(World *);
+    explicit CollisionEventListener(World &world);
     void process(const EventData &event) override;
     void reset();
 
 private:
+    World *m_world;
     ContactListener m_contact_listener;
     std::set<std::pair<Entity *, Entity *>> processed_collisions;
 };

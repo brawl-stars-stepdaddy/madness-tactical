@@ -5,7 +5,7 @@
 
 struct CollisionProjectile : Projectile {
 
-    CollisionProjectile(World *, sf::Vector2f, sf::Vector2f, float, float);
+    CollisionProjectile(World &, sf::Vector2f, sf::Vector2f, float, float);
 
     void on_collision(Entity *) override;
 

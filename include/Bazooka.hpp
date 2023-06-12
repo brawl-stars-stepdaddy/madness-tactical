@@ -5,9 +5,9 @@
 
 struct Bazooka : ChargeableWeapon {
 public:
-    explicit Bazooka(World *, Unit *);
+    explicit Bazooka(World &, Unit *);
 
-    void launch(World &) override;
+    void launch() override;
 
 private:
     void update_current(sf::Time delta_time) override;

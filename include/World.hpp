@@ -12,6 +12,8 @@
 #include "GameLogic.hpp"
 #include "Camera.hpp"
 #include "Unit.hpp"
+#include "EventManager.hpp"
+#include <State.hpp>
 
 struct Map;
 struct CollisionEventListener;
@@ -26,7 +28,7 @@ public:
         LAYER_COUNT,
     };
 
-    explicit World(sf::RenderWindow &window);
+    World(State::Context &context, EventManager &event_manager);
     void update(sf::Time delta_time);
     void draw();
 
@@ -39,11 +41,11 @@ public:
     }
 
     TextureHolder &get_texture_holder() {
-        return m_textures;
+        return *m_context.textures;
     }
 
     FontHolder &get_font_holder() {
-        return m_fonts;
+        return *m_context.fonts;
     }
 
     Unit *get_player() {
@@ -59,16 +61,18 @@ public:
 
     void add_entity(std::unique_ptr<Entity>);
 
+    EventManager *get_event_manager() {
+        return m_event_manager;
+    }
+
     static constexpr float SCALE = 100.f;
 
 private:
     void load_resources();
     void build_scene();
 
-    sf::RenderWindow &m_window;
+    State::Context m_context;
     sf::View m_world_view;
-    TextureHolder m_textures;
-    FontHolder m_fonts;
     SceneNode m_scene_graph;
     std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
 
@@ -82,6 +86,7 @@ private:
     GameLogic m_game_logic;
     Camera m_camera;
     TeamManager m_team_manager;
+    EventManager *m_event_manager;
 
     float m_moves_timer = 5;
 

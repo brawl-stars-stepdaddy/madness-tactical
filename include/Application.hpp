@@ -7,13 +7,15 @@
 #include "World.hpp"
 #include "GameLogic.hpp"
 #include "Controller.hpp"
+#include "StateStack.hpp"
 
-struct Game {
+struct Application {
 public:
-    Game();
+    Application();
     void run();
 
 private:
+    void register_states();
     void process_input();
     void update(sf::Time delta_time);
     void render();
@@ -24,8 +26,9 @@ private:
     sf::Font m_statistics_font;
     sf::Time m_statistics_update_time;
     int m_statistics_num_frames;
-    World m_world;
-    Controller m_controller;
+    StateStack m_state_stack;
+    TextureHolder m_textures;
+    FontHolder m_font_holder;
 };
 
 #endif

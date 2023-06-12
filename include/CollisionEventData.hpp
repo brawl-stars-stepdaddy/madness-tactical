@@ -21,9 +21,9 @@ public:
     [[nodiscard]] Entity *get_second_object() const;
 
 private:
-    CollisionType m_collision_type;
     Entity *m_first_object;
     Entity *m_second_object;
+    CollisionType m_collision_type;
 };
 
 #endif  // COLLISION_EVENT_DATA_HPP_

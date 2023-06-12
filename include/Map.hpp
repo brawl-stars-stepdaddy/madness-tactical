@@ -13,7 +13,7 @@ struct World;
 
 struct Map : Entity {
 public:
-    explicit Map(World *, const std::vector<std::vector<std::pair<float, float>>> &);
+    explicit Map(World &world, const std::vector<std::vector<std::pair<float, float>>> &);
 
     void draw_current(sf::RenderTarget &, sf::RenderStates) const override;
 
@@ -25,7 +25,6 @@ public:
     void on_explosion(const Explosion &) override;
 
 private:
-    World *m_world;
     MapBody m_body;
     std::vector<sf::ConvexShape> m_sprites;
     std::vector<sf::CircleShape> m_explosions;

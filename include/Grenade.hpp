@@ -5,9 +5,9 @@
 
 struct Grenade : ChargeableWeapon {
 public:
-    explicit Grenade(World *, Unit *);
+    explicit Grenade(World &, Unit *);
 
-    void launch(World &) override;
+    void launch() override;
 
 private:
     void update_current(sf::Time delta_time) override;

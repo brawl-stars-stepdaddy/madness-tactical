@@ -5,7 +5,7 @@
 #include "DestructionEventData.hpp"
 
 TimerProjectile::TimerProjectile(
-        World *world,
+        World &world,
         sf::Vector2f center,
         sf::Vector2f impulse,
         float radius,
@@ -19,12 +19,12 @@ TimerProjectile::TimerProjectile(
 void TimerProjectile::explode() {
     if (m_explosion_timer <= 0 && !is_exploded) {
         m_world->add_entity(std::make_unique<ExplosionEntity>(
-                m_world,
+                *m_world,
                 Explosion({m_body.get_position().x, m_body.get_position().y}, explosion_radius))
         );
         is_exploded = true;
         m_body.get_b2Body()->SetEnabled(false);
-        EventManager::get()->queue_event(std::make_unique<DestructionEventData>(this));
+        m_world->get_event_manager()->queue_event(std::make_unique<DestructionEventData>(this));
     }
 }
 

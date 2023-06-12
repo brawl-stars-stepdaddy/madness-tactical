@@ -68,8 +68,3 @@ bool EventManager::update() {
     }
     return true;
 }
-
-EventManager *EventManager::get() {
-    static EventManager event_manager;
-    return &event_manager;
-}

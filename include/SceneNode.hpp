@@ -5,11 +5,13 @@
 #include <memory>
 #include <vector>
 
+struct World;
+
 struct SceneNode : sf::Transformable, sf::Drawable, private sf::NonCopyable {
 public:
     typedef std::unique_ptr<SceneNode> Ptr;
 
-    SceneNode();
+    SceneNode(World &world);
 
     void attach_child(Ptr child);
     Ptr detach_child(const SceneNode &node);
@@ -19,6 +21,9 @@ public:
 
     [[nodiscard]] sf::Transform get_world_transform() const;
     [[nodiscard]] sf::Vector2f get_world_position() const;
+
+protected:
+    World *m_world;
 
 private:
     std::vector<Ptr> m_children;

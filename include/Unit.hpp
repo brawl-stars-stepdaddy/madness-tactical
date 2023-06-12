@@ -17,7 +17,7 @@ public:
         WORM,
     };
 
-    Unit(Type type, World *world, sf::Vector2f, float, int);
+    Unit(World &world, Type type, sf::Vector2f, float, int);
 
     UnitBody &get_body() override;
     EntityType get_type() override;
@@ -58,7 +58,6 @@ private:
     Type m_type;
     UnitBody m_body;
     Weapon *m_weapon;
-    World *m_world;
     Team *m_team = nullptr;
     float m_direction = 1.0f;
     int m_health = 100;

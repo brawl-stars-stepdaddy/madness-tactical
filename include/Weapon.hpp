@@ -17,7 +17,9 @@ const int WEAPON_TYPES_NUMBER = 3;
 struct Unit;
 
 struct Weapon : SceneNode {
-    virtual void launch(World &) = 0;
+    explicit Weapon(World &world);
+
+    virtual void launch() = 0;
     void set_hidden(bool);
 
 protected:

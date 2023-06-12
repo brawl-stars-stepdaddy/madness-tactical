@@ -6,10 +6,10 @@
 #include "GuiUtil.hpp"
 #include "TimerProjectile.hpp"
 
-Grenade::Grenade(World *world, Unit *parent) {
+Grenade::Grenade(World &world, Unit *parent) : ChargeableWeapon(world) {
     m_parent = parent;
     m_parent->set_weapon(this);
-    m_sprite.setTexture(world->get_texture_holder().get(TexturesID::GRENADE));
+    m_sprite.setTexture(m_world->get_texture_holder().get(TexturesID::GRENADE));
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
     float width = 1, height = 0.6;
@@ -28,7 +28,7 @@ void Grenade::draw_current(sf::RenderTarget &target, sf::RenderStates states) co
     }
 }
 
-void Grenade::launch(World &world) {
+void Grenade::launch() {
     if (!m_is_charging) {
         return;
     }
@@ -43,8 +43,8 @@ void Grenade::launch(World &world) {
             cos(m_angle) * m_parent->get_direction() * impulse_value,
             sin(m_angle) * impulse_value
     };
-    world.get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<TimerProjectile>(
-            &world, start_position, impulse, m_projectile_radius, m_explosion_radius, 0, 3
+    m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<TimerProjectile>(
+            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius, 0, 3
     ));
 }
 

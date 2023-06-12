@@ -4,6 +4,7 @@
 #include "RotatableWeapon.hpp"
 
 struct ChargeableWeapon : RotatableWeapon {
+    ChargeableWeapon(World &world);
     void charge(sf::Time);
     void set_currently_charging(bool is_charging);
 

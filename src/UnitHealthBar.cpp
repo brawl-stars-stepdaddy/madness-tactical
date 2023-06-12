@@ -5,8 +5,9 @@
 #include "GuiUtil.hpp"
 
 
-UnitHealthBar::UnitHealthBar(Unit *parent, const sf::Font &font)
-    :   m_parent(parent) {
+UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
+    : SceneNode(world),
+    m_parent(parent) {
     m_text.setFont(font);
     m_text.setCharacterSize(150);
     m_text.setOutlineThickness(5);

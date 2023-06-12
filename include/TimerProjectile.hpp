@@ -4,7 +4,7 @@
 #include "Projectile.hpp"
 
 struct TimerProjectile : Projectile {
-    TimerProjectile(World *, sf::Vector2f, sf::Vector2f, float, float, float, float);
+    TimerProjectile(World &, sf::Vector2f, sf::Vector2f, float, float, float, float);
 
     void explode();
     void on_collision(Entity *) override;

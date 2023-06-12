@@ -1,8 +1,8 @@
 #include "CollisionEventListener.hpp"
+#include "World.hpp"
 
-CollisionEventListener::CollisionEventListener(World *world) {
-    m_contact_listener = ContactListener();
-    world->get_physics_world().SetContactListener(&m_contact_listener);
+CollisionEventListener::CollisionEventListener(World &world) : m_world(&world), m_contact_listener(ContactListener(world)) {
+    m_world->get_physics_world().SetContactListener(&m_contact_listener);
 }
 
 void CollisionEventListener::process(const EventData &event) {

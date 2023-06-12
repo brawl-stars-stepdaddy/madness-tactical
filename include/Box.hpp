@@ -3,10 +3,12 @@
 
 #include "Entity.hpp"
 #include "RectBody.hpp"
-#include "World.hpp"
+
+struct World;
 
 struct Box : Entity {
 public:
+    explicit Box(World &world);
     RectBody &get_body() override;
     EntityType get_type() override;
 

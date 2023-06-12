@@ -7,10 +7,10 @@
 #include "GuiUtil.hpp"
 #include "CollisionProjectile.hpp"
 
-Bazooka::Bazooka(World *world, Unit *parent) {
+Bazooka::Bazooka(World &world, Unit *parent) : ChargeableWeapon(world) {
     m_parent = parent;
     m_parent->set_weapon(this);
-    m_sprite.setTexture(world->get_texture_holder().get(TexturesID::BAZOOKA));
+    m_sprite.setTexture(m_world->get_texture_holder().get(TexturesID::BAZOOKA));
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
     float width = 1, height = 0.6;
@@ -29,7 +29,7 @@ void Bazooka::draw_current(sf::RenderTarget &target, sf::RenderStates states) co
     }
 }
 
-void Bazooka::launch(World &world) {
+void Bazooka::launch() {
     if (!m_is_charging) {
         return;
     }
@@ -43,7 +43,7 @@ void Bazooka::launch(World &world) {
     sf::Vector2f impulse = {
             cos(m_angle) * m_parent->get_direction() * impulse_value,
             sin(m_angle) * impulse_value};
-    world.get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<CollisionProjectile>(
-            &world, start_position, impulse, m_projectile_radius, m_explosion_radius
+    m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<CollisionProjectile>(
+            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius
     ));
 }

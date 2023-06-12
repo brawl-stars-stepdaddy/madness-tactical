@@ -10,7 +10,7 @@ struct World;
 
 struct JumpSensor : Entity {
 public:
-    JumpSensor(Unit *, World *world, sf::Vector2f center, float radius);
+    JumpSensor(World &world, Unit *, sf::Vector2f center, float radius);
 
     Body &get_body() override;
     void on_collision(Entity *);

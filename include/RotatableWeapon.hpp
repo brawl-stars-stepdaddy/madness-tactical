@@ -4,6 +4,7 @@
 #include "Weapon.hpp"
 
 struct RotatableWeapon : Weapon {
+    explicit RotatableWeapon(World &world);
     void change_angle(sf::Time, float);
     void set_angle_change_direction(float direction);
 

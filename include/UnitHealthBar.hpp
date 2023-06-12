@@ -7,7 +7,7 @@ struct Unit;
 struct World;
 
 struct UnitHealthBar : SceneNode {
-    explicit UnitHealthBar(Unit *parent, const sf::Font &font);
+    explicit UnitHealthBar(World &world, Unit *parent, const sf::Font &font);
     sf::Text get_text();
 
 private:

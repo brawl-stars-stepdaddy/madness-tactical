@@ -20,3 +20,7 @@ void RotatableWeapon::change_angle(sf::Time delta_time, float direction) {
 void RotatableWeapon::reset() {
     m_current_angle_change_direction = 0;
 }
+
+RotatableWeapon::RotatableWeapon(World &world) : Weapon(world) {
+
+}

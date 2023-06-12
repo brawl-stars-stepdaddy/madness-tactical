@@ -1,16 +1,26 @@
-#include "Game.hpp"
+#include "Application.hpp"
+#include "GameState.hpp"
 #include <cmath>
 
-Game::Game()
-    : m_window(sf::VideoMode(1920, 1080), "SFML test" ), m_world(m_window) {
+Application::Application()
+    : m_window(sf::VideoMode(1920, 1080), "SFML test" ), m_state_stack(State::Context(m_window, m_textures, m_font_holder)) {
     m_window.setKeyRepeatEnabled(false);
     m_statistics_font.loadFromFile("res/Sansation.ttf");
     m_statistics_text.setFont(m_statistics_font);
     m_statistics_text.setPosition(5.f, 5.f);
     m_statistics_text.setCharacterSize(10);
+    register_states();
 }
 
-void Game::run() {
+void Application::register_states() {
+    //m_state_stack.register_state<TitleState>(StatesID::Title);
+    //m_state_stack.register_state<MenuState>(StatesID::Menu);
+    m_state_stack.register_state<GameState>(StatesID::Game);
+    //m_state_stack.register_state<PauseState>(StatesID::Pause);
+    m_state_stack.push_state(StatesID::Game);
+}
+
+void Application::run() {
     sf::Clock clock;
     sf::Time unprocessed = sf::Time::Zero;
     sf::Time time_per_frame = sf::seconds(1.f / 60);
@@ -34,10 +44,10 @@ void Game::run() {
     }
 }
 
-void Game::process_input() {
+void Application::process_input() {
     sf::Event event;
     while (m_window.pollEvent(event)) {
-        m_controller.handle_event(event);
+        m_state_stack.handle_input(event);
         switch (event.type) {
             case sf::Event::Closed:
                 m_window.close();
@@ -46,24 +56,26 @@ void Game::process_input() {
                 break;
         }
     }
-
-    m_controller.handle_realtime_input();
+    m_state_stack.handle_realtime_input();
 }
 
-void Game::update(sf::Time delta_time) {
-    m_world.update(delta_time);
+void Application::update(sf::Time delta_time) {
+    m_state_stack.update(delta_time);
+    if (m_state_stack.is_empty()) {
+        m_window.close();
+    }
 }
 
-void Game::render() {
+void Application::render() {
     m_window.clear();
-    m_world.draw();
+    m_state_stack.draw();
 
     m_window.setView(m_window.getDefaultView());
     m_window.draw(m_statistics_text);
     m_window.display();
 }
 
-void Game::update_statistics(sf::Time delta_time) {
+void Application::update_statistics(sf::Time delta_time) {
     m_statistics_update_time += delta_time;
     m_statistics_num_frames += 1;
     if (m_statistics_update_time >= sf::seconds(1)) {
