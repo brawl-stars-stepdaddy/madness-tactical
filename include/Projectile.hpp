@@ -7,7 +7,7 @@
 struct World;
 
 struct Projectile : Entity {
-    Projectile(World *, sf::Vector2f, sf::Vector2f, float, float);
+    Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);
 
     CircleBody &get_body() override;
     EntityType get_type() override;
@@ -23,7 +23,6 @@ private:
 
     sf::Sprite m_sprite;
     CircleBody m_body;
-    World *m_world;
     bool is_exploded = false;
     float explosion_radius;
 };

@@ -5,11 +5,11 @@
 
 struct Bazooka : Weapon {
 public:
-    explicit Bazooka(World *, Unit *);
+    explicit Bazooka(World &, Unit *);
 
     void charge(sf::Time) override;
     void change_angle(sf::Time, float) override;
-    void launch(World &) override;
+    void launch() override;
 
 protected:
     void reset() override;

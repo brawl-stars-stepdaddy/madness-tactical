@@ -1,6 +1,10 @@
 #include "Weapon.hpp"
 #include "Unit.hpp"
 
+Weapon::Weapon(World &world) : SceneNode(world) {
+
+}
+
 void Weapon::update_current(sf::Time delta_time) {
     if (m_is_charging) {
         charge(delta_time);

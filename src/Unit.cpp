@@ -20,11 +20,11 @@ TexturesID to_texture_id(Unit::Type type) {
     }
 }
 
-Unit::Unit(Unit::Type type, World *world, sf::Vector2f center, float radius, int player_id)
-    : m_type(type),
-      m_sprite(world->get_texture_holder().get(to_texture_id(type))),
-      m_body(UnitBody(this, world->get_physics_world(), center, radius)),
-      m_world(world),
+Unit::Unit(World &world, Unit::Type type, sf::Vector2f center, float radius, int player_id)
+    : Entity(world),
+      m_type(type),
+      m_sprite(m_world->get_texture_holder().get(to_texture_id(type))),
+      m_body(UnitBody(this, m_world->get_physics_world(), center, radius)),
       m_player_id(player_id) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
@@ -82,7 +82,7 @@ void Unit::on_explosion(const Explosion &explosion) {
     m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
     if (m_health <= 0) {
         m_body.get_b2Body()->SetEnabled(false);
-        EventManager::get()->queue_event(
+        m_world->get_event_manager()->queue_event(
                 std::make_unique<DestructionEventData>(this)
         );
     }

@@ -2,9 +2,9 @@
 #include "World.hpp"
 #include "CollisionEventData.hpp"
 
-JumpSensor::JumpSensor(Unit *parent, World *world, sf::Vector2f center, float radius)
-    : m_parent(parent),
-      m_body(JumpSensorBody(this, world->get_physics_world(), center, radius)) {}
+JumpSensor::JumpSensor(World &world, Unit *parent, sf::Vector2f center, float radius)
+    : Entity(world), m_parent(parent),
+      m_body(JumpSensorBody(this, m_world->get_physics_world(), center, radius)) {}
 
 Body &JumpSensor::get_body() {
     return m_body;

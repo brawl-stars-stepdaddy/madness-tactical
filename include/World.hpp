@@ -12,6 +12,8 @@
 #include "GameLogic.hpp"
 #include "Camera.hpp"
 #include "Unit.hpp"
+#include "EventManager.hpp"
+#include <State.hpp>
 
 struct Map;
 struct CollisionEventListener;
@@ -26,7 +28,7 @@ public:
         LAYER_COUNT,
     };
 
-    explicit World(sf::RenderWindow &window);
+    World(State::Context &context, EventManager &event_manager);
     void update(sf::Time delta_time);
     void draw();
 
@@ -39,7 +41,7 @@ public:
     }
 
     TextureHolder &get_texture_holder() {
-        return m_textures;
+        return *m_context.textures;
     }
 
     Unit *get_player() {
@@ -56,15 +58,18 @@ public:
 
     void add_entity(std::unique_ptr<Entity>);
 
+    EventManager *get_event_manager() {
+        return m_event_manager;
+    }
+
     static constexpr float SCALE = 100.f;
 
 private:
     void load_textures();
     void build_scene();
 
-    sf::RenderWindow &m_window;
+    State::Context m_context;
     sf::View m_world_view;
-    TextureHolder m_textures;
     SceneNode m_scene_graph;
     std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
 
@@ -77,6 +82,7 @@ private:
     DestructionEventListener *m_destruction_listener;
     GameLogic m_game_logic;
     Camera m_camera;
+    EventManager *m_event_manager;
 
     std::vector<std::vector<Unit *>> m_playable_units;
     std::vector<int> m_last_active_units;

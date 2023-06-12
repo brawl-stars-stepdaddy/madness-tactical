@@ -8,9 +8,10 @@
 struct Unit;
 
 struct Weapon : SceneNode {
+    explicit Weapon(World &world);
     virtual void charge(sf::Time) = 0;
     virtual void change_angle(sf::Time, float) = 0;
-    virtual void launch(World &) = 0;
+    virtual void launch() = 0;
     virtual void set_angle_change_direction(float direction);
     virtual void set_currently_charging(bool is_charging);
 

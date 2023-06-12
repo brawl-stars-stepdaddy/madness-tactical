@@ -4,77 +4,65 @@
 #include "EventListener.hpp"
 
 struct GameLogic;
+struct World;
 
-struct ChangeAngleDownEventListener : EventListener {
+struct ActionEventListener : EventListener {
 public:
-    explicit ChangeAngleDownEventListener(GameLogic *game_logic);
-    void process(const EventData &event) override;
+    ActionEventListener(World &world, GameLogic &game_logic);
+    void process(const EventData &event) override = 0;
+    virtual ~ActionEventListener() = default;
 
-private:
+protected:
+    World *m_world;
     GameLogic *m_game_logic;
 };
 
-struct ChangeAngleUpEventListener : EventListener {
+struct ChangeAngleDownEventListener : ActionEventListener {
 public:
-    explicit ChangeAngleUpEventListener(GameLogic *game_logic);
+    ChangeAngleDownEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct MoveLeftEventListener : EventListener {
+struct ChangeAngleUpEventListener : ActionEventListener {
 public:
-    explicit MoveLeftEventListener(GameLogic *game_logic);
+    ChangeAngleUpEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct MoveRightEventListener : EventListener {
+struct MoveLeftEventListener : ActionEventListener {
 public:
-    explicit MoveRightEventListener(GameLogic *game_logic);
+    MoveLeftEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct JumpForwardEventListener : EventListener {
+struct MoveRightEventListener : ActionEventListener {
 public:
-    explicit JumpForwardEventListener(GameLogic *game_logic);
+    MoveRightEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct JumpBackwardEventListener : EventListener {
+struct JumpForwardEventListener : ActionEventListener {
 public:
-    explicit JumpBackwardEventListener(GameLogic *game_logic);
+    JumpForwardEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct BeginChargeWeaponEventListener : EventListener {
+struct JumpBackwardEventListener : ActionEventListener {
 public:
-    explicit BeginChargeWeaponEventListener(GameLogic *game_logic);
+    JumpBackwardEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
-
-private:
-    GameLogic *m_game_logic;
 };
 
-struct LaunchProjectileEventListener : EventListener {
+struct BeginChargeWeaponEventListener : ActionEventListener {
 public:
-    explicit LaunchProjectileEventListener(GameLogic *game_logic);
+    BeginChargeWeaponEventListener(World &world, GameLogic &game_logic);
     void process(const EventData &event) override;
+};
 
-private:
-    GameLogic *m_game_logic;
+struct LaunchProjectileEventListener : ActionEventListener {
+public:
+    LaunchProjectileEventListener(World &world, GameLogic &game_logic);
+    void process(const EventData &event) override;
 };
 
 struct Camera;

@@ -1,4 +1,5 @@
 #include "EventManager.hpp"
+#include <iostream>
 
 EventManager::EventManager() {
 }
@@ -7,6 +8,7 @@ bool EventManager::add_listener(
     EventListenerPtr event_listener,
     const EventType &type
 ) {
+    std::cout << m_event_listeners.size() << std::endl;
     EventListenerList &event_listener_list = m_event_listeners[type];
     event_listener_list.push_back(std::move(event_listener));
     return true;
@@ -67,9 +69,4 @@ bool EventManager::update() {
         m_queues[queue_to_process].pop_front();
     }
     return true;
-}
-
-EventManager *EventManager::get() {
-    static EventManager event_manager;
-    return &event_manager;
 }

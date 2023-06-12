@@ -6,10 +6,10 @@
 #include "World.hpp"
 #include "GuiUtil.hpp"
 
-Bazooka::Bazooka(World *world, Unit *parent) {
+Bazooka::Bazooka(World &world, Unit *parent) : Weapon(world) {
     m_parent = parent;
     m_parent->set_weapon(this);
-    m_sprite.setTexture(world->get_texture_holder().get(TexturesID::BAZOOKA));
+    m_sprite.setTexture(m_world->get_texture_holder().get(TexturesID::BAZOOKA));
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
     float width = 1, height = 0.6;
@@ -54,7 +54,7 @@ const {
 void Bazooka::charge(sf::Time delta_time) {
     m_charge_level = std::min(1.0f, m_charge_level + delta_time.asSeconds() * 0.5f);
     if (m_charge_level == 1.0f) {
-        EventManager().get()->queue_event(std::make_unique<LaunchProjectileEventData>());
+        m_world->get_event_manager()->queue_event(std::make_unique<LaunchProjectileEventData>());
     }
 }
 
@@ -62,7 +62,7 @@ void Bazooka::change_angle(sf::Time delta_time, float direction) {
     m_angle = std::min(M_PI_2f, std::max(-M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction));
 }
 
-void Bazooka::launch(World &world) {
+void Bazooka::launch() {
     if (!m_is_charging) {
         return;
     }
@@ -76,7 +76,7 @@ void Bazooka::launch(World &world) {
     sf::Vector2f impulse = {
             cos(m_angle) * m_parent->get_direction() * impulse_value,
             sin(m_angle) * impulse_value};
-    world.get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<Projectile>(
-            &world, start_position, impulse, m_projectile_radius, m_explosion_radius
+    m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<Projectile>(
+            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius
     ));
 }
