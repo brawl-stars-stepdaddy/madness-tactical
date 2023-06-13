@@ -9,7 +9,6 @@
 #include "GameOverEventListener.hpp"
 #include "EventManager.hpp"
 #include "EventType.hpp"
-#include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
 #include "MoveTransitionEventListener.hpp"
 #include "ActionEventListener.hpp"
@@ -18,31 +17,8 @@
 #include "WeaponBox.hpp"
 #include "HealingBox.hpp"
 #include "Unit.hpp"
-#include <cmath>
-
-std::vector<std::pair<float, float>> generate_naive_map() {
-    std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
-    std::normal_distribution <float> gen_real (0, 0.4);
-
-    std::vector<std::pair<float, float>> points;
-    float prev_value = 30.0f;
-    for (int i = 0; i < 360; i++) {
-        float angle = static_cast<float>(i) / (180 / M_PI);
-        prev_value += gen_real(rng);
-        b2Vec2 vec = {cos(angle), sin(angle)};
-        vec *= prev_value;
-        points.emplace_back(vec.x, vec.y);
-    }
-    prev_value = 30.0f;
-    for (int i = 0; i < 360; i++) {
-        b2Vec2 vec = {points[i].first, points[i].second};
-        float value = vec.Normalize();
-        prev_value = prev_value + 0.3 * (value - prev_value);
-        vec *= prev_value;
-        points[i] = {vec.x, vec.y};
-    }
-    return points;
-}
+#include "PlanetCore.hpp"
+#include "MapGenerator.hpp"
 
 World::World(State::Context &context, EventManager &event_manager)
     : m_context(context),
@@ -51,7 +27,7 @@ World::World(State::Context &context, EventManager &event_manager)
       m_world_bounds(-200, -200, 400, 400),
       m_spawn_position(5.f, 5.f),
       m_active_unit(nullptr),
-      m_physics_world({0, 1e-3}),
+      m_physics_world({0, 0}),
       m_map(nullptr),
       m_game_logic(this),
       m_camera(nullptr),
@@ -92,6 +68,7 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
     m_context.textures->load(TexturesID::BAZOOKA, "res/bazooka.png");
     m_context.textures->load(TexturesID::GRENADE, "res/grenade.png");
+    m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 
@@ -117,6 +94,10 @@ void World::build_scene() {
     Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
 
+
+    std::unique_ptr<PlanetCore> core =
+            std::make_unique<PlanetCore>(*this, 15);
+    m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
     std::unique_ptr<Unit> worm1 =
         std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0);
@@ -149,7 +130,7 @@ void World::build_scene() {
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
     std::unique_ptr<Map> map = std::make_unique<Map>(
         *this,
-        std::vector<std::vector<std::pair<float, float>>> {generate_naive_map()}
+        MapGenerator(1000).get_chains()
     );
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));

@@ -83,12 +83,7 @@ void Unit::on_explosion(const Explosion &explosion) {
 
     m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
     if (m_health <= 0) {
-        m_health = 0;
-        m_team->remove_unit(this);
-        m_body.get_b2Body()->SetEnabled(false);
-        m_world->get_event_manager()->queue_event(
-                std::make_unique<DestructionEventData>(this)
-        );
+        kill_unit();
     }
 }
 
@@ -195,4 +190,13 @@ void Unit::set_activeness(bool new_value) {
 
 void Unit::change_health(int value) {
     m_health += value;
+}
+
+void Unit::kill_unit() {
+    m_health = 0;
+    m_team->remove_unit(this);
+    m_body.get_b2Body()->SetEnabled(false);
+    m_world->get_event_manager()->queue_event(
+            std::make_unique<DestructionEventData>(this)
+    );
 }

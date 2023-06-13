@@ -2,10 +2,10 @@
 
 Map::Map(
     World &world,
-    const std::vector<std::vector<std::pair<float, float>>> &chains_
+    const std::vector<std::vector<std::pair<float, float>>> &chains
 )
     : Entity(world),
-      m_body(MapBody(this, m_world->get_physics_world(), chains_)) {
+      m_body(MapBody(this, m_world->get_physics_world(), chains)) {
     m_sprites = m_body.get_triangulation();
     for (auto &triangle : m_sprites) {
         float min_x = triangle.getPoint(0).x * World::SCALE;

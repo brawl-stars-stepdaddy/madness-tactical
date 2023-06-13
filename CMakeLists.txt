@@ -11,9 +11,8 @@ link_directories(libs/box2d)
 
 include_directories(include)
 add_subdirectory(libs/clipper2)
-add_subdirectory(libs/polypartition)
-
-include_directories(include)
+add_subdirectory(libs/CDT)
+add_subdirectory(libs/SimplexNoise)
 
 file(GLOB SOURCES "src/*.cpp")
 
@@ -25,5 +24,6 @@ target_link_libraries(madness-tactical
         sfml-graphics sfml-system sfml-window
         box2d
         clipper2
-        polypartition
+        CDT
+        SimplexNoise
         )

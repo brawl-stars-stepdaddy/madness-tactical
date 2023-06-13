@@ -1,10 +1,11 @@
 #include "MapBody.hpp"
-#include <polypartition.h>
+#include <CDT.h>
+#include "clipper2/clipper.h"
 
 MapBody::MapBody(
     Map *parent,
     b2World &world,
-    const std::vector<std::vector<std::pair<float, float>>> &chains_
+    const std::vector<std::vector<std::pair<float, float>>> &chains
 ) {
     b2BodyDef map_def;
     map_def.position.Set(0.0f, 0.0f);
@@ -13,9 +14,9 @@ MapBody::MapBody(
 
     b2ChainShape map_shape;
     b2FixtureDef map_fixture;
-    map_fixture.friction = 0.5f;
+    map_fixture.friction = 1.0f;
 
-    for (const auto &chain : chains_) {
+    for (const auto &chain : chains) {
         m_chains.emplace_back();
         m_paths.emplace_back();
         m_chains.back().reserve(chain.size());
@@ -33,6 +34,8 @@ MapBody::MapBody(
         map_fixture.shape = &map_shape;
         m_body->CreateFixture(&map_fixture);
     }
+
+    apply_explosion(Explosion({0, 0}, 0));
 }
 
 sf::Vector2f MapBody::get_position() {
@@ -44,35 +47,32 @@ float MapBody::get_rotation() {
 }
 
 [[nodiscard]] std::vector<sf::ConvexShape> MapBody::get_triangulation() const {
+
     std::vector<sf::ConvexShape> sf_triangles;
 
-    TPPLPartition triangulator;
-    TPPLPolyList polygons, triangles;
+    CDT::Triangulation<double> cdt;
+    std::vector<CDT::V2d<double>> vertices;
+    std::vector<CDT::Edge> edges;
 
-    for (const auto &chain : m_chains) {
-        TPPLPoly polygon;
-        polygon.Init(static_cast<long>(chain.size()));
+    int index = 0;
+    for (const auto & chain : m_chains) {
         for (int i = 0; i < chain.size(); i++) {
-            polygon[i] = {chain[i].x, chain[i].y};
+            vertices.emplace_back(CDT::V2d<double>::make(chain[i].x, chain[i].y));
+            edges.emplace_back(index + i, index + (i + 1) % chain.size());
         }
-        if (polygon.GetOrientation() == TPPLOrientation::TPPL_ORIENTATION_CW) {
-            polygon.SetHole(true);
-        }
-        polygons.push_back(polygon);
+        index += chain.size();
     }
 
-    triangulator.Triangulate_EC(&polygons, &triangles);
-    auto triangles_ = triangles;
-    triangulator.RemoveHoles(&triangles_, &triangles);
+    cdt.insertVertices(vertices);
+    cdt.insertEdges(edges);
+    cdt.eraseOuterTrianglesAndHoles();
 
-    for (const auto &triangle : triangles) {
+    for (const auto &cdt_triangle: cdt.triangles) {
         sf::ConvexShape sf_triangle;
         sf_triangle.setPointCount(3);
         for (int i = 0; i < 3; i++) {
-            sf_triangle.setPoint(
-                i, {static_cast<float>(triangle[i].x),
-                    static_cast<float>(triangle[i].y)}
-            );
+            auto point = vertices[cdt_triangle.vertices[i]];
+            sf_triangle.setPoint(i, {static_cast<float>(point.x), static_cast<float>(point.y)});
         }
         sf_triangles.push_back(sf_triangle);
     }
