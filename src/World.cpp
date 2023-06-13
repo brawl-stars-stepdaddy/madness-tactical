@@ -24,20 +24,9 @@
 #include "opencv2/highgui.hpp"
 #include "algorithm"
 #include <set>
+#include "PlanetCore.hpp"
 
-bool check_collinear(std::pair<float, float> first, std::pair<float, float> second, std::pair<float, float> third) {
-    auto [x1, y1] = first;
-    auto [x2, y2] = second;
-    auto [x3, y3] = third;
-    float dx1 = x2 - x1;
-    float dy1 = y2 - y1;
-    float dx2 = x3 - x2;
-    float dy2 = y3 - y2;
-    return abs(dx1 / dy1 - dx2 / dy2) > 1e-6;
-
-}
-
-std::vector<std::vector<std::pair<float, float>>> map_generation() {
+std::pair<std::vector<std::vector<cv::Point>>, std::vector<cv::Vec4i>> map_generation() {
     float scale     = 20.f;
     float lacunarity    = 1.0f;
     float persistance   = 1.0f;
@@ -57,31 +46,11 @@ std::vector<std::vector<std::pair<float, float>>> map_generation() {
         }
     }
     cv::threshold(image, image, 10, 255, cv::THRESH_BINARY);
+
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
     cv::findContours(image, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
-    std::vector<std::vector<std::pair<float, float>>> chains;
-    std::set<std::pair<int, int>> used;
-    for (const auto &contour : contours) {
-        if (contour.size() < 100) {
-            continue;
-        }
-        chains.emplace_back();
-        int i = 0;
-        for (const auto &[row, col] : contour) {
-            if (i++ % 2 || used.find({row, col}) != used.end()) {
-                continue;
-            }
-            used.insert({row, col});
-            float x = static_cast<float>(col - map_size / 2) / 10;
-            float y = static_cast<float>(row - map_size / 2) / 10;
-            if (chains.back().size() < 2
-                || check_collinear(chains.back()[chains.back().size() - 2], chains.back()[chains.back().size()- 1], {x, y})) {
-                    chains.back().emplace_back(x, y);
-            }
-        }
-    }
-    return chains;
+    return {contours, hierarchy};
 }
 
 
@@ -159,6 +128,7 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
     m_context.textures->load(TexturesID::BAZOOKA, "res/bazooka.png");
     m_context.textures->load(TexturesID::GRENADE, "res/grenade.png");
+    m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 
@@ -184,6 +154,10 @@ void World::build_scene() {
     Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
 
+
+    std::unique_ptr<PlanetCore> core =
+            std::make_unique<PlanetCore>(*this, 15);
+    m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
     std::unique_ptr<Unit> worm1 =
         std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0);
@@ -214,9 +188,10 @@ void World::build_scene() {
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
+    auto [contours, hierarchy] = map_generation();
     std::unique_ptr<Map> map = std::make_unique<Map>(
         *this,
-        map_generation()
+        std::move(contours), std::move(hierarchy)
     );
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));

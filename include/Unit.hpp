@@ -47,6 +47,7 @@ public:
     void jump_backward();
 
     void set_activeness(bool);
+    void kill_unit();
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
