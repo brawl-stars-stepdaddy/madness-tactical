@@ -12,7 +12,7 @@ struct World;
 
 struct Map : Entity {
 public:
-    explicit Map(World &world, std::vector<std::vector<cv::Point>> &&, std::vector<cv::Vec4i> &&);
+    explicit Map(World &world, const std::vector<std::vector<std::pair<float, float>>> &);
 
     void draw_current(sf::RenderTarget &, sf::RenderStates) const override;
     void update_current(sf::Time delta_time) override;

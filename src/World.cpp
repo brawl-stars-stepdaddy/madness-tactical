@@ -9,7 +9,6 @@
 #include "GameOverEventListener.hpp"
 #include "EventManager.hpp"
 #include "EventType.hpp"
-#include "ExplosionEventData.hpp"
 #include "ExplosionEventListener.hpp"
 #include "MoveTransitionEventListener.hpp"
 #include "ActionEventListener.hpp"
@@ -18,67 +17,8 @@
 #include "WeaponBox.hpp"
 #include "HealingBox.hpp"
 #include "Unit.hpp"
-#include <cmath>
-#include "SimplexNoise.h"
-#include <opencv2/imgproc.hpp>
-#include "opencv2/highgui.hpp"
-#include "algorithm"
-#include <set>
 #include "PlanetCore.hpp"
-
-std::pair<std::vector<std::vector<cv::Point>>, std::vector<cv::Vec4i>> map_generation() {
-    float scale     = 20.f;
-    float lacunarity    = 1.0f;
-    float persistance   = 1.0f;
-
-    const SimplexNoise simplex(0.1f/scale, 0.5f, lacunarity, persistance); // Amplitude of 0.5 for the 1st octave : sum ~1.0f
-    const int octaves = static_cast<int>(-1 + std::log(scale));
-
-    float map_size = 1000;
-    cv::Mat image(map_size, map_size, CV_8UC1);
-    for (int row = 0; row < image.rows; ++row) {
-        const float y = static_cast<float>(row - map_size/2);
-        for (int col = 0; col < image.cols; ++col) {
-            const float x = static_cast<float>(col - map_size/2);
-            float noise = simplex.fractal(octaves, x, y);
-            image.at<uchar>(row, col) = noise * 100;
-            image.at<uchar>(row, col) = image.at<uchar>(row, col) / (std::max(1.f, (x * x + y * y) / 10000));
-        }
-    }
-    cv::threshold(image, image, 10, 255, cv::THRESH_BINARY);
-
-    std::vector<std::vector<cv::Point>> contours;
-    std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(image, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
-    return {contours, hierarchy};
-}
-
-
-std::vector<std::pair<float, float>> generate_naive_map() {
-    std::mt19937 rng((uint32_t) std::chrono::steady_clock::now().time_since_epoch().count());
-    std::normal_distribution <float> gen_real (0, 0.4);
-
-    std::vector<std::pair<float, float>> points;
-    points = {{20, 20}, {-20, 20}, {-20, -20}, {20, -20}};
-    std::reverse(points.begin(), points.end());
-    float prev_value = 30.0f;
-    for (int i = 0; i < 360; i++) {
-        float angle = static_cast<float>(i) / (180 / M_PI);
-        prev_value += gen_real(rng);
-        b2Vec2 vec = {cos(angle), sin(angle)};
-        vec *= prev_value;
-        points.emplace_back(vec.x, vec.y);
-    }
-    prev_value = 30.0f;
-    for (int i = 0; i < 360; i++) {
-        b2Vec2 vec = {points[i].first, points[i].second};
-        float value = vec.Normalize();
-        prev_value = prev_value + 0.3 * (value - prev_value);
-        vec *= prev_value;
-        points[i] = {vec.x, vec.y};
-    }
-    return points;
-}
+#include "MapGenerator.hpp"
 
 World::World(State::Context &context, EventManager &event_manager)
     : m_context(context),
@@ -188,10 +128,9 @@ void World::build_scene() {
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
-    auto [contours, hierarchy] = map_generation();
     std::unique_ptr<Map> map = std::make_unique<Map>(
         *this,
-        std::move(contours), std::move(hierarchy)
+        MapGenerator(1000).get_chains()
     );
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));

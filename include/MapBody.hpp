@@ -12,19 +12,16 @@ struct Map;
 
 struct MapBody : Body {
 public:
-    explicit MapBody(Map *, b2World &, std::vector<std::vector<cv::Point>> &&, std::vector<cv::Vec4i> &&);
+    explicit MapBody(Map *, b2World &, const std::vector<std::vector<std::pair<float, float>>> &);
 
     [[nodiscard]] std::vector<sf::ConvexShape> get_triangulation() const;
 
     void apply_explosion(const Explosion &);
 
-    void process_contours(std::vector<std::vector<cv::Point>> &, std::vector<cv::Vec4i> &);
-
     sf::Vector2f get_position() override;
     float get_rotation() override;
 
 private:
-    std::vector<std::vector<cv::Point2f>> m_contours;
     std::vector<std::vector<b2Vec2>> m_chains;
     Clipper2Lib::PathsD m_paths;
 };
