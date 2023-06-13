@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include "Body.hpp"
 #include "Explosion.hpp"
-#include <opencv2/imgproc.hpp>
 
 struct Map;
 
