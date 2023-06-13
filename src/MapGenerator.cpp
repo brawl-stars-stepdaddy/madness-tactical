@@ -2,6 +2,8 @@
 #include "SimplexNoise.h"
 #include <vector>
 #include <queue>
+#include <random>
+#include <iostream>
 
 MapGenerator::MapGenerator(int map_size, int octaves,
                            float simplex_scale, float lacunarity,
@@ -12,11 +14,17 @@ MapGenerator::MapGenerator(int map_size, int octaves,
     const SimplexNoise simplex(0.1f / simplex_scale, 0.5f, lacunarity, persistence);
     m_noise_map.resize(map_size, std::vector<bool>(map_size));
 
+    std::uniform_real_distribution<float> range(-1e4, 1e4);
+    std::mt19937 rand_gen((std::random_device()()));
+    float x_offset = range(rand_gen);
+    float y_offset = range(rand_gen);
+    std::cout << x_offset << ' ' << y_offset << std::endl;
+
     for (int row = 0; row < map_size; ++row) {
         auto y = static_cast<float>(row - map_size / 2);
         for (int col = 0; col < map_size; ++col) {
             auto x = static_cast<float>(col - map_size / 2);
-            float noise = simplex.fractal(octaves, x, y) / std::max(1.f, (x * x + y * y));
+            float noise = simplex.fractal(octaves, x + x_offset, y + y_offset) / std::max(1.f, (x * x + y * y));
             m_noise_map[row][col] = noise > threshold;
         }
     }
