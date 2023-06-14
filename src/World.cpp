@@ -96,7 +96,7 @@ void World::build_scene() {
 
 
     std::unique_ptr<PlanetCore> core =
-            std::make_unique<PlanetCore>(*this, 15);
+            std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
     std::unique_ptr<Unit> worm1 =

@@ -5,9 +5,8 @@
 
 struct MapGenerator {
     MapGenerator(int map_size, int octaves = 1,
-                 float simplex_scale = 20.0f, float lacunarity = 1.0f,
-                 float persistence = 1.0f, float threshold = 2e-6,
-                 float scale = 10.0f, int points_frequency = 3);
+                 float simplex_scale = 0.008f, float threshold = 3.0f,
+                 float scale = 5.0f, int points_frequency = 3);
     const std::vector<std::vector<std::pair<float, float>>> &get_chains();
 
 private:
