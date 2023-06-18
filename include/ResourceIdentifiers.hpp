@@ -21,7 +21,8 @@ enum class TexturesID {
     GRENADE,
     TITLE,
     PLANET_CORE,
-    LAND_MINE
+    LAND_MINE,
+    LASER
 };
 
 enum class FontsID {

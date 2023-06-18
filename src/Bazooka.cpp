@@ -2,7 +2,6 @@
 #include "Unit.hpp"
 #include <cmath>
 #include "EventManager.hpp"
-#include "ActionEventData.hpp"
 #include "World.hpp"
 #include "GuiUtil.hpp"
 #include "CollisionProjectile.hpp"

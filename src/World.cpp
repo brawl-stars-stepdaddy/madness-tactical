@@ -4,6 +4,7 @@
 #include <vector>
 #include "Bazooka.hpp"
 #include "Grenade.hpp"
+#include "Laser.hpp"
 #include "LandMine.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
@@ -71,6 +72,7 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::GRENADE, "res/grenade.png");
     m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
     m_context.textures->load(TexturesID::LAND_MINE, "res/landmine.png");
+    m_context.textures->load(TexturesID::LASER, "res/laser.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 
@@ -106,8 +108,8 @@ void World::build_scene() {
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
-    team1->add_weapon(LAND_MINE);
-    auto weapon = std::make_unique<LandMine>(*this, m_active_unit);
+    team1->add_weapon(LASER);
+    auto weapon = std::make_unique<Laser>(*this, m_active_unit);
     m_active_unit->attach_child(std::move(weapon));
 
     /*std::unique_ptr<Unit> worm2 =

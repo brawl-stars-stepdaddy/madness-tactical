@@ -13,6 +13,7 @@ protected:
 
     float m_current_angle_change_direction = 0;
     float m_angle = 0;
+    bool m_is_rotation_blocked = false;
 
     void update_current(sf::Time delta_time) override;
     void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;

@@ -1,5 +1,4 @@
 #include "LandMine.hpp"
-
 #include "Unit.hpp"
 #include "EventManager.hpp"
 #include "World.hpp"

@@ -37,6 +37,7 @@ void ChargeableWeapon::draw_current(sf::RenderTarget &target, sf::RenderStates s
 
 void ChargeableWeapon::set_currently_charging(bool is_charging) {
     m_is_charging = is_charging;
+    m_is_rotation_blocked = is_charging;
 }
 
 void ChargeableWeapon::charge(sf::Time delta_time) {
