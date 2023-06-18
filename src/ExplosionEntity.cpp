@@ -8,7 +8,7 @@ ExplosionEntity::ExplosionEntity(World &world, Explosion explosion)
     : Entity(world), m_explosion(explosion),
       m_body(this, m_world->get_physics_world(),
              {explosion.get_coordinates().first, explosion.get_coordinates().second},
-             explosion.get_radius(), true) {
+             explosion.get_radius(), true, false) {
 }
 
 void ExplosionEntity::on_collision(Entity *other_object) {

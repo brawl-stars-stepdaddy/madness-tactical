@@ -9,6 +9,7 @@
 enum WeaponType {
     BAZOOKA,
     GRENADE,
+    LAND_MINE,
     CONCRETE_DONKEY
 };
 

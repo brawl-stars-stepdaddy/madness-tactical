@@ -48,6 +48,6 @@ void Bazooka::launch() {
             cos(angle) * impulse_value,
             sin(angle) * impulse_value};
     m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<CollisionProjectile>(
-            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius
+            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius, true, false, TexturesID::CANON_BALL
     ));
 }

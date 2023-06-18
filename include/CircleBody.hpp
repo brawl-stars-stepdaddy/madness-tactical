@@ -8,7 +8,7 @@ struct Entity;
 
 struct CircleBody : Body {
 public:
-    CircleBody(Entity *, b2World &, sf::Vector2f, float, bool=false, bool=false);
+    CircleBody(Entity *, b2World &, sf::Vector2f, float, bool, bool);
     sf::Vector2f get_position() override;
     float get_rotation() override;
 };

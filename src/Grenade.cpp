@@ -11,9 +11,11 @@ Grenade::Grenade(World &world, Unit *parent) : ChargeableWeapon(world) {
     m_parent->set_weapon(this);
     m_sprite.setTexture(m_world->get_texture_holder().get(TexturesID::GRENADE));
     sf::FloatRect bounds = m_sprite.getLocalBounds();
-    m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
-    float width = 1, height = 0.6;
-    GuiUtil::shrink_to_rect_scale(m_sprite, width * 2, height * 2);
+    m_sprite.setScale(
+            m_projectile_radius * World::SCALE * 2 / bounds.width,
+            m_projectile_radius * World::SCALE * 2 / bounds.height
+    );
+    m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
 
 void Grenade::update_current(sf::Time delta_time) {
@@ -49,7 +51,7 @@ void Grenade::launch() {
             sin(angle) * impulse_value
     };
     m_world->get_layer(World::Layer::ENTITIES)->attach_child(std::make_unique<TimerProjectile>(
-            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius, 0, 3
+            *m_world, start_position, impulse, m_projectile_radius, m_explosion_radius, 0, m_explosion_time, false, false, TexturesID::GRENADE
     ));
 }
 

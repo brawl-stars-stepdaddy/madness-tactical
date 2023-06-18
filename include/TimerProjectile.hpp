@@ -4,7 +4,7 @@
 #include "Projectile.hpp"
 
 struct TimerProjectile : Projectile {
-    TimerProjectile(World &, sf::Vector2f, sf::Vector2f, float, float, float, float);
+    TimerProjectile(World &, sf::Vector2f, sf::Vector2f, float, float, float, float, bool, bool, TexturesID);
 
     void explode();
     void on_collision(Entity *) override;
@@ -13,6 +13,7 @@ private:
     void update_current(sf::Time delta_time) override;
     float m_activation_timer = 0;
     float m_explosion_timer = 0;
+    bool is_activated = false;
 };
 
 #endif // TIMER_PROJECTILE_HPP_

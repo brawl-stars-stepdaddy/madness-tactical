@@ -12,6 +12,7 @@ CircleBody::CircleBody(
     b2CircleShape m_circle_shape;
     b2FixtureDef m_fixture_def;
 
+    m_body_def.fixedRotation = false;
     m_body_def.position.Set(center.x, center.y);
     m_body_def.userData.pointer = reinterpret_cast<uintptr_t>(parent);
     if (!is_static) {

@@ -20,7 +20,8 @@ enum class TexturesID {
     BAZOOKA,
     GRENADE,
     TITLE,
-    PLANET_CORE
+    PLANET_CORE,
+    LAND_MINE
 };
 
 enum class FontsID {
