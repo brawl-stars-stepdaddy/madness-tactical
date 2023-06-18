@@ -60,11 +60,11 @@ World::World(State::Context &context, EventManager &event_manager)
 }
 
 void World::load_resources() {
-    m_context.textures->load(TexturesID::BACKGROUND, "res/sky.jpg");
+    m_context.textures->load(TexturesID::BACKGROUND, "res/star_sky.jpg");
     m_context.textures->load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_context.textures->load(TexturesID::HALO, "res/HaloRender.jpg");
     m_context.textures->load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
-    m_context.textures->load(TexturesID::WORM, "res/Worm.png");
+    m_context.textures->load(TexturesID::WORM, "res/wheel_amogus.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_context.textures->load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
     m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
