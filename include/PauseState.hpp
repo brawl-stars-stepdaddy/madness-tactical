@@ -2,6 +2,7 @@
 #define MADNESS_TACTICAL_PAUSESTATE_HPP
 
 #include "State.hpp"
+#include "Container.hpp"
 #include <SFML/Graphics.hpp>
 
 struct PauseState : State {
@@ -13,6 +14,7 @@ public:
     virtual bool handle_realtime_input() override;
 
 private:
+    GUI::Container m_gui_container;
     sf::Text m_pause_text;
     sf::Time m_text_effect_time;
     bool m_show_text;

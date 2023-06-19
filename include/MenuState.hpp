@@ -2,6 +2,7 @@
 #define MADNESS_TACTICAL_MENUSTATE_HPP
 
 #include "State.hpp"
+#include "Container.hpp"
 #include <SFML/Graphics.hpp>
 
 struct MenuState : State {
@@ -12,18 +13,8 @@ public:
     virtual bool handle_input(const sf::Event &event) override;
     virtual bool handle_realtime_input() override;
 
-    void update_option_text();
-
 private:
-    enum OptionNames {
-        Play,
-        Exit,
-        Huexit,
-        NOptions,
-    };
-
-    std::vector<sf::Text> m_options;
-    int m_option_index;
+    GUI::Container m_gui_container;
 };
 
 #endif

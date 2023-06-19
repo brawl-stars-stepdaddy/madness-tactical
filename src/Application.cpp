@@ -5,7 +5,7 @@
 #include "PauseState.hpp"
 
 Application::Application()
-    : m_window(sf::VideoMode(1920, 1080), "SFML test" ), m_state_stack(State::Context(m_window, m_textures, m_font_holder)) {
+    : m_window(sf::VideoMode(1920, 1080), "SFML test", sf::Style::Fullscreen), m_state_stack(State::Context(m_window, m_textures, m_font_holder)) {
     m_window.setKeyRepeatEnabled(false);
     m_statistics_font.loadFromFile("res/Sansation.ttf");
     m_statistics_text.setFont(m_statistics_font);
