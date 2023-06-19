@@ -4,7 +4,7 @@
 #include "ResourceHolder.hpp"
 
 MenuState::MenuState(StateStack &stack, State::Context context)
-    : State(stack, context), m_gui_container() {
+    : State(stack, context), m_gui_container(), m_event_manager(), m_background_world(context, m_event_manager) {
     auto play_button = std::make_unique<GUI::Button>(*context.fonts);
     play_button->setPosition(context.window->getView().getSize() / 2.f);
     play_button->set_text("Play");
@@ -25,11 +25,14 @@ MenuState::MenuState(StateStack &stack, State::Context context)
 
 void MenuState::draw() {
     // TODO: draw background
+    m_background_world.draw();
     get_context().window->setView(get_context().window->getDefaultView());
     get_context().window->draw(m_gui_container);
 }
 
 bool MenuState::update(sf::Time delta_time) {
+    m_background_world.update(delta_time);
+    m_event_manager.update();
     return false;
 }
 

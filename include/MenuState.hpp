@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Container.hpp"
 #include "State.hpp"
+#include "World.hpp"
 
 struct MenuState : State {
 public:
@@ -15,6 +16,8 @@ public:
 
 private:
     GUI::Container m_gui_container;
+    EventManager m_event_manager;
+    World m_background_world;
 };
 
 #endif
