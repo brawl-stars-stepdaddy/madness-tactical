@@ -1,10 +1,12 @@
 #include "Team.hpp"
 #include "Unit.hpp"
 
-Team::Team(sf::Color color) : m_team_color(color) {}
+Team::Team(sf::Color color) : m_team_color(color) {
+}
 
 void Team::add_unit(Unit *unit) {
-    auto unit_position = std::find(m_team_units.begin(), m_team_units.end(), unit);
+    auto unit_position =
+        std::find(m_team_units.begin(), m_team_units.end(), unit);
     if (unit_position == m_team_units.end()) {
         unit->set_team(this);
         m_team_units.push_back(unit);
@@ -13,7 +15,8 @@ void Team::add_unit(Unit *unit) {
 }
 
 void Team::remove_unit(Unit *unit) {
-    auto unit_position = std::find(m_team_units.begin(), m_team_units.end(), unit);
+    auto unit_position =
+        std::find(m_team_units.begin(), m_team_units.end(), unit);
     if (unit_position != m_team_units.end()) {
         m_team_units.erase(unit_position);
         m_team_size--;

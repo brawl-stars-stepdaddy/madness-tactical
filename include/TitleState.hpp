@@ -1,8 +1,8 @@
 #ifndef MADNESS_TACTICAL_TITLESTATE_HPP
 #define MADNESS_TACTICAL_TITLESTATE_HPP
 
-#include "State.hpp"
 #include <SFML/Graphics.hpp>
+#include "State.hpp"
 
 struct TitleState : State {
 public:

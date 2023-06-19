@@ -1,8 +1,8 @@
 #ifndef DESTRUCTION_EVENT_LISTENER_HPP_
 #define DESTRUCTION_EVENT_LISTENER_HPP_
 
-#include <set>
 #include <cassert>
+#include <set>
 #include "DestructionEventData.hpp"
 #include "EventListener.hpp"
 

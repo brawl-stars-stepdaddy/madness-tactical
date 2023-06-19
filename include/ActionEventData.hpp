@@ -22,7 +22,6 @@ public:
     [[nodiscard]] EventType get_event_type() const override {
         return EventType::MOVE_LEFT;
     }
-
 };
 
 struct MoveRightEventData : EventData {
@@ -37,7 +36,6 @@ public:
     [[nodiscard]] EventType get_event_type() const override {
         return EventType::JUMP_FORWARD;
     }
-
 };
 
 struct JumpBackwardEventData : EventData {
@@ -75,4 +73,4 @@ public:
     }
 };
 
-#endif // ACTION_EVENT_DATA_HPP_
+#endif  // ACTION_EVENT_DATA_HPP_

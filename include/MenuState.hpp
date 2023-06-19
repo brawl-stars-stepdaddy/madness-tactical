@@ -1,9 +1,9 @@
 #ifndef MADNESS_TACTICAL_MENUSTATE_HPP
 #define MADNESS_TACTICAL_MENUSTATE_HPP
 
-#include "State.hpp"
-#include "Container.hpp"
 #include <SFML/Graphics.hpp>
+#include "Container.hpp"
+#include "State.hpp"
 
 struct MenuState : State {
 public:

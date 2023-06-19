@@ -42,7 +42,8 @@ void Map::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     }
 }
 
-void Map::update_current(sf::Time delta_time) {}
+void Map::update_current(sf::Time delta_time) {
+}
 
 MapBody &Map::get_body() {
     return m_body;

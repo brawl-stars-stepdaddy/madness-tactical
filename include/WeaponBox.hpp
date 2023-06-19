@@ -9,4 +9,4 @@ struct WeaponBox : Box {
     void on_collision(Entity *) override;
 };
 
-#endif // WEAPON_BOX_HPP_
+#endif  // WEAPON_BOX_HPP_

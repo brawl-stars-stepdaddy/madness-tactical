@@ -1,10 +1,16 @@
 #include "SpriteNode.hpp"
 
-SpriteNode::SpriteNode(World &world, const sf::Texture &texture) : SceneNode(world) {
+SpriteNode::SpriteNode(World &world, const sf::Texture &texture)
+    : SceneNode(world) {
     m_sprite.setTexture(texture);
 }
 
-SpriteNode::SpriteNode(World &world, const sf::Texture &texture, const sf::IntRect &rect) : SceneNode(world) {
+SpriteNode::SpriteNode(
+    World &world,
+    const sf::Texture &texture,
+    const sf::IntRect &rect
+)
+    : SceneNode(world) {
     m_sprite.setTexture(texture);
     m_sprite.setTextureRect(rect);
 }

@@ -7,7 +7,11 @@
 struct SpriteNode : SceneNode {
 public:
     explicit SpriteNode(World &world, const sf::Texture &texture);
-    SpriteNode(World &world, const sf::Texture &texture, const sf::IntRect &rect);
+    SpriteNode(
+        World &world,
+        const sf::Texture &texture,
+        const sf::IntRect &rect
+    );
 
     sf::Sprite get_sprite() {
         return m_sprite;

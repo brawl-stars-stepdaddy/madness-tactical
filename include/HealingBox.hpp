@@ -9,4 +9,4 @@ struct HealingBox : Box {
     void on_collision(Entity *) override;
 };
 
-#endif // HEALING_BOX_HPP_
+#endif  // HEALING_BOX_HPP_

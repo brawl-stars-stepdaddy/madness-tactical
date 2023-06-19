@@ -43,9 +43,9 @@ private:
     std::map<StatesID, std::function<State::Ptr()>> m_factories;
 };
 
-template<typename T>
+template <typename T>
 void StateStack::register_state(StatesID state_id) {
-    m_factories[state_id] = [this](){
+    m_factories[state_id] = [this]() {
         return State::Ptr(new T(*this, m_context));
     };
 }

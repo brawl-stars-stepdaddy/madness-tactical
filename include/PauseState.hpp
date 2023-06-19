@@ -1,9 +1,9 @@
 #ifndef MADNESS_TACTICAL_PAUSESTATE_HPP
 #define MADNESS_TACTICAL_PAUSESTATE_HPP
 
-#include "State.hpp"
-#include "Container.hpp"
 #include <SFML/Graphics.hpp>
+#include "Container.hpp"
+#include "State.hpp"
 
 struct PauseState : State {
 public:

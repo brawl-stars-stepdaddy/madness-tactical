@@ -1,9 +1,9 @@
 #ifndef TEAM_HPP_
 #define TEAM_HPP_
 
-#include <vector>
 #include <algorithm>
 #include <map>
+#include <vector>
 #include "Weapon.hpp"
 
 struct Unit;
@@ -39,4 +39,4 @@ private:
     void update_health();
 };
 
-#endif // TEAM_HPP_
+#endif  // TEAM_HPP_

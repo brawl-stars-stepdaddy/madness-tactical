@@ -1,14 +1,14 @@
 #include "Unit.hpp"
+#include <DestructionEventData.hpp>
+#include <World.hpp>
+#include <cmath>
 #include <iostream>
 #include "EventManager.hpp"
 #include "ExplosionEventData.hpp"
-#include "ResourceHolder.hpp"
 #include "GuiUtil.hpp"
-#include <World.hpp>
-#include <DestructionEventData.hpp>
-#include "Weapon.hpp"
-#include <cmath>
+#include "ResourceHolder.hpp"
 #include "UnitHealthBar.hpp"
+#include "Weapon.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -22,7 +22,13 @@ TexturesID to_texture_id(Unit::Type type) {
     }
 }
 
-Unit::Unit(World &world, Unit::Type type, sf::Vector2f center, float radius, int player_id)
+Unit::Unit(
+    World &world,
+    Unit::Type type,
+    sf::Vector2f center,
+    float radius,
+    int player_id
+)
     : Entity(world),
       m_type(type),
       m_sprite(m_world->get_texture_holder().get(to_texture_id(type))),
@@ -31,11 +37,11 @@ Unit::Unit(World &world, Unit::Type type, sf::Vector2f center, float radius, int
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
 
-
-    auto health_bar = std::make_unique<UnitHealthBar>(*m_world, this, m_world->get_font_holder().get(FontsID::BAGEL_FONT));
+    auto health_bar = std::make_unique<UnitHealthBar>(
+        *m_world, this, m_world->get_font_holder().get(FontsID::BAGEL_FONT)
+    );
     this->attach_child(std::move(health_bar));
 }
-
 
 void Unit::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
@@ -47,8 +53,7 @@ void Unit::update_current(sf::Time delta_time) {
     if (m_body.get_b2Body()->GetLinearVelocity().LengthSquared() < 1e-1) {
         m_jumping_active = true;
         m_dumping_active = false;
-    }
-    else {
+    } else {
         m_jumping_active = false;
     }
     move(delta_time, m_direction);
@@ -111,12 +116,19 @@ void Unit::move(sf::Time delta_time, float direction) {
         b2Vec2 position = m_body.get_b2Body()->GetPosition();
         b2Vec2 normal = {-position.y, position.x};
         b2Vec2 current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_projection = (b2Dot(current_velocity, normal) /  b2Dot(normal, normal) * normal).Length();
-        float horizontal_change = direction * b2Min(abs(horizontal_projection + 5.0f * direction), 5.0f) - horizontal_projection;
+        float horizontal_projection =
+            (b2Dot(current_velocity, normal) / b2Dot(normal, normal) * normal)
+                .Length();
+        float horizontal_change =
+            direction *
+                b2Min(abs(horizontal_projection + 5.0f * direction), 5.0f) -
+            horizontal_projection;
         float impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
         float angle = atan2(normal.x, normal.y);
 
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter({impulse * sin(angle), impulse * cos(angle)}, true);
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(
+            {impulse * sin(angle), impulse * cos(angle)}, true
+        );
     }
 }
 
@@ -126,8 +138,8 @@ void Unit::stop_move(sf::Time delta_time) {
         float horizontal_change = -current_velocity.x * 0.9;
         float vertical_change = -current_velocity.y * 0.9;
         b2Vec2 impulse = {
-                m_body.get_b2Body()->GetMass() * horizontal_change,
-                m_body.get_b2Body()->GetMass() * vertical_change,
+            m_body.get_b2Body()->GetMass() * horizontal_change,
+            m_body.get_b2Body()->GetMass() * vertical_change,
         };
         m_body.get_b2Body()->ApplyLinearImpulseToCenter(impulse, true);
     }
@@ -141,7 +153,9 @@ void Unit::jump_forward() {
         horizontal.Normalize();
         horizontal *= m_direction * 30;
         vertical *= 30;
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter(horizontal + vertical, true);
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(
+            horizontal + vertical, true
+        );
     }
 }
 
@@ -153,7 +167,9 @@ void Unit::jump_backward() {
         horizontal.Normalize();
         horizontal *= -m_direction * 20;
         vertical *= 40;
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter(horizontal + vertical, true);
+        m_body.get_b2Body()->ApplyLinearImpulseToCenter(
+            horizontal + vertical, true
+        );
     }
 }
 
@@ -197,6 +213,6 @@ void Unit::kill_unit() {
     m_team->remove_unit(this);
     m_body.get_b2Body()->SetEnabled(false);
     m_world->get_event_manager()->queue_event(
-            std::make_unique<DestructionEventData>(this)
+        std::make_unique<DestructionEventData>(this)
     );
 }

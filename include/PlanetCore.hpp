@@ -16,7 +16,8 @@ struct PlanetCore : Entity {
     void on_explosion(const Explosion &) override;
 
 protected:
-    void draw_current(sf::RenderTarget &target, sf::RenderStates) const override;
+    void draw_current(sf::RenderTarget &target, sf::RenderStates)
+        const override;
     void update_current(sf::Time delta_time) override;
 
     sf::Sprite m_sprite;

@@ -1,26 +1,31 @@
 #include "PauseState.hpp"
-#include "ResourceIdentifiers.hpp"
-#include "ResourceHolder.hpp"
-#include "GuiUtil.hpp"
 #include "Button.hpp"
+#include "GuiUtil.hpp"
+#include "ResourceHolder.hpp"
+#include "ResourceIdentifiers.hpp"
 
-PauseState::PauseState(StateStack &stack, State::Context context) : State(stack, context), m_text_effect_time(sf::Time::Zero), m_show_text(true) {
+PauseState::PauseState(StateStack &stack, State::Context context)
+    : State(stack, context),
+      m_text_effect_time(sf::Time::Zero),
+      m_show_text(true) {
     m_pause_text.setString("BPEMR COCATb XYN!!! (pereryv 10 minutes)");
     m_pause_text.setFont(context.fonts->get(FontsID::SANSATION));
     GuiUtil::center(m_pause_text);
-    m_pause_text.setPosition(context.window->getView().getCenter() + sf::Vector2f(0, -300));
+    m_pause_text.setPosition(
+        context.window->getView().getCenter() + sf::Vector2f(0, -300)
+    );
     auto resume_button = std::make_unique<GUI::Button>(*context.fonts);
     resume_button->setPosition(context.window->getView().getSize() / 2.f);
     resume_button->set_text("Resume");
-    resume_button->set_callback([this](){
-        request_stack_pop();
-    });
+    resume_button->set_callback([this]() { request_stack_pop(); });
     m_gui_container.pack(std::move(resume_button));
 
     auto exit_button = std::make_unique<GUI::Button>(*context.fonts);
-    exit_button->setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0, 100));
+    exit_button->setPosition(
+        context.window->getView().getSize() / 2.f + sf::Vector2f(0, 100)
+    );
     exit_button->set_text("Exit to menu");
-    exit_button->set_callback([this](){
+    exit_button->set_callback([this]() {
         request_stack_clear();
         request_stack_push(StatesID::Menu);
     });

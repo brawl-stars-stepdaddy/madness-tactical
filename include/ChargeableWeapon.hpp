@@ -14,8 +14,8 @@ protected:
     float m_charge_level = m_init_charge_level;
 
     void update_current(sf::Time delta_time) override;
-    void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;
-
+    void draw_current(sf::RenderTarget &target, sf::RenderStates states)
+        const override;
 };
 
-#endif // CHARGEABLE_WEAPON_HPP_
+#endif  // CHARGEABLE_WEAPON_HPP_

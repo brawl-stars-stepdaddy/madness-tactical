@@ -1,9 +1,9 @@
 #ifndef TEAM_MANAGER_HPP_
 #define TEAM_MANAGER_HPP_
 
-#include <vector>
-#include <memory>
 #include <algorithm>
+#include <memory>
+#include <vector>
 #include "Team.hpp"
 
 struct Unit;
@@ -23,4 +23,4 @@ private:
     void remove_empty_teams();
 };
 
-#endif // TEAM_MANAGER_HPP_
+#endif  // TEAM_MANAGER_HPP_

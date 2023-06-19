@@ -2,18 +2,18 @@
 #define WORLD_HPP_
 
 #include <SFML/Graphics.hpp>
+#include <State.hpp>
 #include <array>
+#include "Camera.hpp"
 #include "Entity.hpp"
+#include "EventManager.hpp"
+#include "GameLogic.hpp"
 #include "Map.hpp"
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
-#include "box2d/box2d.h"
-#include "GameLogic.hpp"
-#include "Camera.hpp"
 #include "Unit.hpp"
-#include "EventManager.hpp"
-#include <State.hpp>
+#include "box2d/box2d.h"
 
 struct Map;
 struct CollisionEventListener;
@@ -89,7 +89,6 @@ private:
     EventManager *m_event_manager;
 
     float m_moves_timer = 5;
-
 };
 
 #endif

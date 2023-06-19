@@ -6,10 +6,7 @@
 
 struct MoveTransitionEventData : EventData {
 public:
-    enum class TransitionType {
-        OTHER_UNIT,
-        OTHER_PLAYER
-    };
+    enum class TransitionType { OTHER_UNIT, OTHER_PLAYER };
 
     explicit MoveTransitionEventData(TransitionType);
 
@@ -21,5 +18,4 @@ private:
     TransitionType m_transition_type;
 };
 
-
-#endif // MOVE_TRANSITION_DATA_HPP_
+#endif  // MOVE_TRANSITION_DATA_HPP_

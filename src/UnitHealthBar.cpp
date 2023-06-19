@@ -1,13 +1,11 @@
 #include "UnitHealthBar.hpp"
-#include "Unit.hpp"
-#include "World.hpp"
 #include <string>
 #include "GuiUtil.hpp"
-
+#include "Unit.hpp"
+#include "World.hpp"
 
 UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
-    : SceneNode(world),
-    m_parent(parent) {
+    : SceneNode(world), m_parent(parent) {
     m_text.setFont(font);
     m_text.setCharacterSize(150);
     m_text.setOutlineThickness(5);
@@ -23,8 +21,10 @@ UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
     setScale({0.4, 0.4});
 }
 
-void UnitHealthBar::draw_current(sf::RenderTarget &target, sf::RenderStates states)
-const {
+void UnitHealthBar::draw_current(
+    sf::RenderTarget &target,
+    sf::RenderStates states
+) const {
     target.draw(m_text, states);
 }
 

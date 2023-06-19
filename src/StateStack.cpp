@@ -1,9 +1,7 @@
-#include <cassert>
 #include "StateStack.hpp"
-
+#include <cassert>
 
 StateStack::StateStack(State::Context context) : m_context(context) {
-
 }
 
 void StateStack::update(sf::Time delta_time) {

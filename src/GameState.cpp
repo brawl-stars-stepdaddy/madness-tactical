@@ -1,8 +1,9 @@
 #include "GameState.hpp"
 
-
-GameState::GameState(StateStack &stack, State::Context context) : State(stack, context), m_controller(*this), m_world(context, m_event_manager) {
-
+GameState::GameState(StateStack &stack, State::Context context)
+    : State(stack, context),
+      m_controller(*this),
+      m_world(context, m_event_manager) {
 }
 
 void GameState::draw() {
@@ -16,7 +17,8 @@ bool GameState::update(sf::Time delta_time) {
 }
 
 bool GameState::handle_input(const sf::Event &event) {
-    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+    if (event.type == sf::Event::KeyReleased &&
+        event.key.code == sf::Keyboard::Escape) {
         request_stack_push(StatesID::Pause);
     }
     m_controller.handle_input(event);

@@ -1,9 +1,9 @@
 #ifndef EVENT_MANAGER_HPP
 #define EVENT_MANAGER_HPP
 
-#include <unordered_map>
 #include <list>
 #include <memory>
+#include <unordered_map>
 #include "EventListener.hpp"
 #include "EventType.hpp"
 

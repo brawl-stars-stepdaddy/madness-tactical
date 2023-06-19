@@ -1,8 +1,8 @@
 #ifndef CAMERA_HPP_
 #define CAMERA_HPP_
 
-#include "SFML/Graphics.hpp"
 #include <memory>
+#include "SFML/Graphics.hpp"
 
 struct Entity;
 struct Camera;
@@ -16,7 +16,12 @@ public:
 
 struct SmoothFollowStrategy : FollowStrategy {
 public:
-    SmoothFollowStrategy(Camera *camera, Entity *target, float min_speed, float convergence_factor);
+    SmoothFollowStrategy(
+        Camera *camera,
+        Entity *target,
+        float min_speed,
+        float convergence_factor
+    );
 
     void update(sf::Time delta_time) override;
 

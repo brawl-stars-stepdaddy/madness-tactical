@@ -1,9 +1,9 @@
 #ifndef EXPLOSION_EVENT_DATA_HPP
 #define EXPLOSION_EVENT_DATA_HPP
 
+#include "Entity.hpp"
 #include "EventData.hpp"
 #include "Explosion.hpp"
-#include "Entity.hpp"
 
 struct ExplosionEventData : EventData {
 public:

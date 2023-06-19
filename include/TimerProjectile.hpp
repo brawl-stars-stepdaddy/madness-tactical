@@ -4,7 +4,18 @@
 #include "Projectile.hpp"
 
 struct TimerProjectile : Projectile {
-    TimerProjectile(World &, sf::Vector2f, sf::Vector2f, float, float, float, float, bool, bool, TexturesID);
+    TimerProjectile(
+        World &,
+        sf::Vector2f,
+        sf::Vector2f,
+        float,
+        float,
+        float,
+        float,
+        bool,
+        bool,
+        TexturesID
+    );
 
     void explode();
     void on_collision(Entity *) override;
@@ -16,4 +27,4 @@ private:
     bool is_activated = false;
 };
 
-#endif // TIMER_PROJECTILE_HPP_
+#endif  // TIMER_PROJECTILE_HPP_

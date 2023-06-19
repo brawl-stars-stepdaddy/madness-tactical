@@ -11,7 +11,8 @@ public:
 
 private:
     void update_current(sf::Time delta_time) override;
-    void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void draw_current(sf::RenderTarget &target, sf::RenderStates states)
+        const override;
 
     void create_new_explosion();
 
@@ -28,4 +29,4 @@ private:
     sf::Sprite m_sprite;
 };
 
-#endif // LASER_HPP_
+#endif  // LASER_HPP_

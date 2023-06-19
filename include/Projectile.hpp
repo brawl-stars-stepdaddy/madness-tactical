@@ -8,7 +8,16 @@
 struct World;
 
 struct Projectile : Entity {
-    Projectile(World &, sf::Vector2f, sf::Vector2f, float, float, bool, bool, TexturesID);
+    Projectile(
+        World &,
+        sf::Vector2f,
+        sf::Vector2f,
+        float,
+        float,
+        bool,
+        bool,
+        TexturesID
+    );
 
     CircleBody &get_body() override;
     EntityType get_type() override;
@@ -17,7 +26,8 @@ struct Projectile : Entity {
     void on_explosion(const Explosion &) override;
 
 protected:
-    void draw_current(sf::RenderTarget &target, sf::RenderStates) const override;
+    void draw_current(sf::RenderTarget &target, sf::RenderStates)
+        const override;
     void update_current(sf::Time delta_time) override;
 
     sf::Sprite m_sprite;

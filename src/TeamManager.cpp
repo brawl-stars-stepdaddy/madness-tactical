@@ -19,8 +19,12 @@ Team *TeamManager::get_active_team() const {
 }
 
 void TeamManager::remove_empty_teams() {
-    m_teams.erase(std::remove_if(m_teams.begin(), m_teams.end(), [](const auto& team){
-        return team->get_team_size() == 0;
-    }), m_teams.end());
+    m_teams.erase(
+        std::remove_if(
+            m_teams.begin(), m_teams.end(),
+            [](const auto &team) { return team->get_team_size() == 0; }
+        ),
+        m_teams.end()
+    );
     m_team_number = static_cast<int>(m_teams.size());
 }

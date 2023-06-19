@@ -1,7 +1,7 @@
 #include "Projectile.hpp"
+#include "DestructionEventData.hpp"
 #include "ExplosionEntity.hpp"
 #include "World.hpp"
-#include "DestructionEventData.hpp"
 
 Projectile::Projectile(
     World &world,
@@ -15,7 +15,14 @@ Projectile::Projectile(
 )
     : Entity(world),
       m_sprite(m_world->get_texture_holder().get(texture)),
-      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, is_sensor, is_static)),
+      m_body(CircleBody(
+          this,
+          m_world->get_physics_world(),
+          center,
+          radius,
+          is_sensor,
+          is_static
+      )),
       explosion_radius(explosion_radius) {
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setScale(
@@ -45,6 +52,8 @@ EntityType Projectile::get_type() {
     return EntityType::PROJECTILE;
 }
 
-void Projectile::on_collision(Entity *other_object) {}
+void Projectile::on_collision(Entity *other_object) {
+}
 
-void Projectile::on_explosion(const Explosion &) {}
+void Projectile::on_explosion(const Explosion &) {
+}

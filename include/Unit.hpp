@@ -1,10 +1,9 @@
 #ifndef UNIT_HPP_
 #define UNIT_HPP_
 
-#include "JumpSensor.hpp"
 #include "Entity.hpp"
-#include "UnitBody.hpp"
 #include "JumpSensor.hpp"
+#include "UnitBody.hpp"
 
 struct Weapon;
 struct World;
@@ -68,6 +67,5 @@ private:
     bool m_dumping_active = false;
     bool m_is_active = false;
 };
-
 
 #endif

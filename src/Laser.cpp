@@ -1,10 +1,10 @@
 #include "Laser.hpp"
-#include "Unit.hpp"
 #include <cmath>
 #include "EventManager.hpp"
-#include "World.hpp"
-#include "GuiUtil.hpp"
 #include "ExplosionEntity.hpp"
+#include "GuiUtil.hpp"
+#include "Unit.hpp"
+#include "World.hpp"
 
 Laser::Laser(World &world, Unit *parent) : RotatableWeapon(world) {
     m_parent = parent;
@@ -34,7 +34,8 @@ void Laser::update_current(sf::Time delta_time) {
     }
 }
 
-void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states) const {
+void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
+    const {
     RotatableWeapon::draw_current(target, states);
     if (!m_is_hidden) {
         target.draw(m_sprite, states);
@@ -50,13 +51,10 @@ void Laser::launch() {
     }
     angle += Weapon::m_parent->getRotation() / (180 / M_PI);
     m_start_position = {
-            m_parent->get_body().get_position().x + cos(angle) * 1.5f,
-            m_parent->get_body().get_position().y + sin(angle) * 1.5f
-    };
+        m_parent->get_body().get_position().x + cos(angle) * 1.5f,
+        m_parent->get_body().get_position().y + sin(angle) * 1.5f};
     m_direction = {
-            cos(angle) * m_ray_radius * 1.2f,
-            sin(angle) * m_ray_radius * 1.2f
-    };
+        cos(angle) * m_ray_radius * 1.2f, sin(angle) * m_ray_radius * 1.2f};
 }
 
 void Laser::create_new_explosion() {
@@ -64,8 +62,7 @@ void Laser::create_new_explosion() {
     position.x += m_direction.x * m_explosions_number;
     position.y += m_direction.y * m_explosions_number;
     m_world->add_entity(std::make_unique<ExplosionEntity>(
-            *m_world,
-            Explosion({position.x, position.y}, m_ray_radius)
+        *m_world, Explosion({position.x, position.y}, m_ray_radius)
     ));
     m_explosions_number++;
 }

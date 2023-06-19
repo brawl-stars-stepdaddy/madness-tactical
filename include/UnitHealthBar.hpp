@@ -12,7 +12,7 @@ struct UnitHealthBar : SceneNode {
 
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
-    const override;
+        const override;
 
     void update_current(sf::Time delta_time) override;
 
@@ -21,4 +21,4 @@ private:
     sf::Text m_text;
 };
 
-#endif // UNIT_HEALTH_BAR_HPP_
+#endif  // UNIT_HEALTH_BAR_HPP_

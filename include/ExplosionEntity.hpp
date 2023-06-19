@@ -1,9 +1,9 @@
 #ifndef EXPLOSION_ENTITY_HPP_
 #define EXPLOSION_ENTITY_HPP_
 
+#include "CircleBody.hpp"
 #include "Entity.hpp"
 #include "Explosion.hpp"
-#include "CircleBody.hpp"
 
 struct World;
 
@@ -12,7 +12,7 @@ public:
     ExplosionEntity(World &world, Explosion);
     EntityType get_type() override;
     Body &get_body() override;
-    void on_explosion(const Explosion &) override {};
+    void on_explosion(const Explosion &) override{};
     void on_collision(Entity *) override;
 
 private:
@@ -20,4 +20,4 @@ private:
     CircleBody m_body;
 };
 
-#endif // EXPLOSION_ENTITY_HPP_
+#endif  // EXPLOSION_ENTITY_HPP_

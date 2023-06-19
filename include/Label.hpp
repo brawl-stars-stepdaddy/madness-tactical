@@ -5,19 +5,20 @@
 #include "ResourceIdentifiers.hpp"
 
 namespace GUI {
-    struct Label : Component {
-    public:
-        Label(const std::string &text, const FontHolder &fonts);
+struct Label : Component {
+public:
+    Label(const std::string &text, const FontHolder &fonts);
 
-        virtual bool is_selectable() override;
+    virtual bool is_selectable() override;
 
-        void set_text(const std::string &text);
+    void set_text(const std::string &text);
 
-    private:
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+private:
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states)
+        const override;
 
-        sf::Text m_text;
-    };
-}
+    sf::Text m_text;
+};
+}  // namespace GUI
 
 #endif

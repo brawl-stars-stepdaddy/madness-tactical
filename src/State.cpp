@@ -1,12 +1,16 @@
 #include <State.hpp>
 #include <StateStack.hpp>
 
-State::Context::Context(sf::RenderWindow &window, TextureHolder &textures, FontHolder &fonts) : window(&window), textures(&textures), fonts(&fonts) {
-
+State::Context::Context(
+    sf::RenderWindow &window,
+    TextureHolder &textures,
+    FontHolder &fonts
+)
+    : window(&window), textures(&textures), fonts(&fonts) {
 }
 
-State::State(StateStack &stack, State::Context context) : m_stack(&stack), m_context(context) {
-
+State::State(StateStack &stack, State::Context context)
+    : m_stack(&stack), m_context(context) {
 }
 
 void State::request_stack_push(StatesID state_id) {

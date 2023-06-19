@@ -1,11 +1,11 @@
 #ifndef MADNESS_TACTICAL_CONTROLLER_HPP
 #define MADNESS_TACTICAL_CONTROLLER_HPP
 
-#include "EventType.hpp"
 #include <SFML/Window/Event.hpp>
+#include <functional>
 #include <map>
 #include <set>
-#include <functional>
+#include "EventType.hpp"
 
 struct Controller {
 public:
@@ -18,7 +18,8 @@ public:
     Controller();
     void handle_input(const sf::Event &event);
     void handle_realtime_input();
-    void assign_key(EventType action, sf::Keyboard::Key key, ActionActivationType);
+    void
+    assign_key(EventType action, sf::Keyboard::Key key, ActionActivationType);
     [[nodiscard]] sf::Keyboard::Key get_assigned_key(EventType action) const;
 
 protected:
@@ -30,4 +31,4 @@ protected:
     std::map<EventType, std::function<void()>> m_action_binding;
 };
 
-#endif //MADNESS_TACTICAL_CONTROLLER_HPP
+#endif  // MADNESS_TACTICAL_CONTROLLER_HPP

@@ -2,12 +2,12 @@
 #define GAME_HPP_
 
 #include <SFML/Graphics.hpp>
+#include "Controller.hpp"
+#include "GameLogic.hpp"
 #include "ResourceHolder.hpp"
 #include "ResourceIdentifiers.hpp"
-#include "World.hpp"
-#include "GameLogic.hpp"
-#include "Controller.hpp"
 #include "StateStack.hpp"
+#include "World.hpp"
 
 struct Application {
 public:

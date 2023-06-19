@@ -1,10 +1,10 @@
 #ifndef MADNESS_TACTICAL_STATE_HPP
 #define MADNESS_TACTICAL_STATE_HPP
 
-#include <memory>
-#include "StateIdentifiers.hpp"
 #include <ResourceIdentifiers.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <memory>
+#include "StateIdentifiers.hpp"
 
 struct StateStack;
 
@@ -14,7 +14,11 @@ public:
 
     struct Context {
     public:
-        Context(sf::RenderWindow &window, TextureHolder &textures, FontHolder &fonts);
+        Context(
+            sf::RenderWindow &window,
+            TextureHolder &textures,
+            FontHolder &fonts
+        );
 
         sf::RenderWindow *window;
         TextureHolder *textures;

@@ -47,7 +47,6 @@ float MapBody::get_rotation() {
 }
 
 [[nodiscard]] std::vector<sf::ConvexShape> MapBody::get_triangulation() const {
-
     std::vector<sf::ConvexShape> sf_triangles;
 
     CDT::Triangulation<double> cdt;
@@ -55,9 +54,10 @@ float MapBody::get_rotation() {
     std::vector<CDT::Edge> edges;
 
     int index = 0;
-    for (const auto & chain : m_chains) {
+    for (const auto &chain : m_chains) {
         for (int i = 0; i < chain.size(); i++) {
-            vertices.emplace_back(CDT::V2d<double>::make(chain[i].x, chain[i].y));
+            vertices.emplace_back(CDT::V2d<double>::make(chain[i].x, chain[i].y)
+            );
             edges.emplace_back(index + i, index + (i + 1) % chain.size());
         }
         index += chain.size();
@@ -67,12 +67,14 @@ float MapBody::get_rotation() {
     cdt.insertEdges(edges);
     cdt.eraseOuterTrianglesAndHoles();
 
-    for (const auto &cdt_triangle: cdt.triangles) {
+    for (const auto &cdt_triangle : cdt.triangles) {
         sf::ConvexShape sf_triangle;
         sf_triangle.setPointCount(3);
         for (int i = 0; i < 3; i++) {
             auto point = vertices[cdt_triangle.vertices[i]];
-            sf_triangle.setPoint(i, {static_cast<float>(point.x), static_cast<float>(point.y)});
+            sf_triangle.setPoint(
+                i, {static_cast<float>(point.x), static_cast<float>(point.y)}
+            );
         }
         sf_triangles.push_back(sf_triangle);
     }

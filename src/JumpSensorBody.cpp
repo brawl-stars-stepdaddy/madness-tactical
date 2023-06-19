@@ -1,10 +1,10 @@
 #include "JumpSensorBody.hpp"
 
 JumpSensorBody::JumpSensorBody(
-        JumpSensor *parent,
-        b2World &world,
-        sf::Vector2f center,
-        float radius
+    JumpSensor *parent,
+    b2World &world,
+    sf::Vector2f center,
+    float radius
 ) {
     b2BodyDef sensor_def;
     sensor_def.position.Set(center.x, center.y);

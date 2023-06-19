@@ -1,10 +1,10 @@
 #ifndef MADNESS_TACTICAL_GAMESTATE_HPP
 #define MADNESS_TACTICAL_GAMESTATE_HPP
 
+#include "EventManager.hpp"
+#include "GameController.hpp"
 #include "StateStack.hpp"
 #include "World.hpp"
-#include "GameController.hpp"
-#include "EventManager.hpp"
 
 struct GameState : State {
 public:

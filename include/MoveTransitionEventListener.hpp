@@ -14,4 +14,4 @@ private:
     World *m_world;
 };
 
-#endif // MOVE_TRANSITION_LISTENER_HPP_
+#endif  // MOVE_TRANSITION_LISTENER_HPP_

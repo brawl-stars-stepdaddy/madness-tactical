@@ -18,4 +18,4 @@ private:
     World *m_world;
 };
 
-#endif //MADNESS_TACTICAL_GAMELOGIC_HPP
+#endif  // MADNESS_TACTICAL_GAMELOGIC_HPP

@@ -1,10 +1,10 @@
 #include "ActionEventListener.hpp"
-#include "GameLogic.hpp"
-#include "ChargeableWeapon.hpp"
 #include "ActionEventData.hpp"
+#include "Camera.hpp"
+#include "ChargeableWeapon.hpp"
+#include "GameLogic.hpp"
 #include "Unit.hpp"
 #include "World.hpp"
-#include "Camera.hpp"
 
 ZoomInEventListener::ZoomInEventListener(Camera *camera) : m_camera(camera) {
 }
@@ -13,23 +13,31 @@ ZoomOutEventListener::ZoomOutEventListener(Camera *camera) : m_camera(camera) {
 }
 
 void ChangeAngleDownEventListener::process(const EventData &event) {
-    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    auto weapon = static_cast<RotatableWeapon *>(
+        m_game_logic->get_current_unit()->get_weapon()
+    );
     weapon->set_angle_change_direction(-1);
 }
 
-ChangeAngleDownEventListener::ChangeAngleDownEventListener(World &world, GameLogic &game_logic) : ActionEventListener(
-        world, game_logic) {
-
+ChangeAngleDownEventListener::ChangeAngleDownEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void ChangeAngleUpEventListener::process(const EventData &event) {
-    auto weapon = static_cast<RotatableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    auto weapon = static_cast<RotatableWeapon *>(
+        m_game_logic->get_current_unit()->get_weapon()
+    );
     weapon->set_angle_change_direction(1);
 }
 
-ChangeAngleUpEventListener::ChangeAngleUpEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
-                                                                                                                  game_logic) {
-
+ChangeAngleUpEventListener::ChangeAngleUpEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void MoveLeftEventListener::process([[maybe_unused]] const EventData &event) {
@@ -38,9 +46,11 @@ void MoveLeftEventListener::process([[maybe_unused]] const EventData &event) {
     m_game_logic->get_current_unit()->set_direction(-1);
 }
 
-MoveLeftEventListener::MoveLeftEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
-                                                                                                        game_logic) {
-
+MoveLeftEventListener::MoveLeftEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void MoveRightEventListener::process([[maybe_unused]] const EventData &event) {
@@ -49,37 +59,49 @@ void MoveRightEventListener::process([[maybe_unused]] const EventData &event) {
     m_game_logic->get_current_unit()->set_direction(1);
 }
 
-MoveRightEventListener::MoveRightEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
-                                                                                                          game_logic) {
-
+MoveRightEventListener::MoveRightEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
-void JumpForwardEventListener::process([[maybe_unused]] const EventData &event) {
+void JumpForwardEventListener::process([[maybe_unused]] const EventData &event
+) {
     m_game_logic->get_current_unit()->jump_forward();
 }
 
-JumpForwardEventListener::JumpForwardEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
-                                                                                                              game_logic) {
-
+JumpForwardEventListener::JumpForwardEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
-void JumpBackwardEventListener::process([[maybe_unused]] const EventData &event) {
+void JumpBackwardEventListener::process([[maybe_unused]] const EventData &event
+) {
     m_game_logic->get_current_unit()->jump_backward();
 }
 
-JumpBackwardEventListener::JumpBackwardEventListener(World &world, GameLogic &game_logic) : ActionEventListener(world,
-                                                                                                                game_logic) {
-
+JumpBackwardEventListener::JumpBackwardEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void BeginChargeWeaponEventListener::process(const EventData &event) {
-    auto weapon = static_cast<ChargeableWeapon *>(m_game_logic->get_current_unit()->get_weapon());
+    auto weapon = static_cast<ChargeableWeapon *>(
+        m_game_logic->get_current_unit()->get_weapon()
+    );
     weapon->set_currently_charging(true);
 }
 
-BeginChargeWeaponEventListener::BeginChargeWeaponEventListener(World &world, GameLogic &game_logic)
-        : ActionEventListener(world, game_logic) {
-
+BeginChargeWeaponEventListener::BeginChargeWeaponEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void LaunchProjectileEventListener::process(const EventData &event) {
@@ -88,9 +110,11 @@ void LaunchProjectileEventListener::process(const EventData &event) {
     m_game_logic->get_current_unit()->get_weapon()->launch();
 }
 
-LaunchProjectileEventListener::LaunchProjectileEventListener(World &world, GameLogic &game_logic) : ActionEventListener(
-        world, game_logic) {
-
+LaunchProjectileEventListener::LaunchProjectileEventListener(
+    World &world,
+    GameLogic &game_logic
+)
+    : ActionEventListener(world, game_logic) {
 }
 
 void ZoomInEventListener::process([[maybe_unused]] const EventData &event) {
@@ -101,6 +125,6 @@ void ZoomOutEventListener::process([[maybe_unused]] const EventData &event) {
     m_camera->zoom_out();
 }
 
-ActionEventListener::ActionEventListener(World &world, GameLogic &game_logic) : m_world(&world), m_game_logic(&game_logic) {
-
+ActionEventListener::ActionEventListener(World &world, GameLogic &game_logic)
+    : m_world(&world), m_game_logic(&game_logic) {
 }

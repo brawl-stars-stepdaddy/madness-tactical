@@ -16,8 +16,8 @@ protected:
     bool m_is_rotation_blocked = false;
 
     void update_current(sf::Time delta_time) override;
-    void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;
-
+    void draw_current(sf::RenderTarget &target, sf::RenderStates states)
+        const override;
 };
 
-#endif // ROTATABLE_WEAPON_HPP_
+#endif  // ROTATABLE_WEAPON_HPP_

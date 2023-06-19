@@ -3,7 +3,6 @@
 #include "World.hpp"
 
 Box::Box(World &world) : Entity(world) {
-
 }
 
 void Box::draw_current(sf::RenderTarget &target, sf::RenderStates states)
@@ -27,7 +26,7 @@ void Box::on_collision(Entity *other_object) {
     if (other_object->get_type() == EntityType::PLANET_CORE) {
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(
-                std::make_unique<DestructionEventData>(this)
+            std::make_unique<DestructionEventData>(this)
         );
     }
 }
@@ -35,6 +34,6 @@ void Box::on_collision(Entity *other_object) {
 void Box::on_explosion(const Explosion &) {
     m_body.get_b2Body()->SetEnabled(false);
     m_world->get_event_manager()->queue_event(
-            std::make_unique<DestructionEventData>(this)
+        std::make_unique<DestructionEventData>(this)
     );
 }

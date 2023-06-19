@@ -4,7 +4,7 @@
 namespace sf {
 class Texture;
 class Font;
-}
+}  // namespace sf
 
 enum class TexturesID {
     SUN,
@@ -37,6 +37,5 @@ using TextureHolder = ResourceHolder<TexturesID, sf::Texture>;
 using FontHolder = ResourceHolder<FontsID, sf::Font>;
 
 using FontHolder = ResourceHolder<FontsID, sf::Font>;
-
 
 #endif

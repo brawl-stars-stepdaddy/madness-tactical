@@ -1,26 +1,26 @@
 #include "World.hpp"
-#include <random>
 #include <chrono>
+#include <random>
 #include <vector>
+#include "ActionEventData.hpp"
+#include "ActionEventListener.hpp"
 #include "Bazooka.hpp"
-#include "Grenade.hpp"
-#include "Laser.hpp"
-#include "LandMine.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
-#include "GameOverEventListener.hpp"
 #include "EventManager.hpp"
 #include "EventType.hpp"
 #include "ExplosionEventListener.hpp"
-#include "MoveTransitionEventListener.hpp"
-#include "ActionEventListener.hpp"
-#include "ActionEventData.hpp"
-#include "SpriteNode.hpp"
-#include "WeaponBox.hpp"
+#include "GameOverEventListener.hpp"
+#include "Grenade.hpp"
 #include "HealingBox.hpp"
-#include "Unit.hpp"
-#include "PlanetCore.hpp"
+#include "LandMine.hpp"
+#include "Laser.hpp"
 #include "MapGenerator.hpp"
+#include "MoveTransitionEventListener.hpp"
+#include "PlanetCore.hpp"
+#include "SpriteNode.hpp"
+#include "Unit.hpp"
+#include "WeaponBox.hpp"
 
 World::World(State::Context &context, EventManager &event_manager)
     : m_context(context),
@@ -41,22 +41,59 @@ World::World(State::Context &context, EventManager &event_manager)
     );
     auto collision_listener = std::make_unique<CollisionEventListener>(*this);
     m_collision_listener = collision_listener.get();
-    m_event_manager->add_listener(std::move(collision_listener), EventType::COLLISION);
+    m_event_manager->add_listener(
+        std::move(collision_listener), EventType::COLLISION
+    );
     auto destruction_listener = std::make_unique<DestructionEventListener>();
     m_destruction_listener = destruction_listener.get();
-    m_event_manager->add_listener(std::move(destruction_listener), EventType::DESTRUCTION);
-    m_event_manager->add_listener(std::make_unique<MoveRightEventListener>(*this, m_game_logic), EventType::MOVE_RIGHT);
-    m_event_manager->add_listener(std::make_unique<MoveLeftEventListener>(*this, m_game_logic), EventType::MOVE_LEFT);
-    m_event_manager->add_listener(std::make_unique<ChangeAngleUpEventListener>(*this, m_game_logic), EventType::CHANGE_ANGLE_UP);
-    m_event_manager->add_listener(std::make_unique<ChangeAngleDownEventListener>(*this, m_game_logic), EventType::CHANGE_ANGLE_DOWN);
-    m_event_manager->add_listener(std::make_unique<JumpForwardEventListener>(*this, m_game_logic), EventType::JUMP_FORWARD);
-    m_event_manager->add_listener(std::make_unique<JumpBackwardEventListener>(*this, m_game_logic), EventType::JUMP_BACKWARD);
-    m_event_manager->add_listener(std::make_unique<BeginChargeWeaponEventListener>(*this, m_game_logic), EventType::BEGIN_CHARGE_WEAPON);
-    m_event_manager->add_listener(std::make_unique<LaunchProjectileEventListener>(*this, m_game_logic),EventType::LAUNCH_PROJECTILE);
-    m_event_manager->add_listener(std::make_unique<ZoomInEventListener>(&m_camera), EventType::ZOOM_IN);
-    m_event_manager->add_listener(std::make_unique<ZoomOutEventListener>(&m_camera),EventType::ZOOM_OUT);
-    m_event_manager->add_listener(std::make_unique<MoveTransitionEventListener>(this), EventType::MOVE_TRANSITION);
-    m_event_manager->add_listener(std::make_unique<GameOverEventListener>(), EventType::GAME_OVER);
+    m_event_manager->add_listener(
+        std::move(destruction_listener), EventType::DESTRUCTION
+    );
+    m_event_manager->add_listener(
+        std::make_unique<MoveRightEventListener>(*this, m_game_logic),
+        EventType::MOVE_RIGHT
+    );
+    m_event_manager->add_listener(
+        std::make_unique<MoveLeftEventListener>(*this, m_game_logic),
+        EventType::MOVE_LEFT
+    );
+    m_event_manager->add_listener(
+        std::make_unique<ChangeAngleUpEventListener>(*this, m_game_logic),
+        EventType::CHANGE_ANGLE_UP
+    );
+    m_event_manager->add_listener(
+        std::make_unique<ChangeAngleDownEventListener>(*this, m_game_logic),
+        EventType::CHANGE_ANGLE_DOWN
+    );
+    m_event_manager->add_listener(
+        std::make_unique<JumpForwardEventListener>(*this, m_game_logic),
+        EventType::JUMP_FORWARD
+    );
+    m_event_manager->add_listener(
+        std::make_unique<JumpBackwardEventListener>(*this, m_game_logic),
+        EventType::JUMP_BACKWARD
+    );
+    m_event_manager->add_listener(
+        std::make_unique<BeginChargeWeaponEventListener>(*this, m_game_logic),
+        EventType::BEGIN_CHARGE_WEAPON
+    );
+    m_event_manager->add_listener(
+        std::make_unique<LaunchProjectileEventListener>(*this, m_game_logic),
+        EventType::LAUNCH_PROJECTILE
+    );
+    m_event_manager->add_listener(
+        std::make_unique<ZoomInEventListener>(&m_camera), EventType::ZOOM_IN
+    );
+    m_event_manager->add_listener(
+        std::make_unique<ZoomOutEventListener>(&m_camera), EventType::ZOOM_OUT
+    );
+    m_event_manager->add_listener(
+        std::make_unique<MoveTransitionEventListener>(this),
+        EventType::MOVE_TRANSITION
+    );
+    m_event_manager->add_listener(
+        std::make_unique<GameOverEventListener>(), EventType::GAME_OVER
+    );
 }
 
 void World::load_resources() {
@@ -84,25 +121,35 @@ void World::build_scene() {
         m_scene_graph.attach_child(std::move(layer));
     }
     std::unique_ptr<SpriteNode> background_sprite =
-        std::make_unique<SpriteNode>(*this, m_context.textures->get(TexturesID::BACKGROUND), sf::IntRect(m_world_bounds.left * World::SCALE,
-                                                                                         m_world_bounds.top * World::SCALE,
-                                                                                         m_world_bounds.width * World::SCALE,
-                                                                                         m_world_bounds.height * World::SCALE));
-    background_sprite->setPosition(m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE);
+        std::make_unique<SpriteNode>(
+            *this, m_context.textures->get(TexturesID::BACKGROUND),
+            sf::IntRect(
+                m_world_bounds.left * World::SCALE,
+                m_world_bounds.top * World::SCALE,
+                m_world_bounds.width * World::SCALE,
+                m_world_bounds.height * World::SCALE
+            )
+        );
+    background_sprite->setPosition(
+        m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE
+    );
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
-    m_scene_layers[ENTITIES]->attach_child(std::make_unique<WeaponBox>(*this, sf::FloatRect(50, -50, 1.5, 1)));
-    m_scene_layers[ENTITIES]->attach_child(std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1)));
+    m_scene_layers[ENTITIES]->attach_child(
+        std::make_unique<WeaponBox>(*this, sf::FloatRect(50, -50, 1.5, 1))
+    );
+    m_scene_layers[ENTITIES]->attach_child(
+        std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1))
+    );
 
     Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
 
-
-    std::unique_ptr<PlanetCore> core =
-            std::make_unique<PlanetCore>(*this, 10);
+    std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
-    std::unique_ptr<Unit> worm1 =
-        std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0);
+    std::unique_ptr<Unit> worm1 = std::make_unique<Unit>(
+        *this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0
+    );
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
@@ -111,20 +158,19 @@ void World::build_scene() {
     m_active_unit->attach_child(std::move(weapon));
 
     /*std::unique_ptr<Unit> worm2 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
-    auto second_unit = worm2.get();
-    team2->add_unit(second_unit);
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1},
+    1, 1); auto second_unit = worm2.get(); team2->add_unit(second_unit);
     team2->add_weapon(LAND_MINE);
     weapon = std::make_unique<LandMine>(*this, second_unit);
     second_unit->attach_child(std::move(weapon));
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));*/
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
-    std::unique_ptr<Map> map = std::make_unique<Map>(
-        *this,
-        MapGenerator(1000).get_chains()
-    );
+    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
+        &m_camera, m_active_unit, .5f, 3.f
+    ));
+    std::unique_ptr<Map> map =
+        std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
@@ -143,8 +189,9 @@ void World::draw() {
 void World::update(sf::Time delta_time) {
     m_moves_timer -= delta_time.asSeconds();
     if (m_moves_timer <= 0) {
-        m_event_manager->queue_event(
-                std::make_unique<MoveTransitionEventData>(MoveTransitionEventData::TransitionType::OTHER_PLAYER));
+        m_event_manager->queue_event(std::make_unique<MoveTransitionEventData>(
+            MoveTransitionEventData::TransitionType::OTHER_PLAYER
+        ));
         m_moves_timer = 5;
     }
     m_event_manager->update();
@@ -153,7 +200,9 @@ void World::update(sf::Time delta_time) {
     m_collision_listener->reset();
     m_destruction_listener->reset();
     m_camera.update(delta_time);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));
+    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
+        &m_camera, m_active_unit, .5f, 3.f
+    ));
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {

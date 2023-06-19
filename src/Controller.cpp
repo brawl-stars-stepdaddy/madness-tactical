@@ -1,8 +1,8 @@
-#include <iostream>
 #include "Controller.hpp"
-#include "EventType.hpp"
-#include "EventManager.hpp"
+#include <iostream>
 #include "ActionEventData.hpp"
+#include "EventManager.hpp"
+#include "EventType.hpp"
 
 Controller::Controller() {
 }
@@ -35,19 +35,26 @@ void Controller::handle_realtime_input() {
     }
 }
 
-void Controller::assign_key(EventType action, sf::Keyboard::Key key, ActionActivationType action_activation_type) {
+void Controller::assign_key(
+    EventType action,
+    sf::Keyboard::Key key,
+    ActionActivationType action_activation_type
+) {
     switch (action_activation_type) {
         case ActionActivationType::ON_KEY_PRESSED:
             m_key_pressed_binding[key] = action;
-            m_action_activation_type[action] = ActionActivationType::ON_KEY_PRESSED;
+            m_action_activation_type[action] =
+                ActionActivationType::ON_KEY_PRESSED;
             break;
         case ActionActivationType::ON_KEY_IS_PRESSED:
             m_key_is_pressed_binding[key] = action;
-            m_action_activation_type[action] = ActionActivationType::ON_KEY_IS_PRESSED;
+            m_action_activation_type[action] =
+                ActionActivationType::ON_KEY_IS_PRESSED;
             break;
         case ActionActivationType::ON_KEY_RELEASED:
             m_key_released_binding[key] = action;
-            m_action_activation_type[action] = ActionActivationType::ON_KEY_RELEASED;
+            m_action_activation_type[action] =
+                ActionActivationType::ON_KEY_RELEASED;
             break;
     }
 }

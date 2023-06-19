@@ -6,10 +6,7 @@
 
 struct CollisionEventData : EventData {
 public:
-    enum class CollisionType {
-        BEGIN_CONTACT,
-        END_CONTACT
-    };
+    enum class CollisionType { BEGIN_CONTACT, END_CONTACT };
 
     explicit CollisionEventData(Entity *, Entity *, CollisionType);
 

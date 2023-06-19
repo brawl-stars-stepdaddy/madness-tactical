@@ -9,4 +9,4 @@ public:
     void process(const EventData &event) override;
 };
 
-#endif // GAME_OVER_LISTENER_HPP_
+#endif  // GAME_OVER_LISTENER_HPP_
