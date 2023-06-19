@@ -75,8 +75,6 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::LASER, "res/laser.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
-
-    m_context.fonts->load(FontsID::BAGEL_FONT, "res/BagelFatOne-Regular.ttf");
 }
 
 void World::build_scene() {

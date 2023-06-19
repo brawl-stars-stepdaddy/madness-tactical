@@ -7,6 +7,7 @@ namespace GuiUtil {
     void shrink_to_rect_scale(sf::Sprite &sprite, float width, float height);
 
     void center(sf::Sprite &sprite);
+    void center(sf::Text &text);
 
     void resize(sf::Sprite &sprite, sf::Vector2<unsigned int> size);
 }

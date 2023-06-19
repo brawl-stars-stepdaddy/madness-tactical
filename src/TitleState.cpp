@@ -23,7 +23,7 @@ bool TitleState::update(sf::Time delta_time) {
     m_time -= delta_time;
     if (m_time.asSeconds() <= 0) {
         request_stack_pop();
-        request_stack_push(StatesID::Game);
+        request_stack_push(StatesID::Menu);
     }
     return false;
 }

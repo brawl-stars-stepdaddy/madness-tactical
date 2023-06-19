@@ -26,7 +26,8 @@ enum class TexturesID {
 };
 
 enum class FontsID {
-    BAGEL_FONT
+    BAGEL_FONT,
+    SANSATION,
 };
 
 template <typename Resource, typename Identifier>

@@ -1,7 +1,8 @@
 #include "Application.hpp"
 #include "GameState.hpp"
 #include "TitleState.hpp"
-#include <cmath>
+#include "MenuState.hpp"
+#include "PauseState.hpp"
 
 Application::Application()
     : m_window(sf::VideoMode(1920, 1080), "SFML test" ), m_state_stack(State::Context(m_window, m_textures, m_font_holder)) {
@@ -11,13 +12,15 @@ Application::Application()
     m_statistics_text.setPosition(5.f, 5.f);
     m_statistics_text.setCharacterSize(10);
     register_states();
+    m_font_holder.load(FontsID::SANSATION, "res/Sansation.ttf");
+    m_font_holder.load(FontsID::BAGEL_FONT, "res/BagelFatOne-Regular.ttf");
 }
 
 void Application::register_states() {
     m_state_stack.register_state<TitleState>(StatesID::Title);
-    //m_state_stack.register_state<MenuState>(StatesID::Menu);
+    m_state_stack.register_state<MenuState>(StatesID::Menu);
     m_state_stack.register_state<GameState>(StatesID::Game);
-    //m_state_stack.register_state<PauseState>(StatesID::Pause);
+    m_state_stack.register_state<PauseState>(StatesID::Pause);
     m_state_stack.push_state(StatesID::Title);
 }
 

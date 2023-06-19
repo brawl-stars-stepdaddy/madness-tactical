@@ -11,6 +11,9 @@ template <typename Identifier, typename Resource>
 struct ResourceHolder {
 public:
     void load(Identifier id, const std::string &filename) {
+        if (m_resource_map.find(id) != m_resource_map.end()) {
+            return;
+        }
         std::unique_ptr<Resource> resource(new Resource());
         if (!resource->loadFromFile(filename)) {
             throw std::runtime_error(

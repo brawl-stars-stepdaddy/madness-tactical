@@ -16,6 +16,9 @@ bool GameState::update(sf::Time delta_time) {
 }
 
 bool GameState::handle_input(const sf::Event &event) {
+    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+        request_stack_push(StatesID::Pause);
+    }
     m_controller.handle_input(event);
     return false;
 }
