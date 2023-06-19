@@ -1,11 +1,11 @@
-#ifndef BAZOOKA_HPP_
-#define BAZOOKA_HPP_
+#ifndef LAND_MINE_HPP_
+#define LAND_MINE_HPP_
 
-#include "ChargeableWeapon.hpp"
+#include "Weapon.hpp"
 
-struct Bazooka : ChargeableWeapon {
+struct LandMine : Weapon {
 public:
-    Bazooka(World &, Unit *);
+    LandMine(World &, Unit *);
 
     void launch() override;
 
@@ -15,8 +15,10 @@ private:
 
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;
+    float m_activation_time = 5.0f;
+    float m_explosion_time = 1.0f;
 
     sf::Sprite m_sprite;
 };
 
-#endif  // BAZOOKA_HPP_
+#endif // LAND_MINE_HPP_

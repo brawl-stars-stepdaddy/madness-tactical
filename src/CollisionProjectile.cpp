@@ -9,8 +9,11 @@ CollisionProjectile::CollisionProjectile(
         sf::Vector2f center,
         sf::Vector2f impulse,
         float radius,
-        float explosion_radius
-) : Projectile(world, center, impulse, radius, explosion_radius) {}
+        float explosion_radius,
+        bool is_sensor,
+        bool is_static,
+        TexturesID texture
+) : Projectile(world, center, impulse, radius, explosion_radius, is_sensor, is_static, texture) {}
 
 void CollisionProjectile::on_collision(Entity *other_object) {
     if (!is_exploded) {

@@ -8,17 +8,20 @@ Projectile::Projectile(
     sf::Vector2f center,
     sf::Vector2f impulse,
     float radius,
-    float explosion_radius
+    float explosion_radius,
+    bool is_sensor,
+    bool is_static,
+    TexturesID texture
 )
     : Entity(world),
-      m_sprite(m_world->get_texture_holder().get(TexturesID::CANON_BALL)),
-      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, false)),
+      m_sprite(m_world->get_texture_holder().get(texture)),
+      m_body(CircleBody(this, m_world->get_physics_world(), center, radius, is_sensor, is_static)),
       explosion_radius(explosion_radius) {
-    m_sprite.setScale(
-        radius * World::SCALE * 2 / m_sprite.getLocalBounds().width,
-        radius * World::SCALE * 2 / m_sprite.getLocalBounds().height
-    );
     sf::FloatRect bounds = m_sprite.getLocalBounds();
+    m_sprite.setScale(
+        radius * World::SCALE * 2 / bounds.width,
+        radius * World::SCALE * 2 / bounds.height
+    );
     m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
     m_body.get_b2Body()->ApplyLinearImpulseToCenter(
         {impulse.x, impulse.y}, true

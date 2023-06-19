@@ -4,6 +4,8 @@
 #include <vector>
 #include "Bazooka.hpp"
 #include "Grenade.hpp"
+#include "Laser.hpp"
+#include "LandMine.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
 #include "GameOverEventListener.hpp"
@@ -58,17 +60,19 @@ World::World(State::Context &context, EventManager &event_manager)
 }
 
 void World::load_resources() {
-    m_context.textures->load(TexturesID::BACKGROUND, "res/sky.jpg");
+    m_context.textures->load(TexturesID::BACKGROUND, "res/star_sky.jpg");
     m_context.textures->load(TexturesID::ENGINEER, "res/Engineer.jpg");
     m_context.textures->load(TexturesID::HALO, "res/HaloRender.jpg");
     m_context.textures->load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
-    m_context.textures->load(TexturesID::WORM, "res/Worm.png");
+    m_context.textures->load(TexturesID::WORM, "res/wheel_amogus.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_context.textures->load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
     m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
     m_context.textures->load(TexturesID::BAZOOKA, "res/bazooka.png");
     m_context.textures->load(TexturesID::GRENADE, "res/grenade.png");
     m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
+    m_context.textures->load(TexturesID::LAND_MINE, "res/landmine.png");
+    m_context.textures->load(TexturesID::LASER, "res/laser.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 
@@ -96,7 +100,7 @@ void World::build_scene() {
 
 
     std::unique_ptr<PlanetCore> core =
-            std::make_unique<PlanetCore>(*this, 15);
+            std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
     std::unique_ptr<Unit> worm1 =
@@ -104,27 +108,18 @@ void World::build_scene() {
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
-    team1->add_weapon(BAZOOKA);
-    auto bazooka = std::make_unique<Bazooka>(*this, m_active_unit);
-    m_active_unit->attach_child(std::move(bazooka));
+    team1->add_weapon(LASER);
+    auto weapon = std::make_unique<Laser>(*this, m_active_unit);
+    m_active_unit->attach_child(std::move(weapon));
 
-    std::unique_ptr<Unit> worm2 =
+    /*std::unique_ptr<Unit> worm2 =
             std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
     auto second_unit = worm2.get();
     team2->add_unit(second_unit);
-    team2->add_weapon(GRENADE);
-    auto grenade = std::make_unique<Grenade>(*this, second_unit);
-    second_unit->attach_child(std::move(grenade));
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
-
-    std::unique_ptr<Unit> worm3 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{50, 50}, 1, 1);
-    auto third_unit = worm3.get();
-    team2->add_unit(third_unit);
-    team2->add_weapon(BAZOOKA);
-    bazooka = std::make_unique<Bazooka>(*this, third_unit);
-    third_unit->attach_child(std::move(bazooka));
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm3));
+    team2->add_weapon(LAND_MINE);
+    weapon = std::make_unique<LandMine>(*this, second_unit);
+    second_unit->attach_child(std::move(weapon));
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));*/
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
     m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(&m_camera, m_active_unit, .5f, 3.f));

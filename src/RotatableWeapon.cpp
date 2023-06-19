@@ -13,7 +13,9 @@ void RotatableWeapon::set_angle_change_direction(float direction) {
 }
 
 void RotatableWeapon::change_angle(sf::Time delta_time, float direction) {
-    m_angle = std::min(M_PI_2f, std::max(-M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction));
+    if (!m_is_rotation_blocked) {
+        m_angle = std::min(M_PI_2f, std::max(-M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction));
+    }
 }
 
 

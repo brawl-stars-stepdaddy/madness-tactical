@@ -3,11 +3,12 @@
 
 #include "CircleBody.hpp"
 #include "Entity.hpp"
+#include "ResourceIdentifiers.hpp"
 
 struct World;
 
 struct Projectile : Entity {
-    Projectile(World &, sf::Vector2f, sf::Vector2f, float, float);
+    Projectile(World &, sf::Vector2f, sf::Vector2f, float, float, bool, bool, TexturesID);
 
     CircleBody &get_body() override;
     EntityType get_type() override;

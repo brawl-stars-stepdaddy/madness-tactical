@@ -1,7 +1,6 @@
 #include "TimerProjectile.hpp"
 #include "ExplosionEntity.hpp"
 #include "World.hpp"
-#include "EventManager.hpp"
 #include "DestructionEventData.hpp"
 
 TimerProjectile::TimerProjectile(
@@ -11,8 +10,11 @@ TimerProjectile::TimerProjectile(
         float radius,
         float explosion_radius,
         float activation_time,
-        float explosion_time
-) :   Projectile(world, center, impulse, radius, explosion_radius),
+        float explosion_time,
+        bool is_sensor,
+        bool is_static,
+        TexturesID texture
+) :   Projectile(world, center, impulse, radius, explosion_radius, is_sensor, is_static, texture),
       m_activation_timer(activation_time),
       m_explosion_timer(explosion_time) {}
 
@@ -31,12 +33,15 @@ void TimerProjectile::explode() {
 void TimerProjectile::update_current(sf::Time delta_time) {
     Projectile::update_current(delta_time);
     m_activation_timer -= delta_time.asSeconds();
-    if (m_activation_timer <= 0) {
+    if (is_activated) {
         m_explosion_timer -= delta_time.asSeconds();
     }
     explode();
 }
 
 void TimerProjectile::on_collision(Entity *) {
+    if (m_activation_timer <= 0) {
+        is_activated = true;
+    }
     explode();
 }

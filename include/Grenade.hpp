@@ -15,7 +15,7 @@ private:
 
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;
-    float m_explosion_timer = 3.0f;
+    float m_explosion_time = 3.0f;
 
     sf::Sprite m_sprite;
 };
