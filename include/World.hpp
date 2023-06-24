@@ -13,6 +13,7 @@
 #include "ResourceIdentifiers.hpp"
 #include "SceneNode.hpp"
 #include "Unit.hpp"
+#include "Process.hpp"
 #include "box2d/box2d.h"
 
 struct Map;
@@ -39,6 +40,8 @@ public:
     b2World &get_physics_world() {
         return m_physics_world;
     }
+
+    sf::Vector2f get_camera_position() const;
 
     Map *get_map() {
         return m_map;
@@ -71,6 +74,9 @@ public:
 
     static constexpr float SCALE = 100.f;
 
+    void add_process(std::unique_ptr<Process>);
+    void execute_processes(sf::Time);
+
 protected:
     void load_resources();
 
@@ -91,7 +97,9 @@ protected:
     TeamManager m_team_manager;
     EventManager *m_event_manager;
 
-    float m_moves_timer = 5;
+    std::vector<std::unique_ptr<Process>> m_processes;
+
+    float m_moves_timer = 100;
 };
 
 #endif

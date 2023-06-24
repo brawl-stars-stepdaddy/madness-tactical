@@ -22,7 +22,10 @@ enum class TexturesID {
     TITLE,
     PLANET_CORE,
     LAND_MINE,
-    LASER
+    LASER,
+    CASE,
+    KETTLEBELL,
+    METEORITE
 };
 
 enum class FontsID {

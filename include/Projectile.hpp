@@ -32,8 +32,8 @@ protected:
 
     sf::Sprite m_sprite;
     CircleBody m_body;
-    bool is_exploded = false;
-    float explosion_radius;
+    bool m_is_exploded = false;
+    float m_explosion_radius;
 };
 
 #endif  // PROJECTILE_HPP_

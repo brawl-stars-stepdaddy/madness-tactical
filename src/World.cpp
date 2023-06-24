@@ -3,8 +3,10 @@
 #include <random>
 #include <vector>
 #include "ActionEventData.hpp"
+#include "Armageddon.hpp"
 #include "ActionEventListener.hpp"
 #include "Bazooka.hpp"
+#include "Kettlebell.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
 #include "EventManager.hpp"
@@ -125,6 +127,9 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
     m_context.textures->load(TexturesID::LAND_MINE, "res/landmine.png");
     m_context.textures->load(TexturesID::LASER, "res/laser.png");
+    m_context.textures->load(TexturesID::KETTLEBELL, "res/kettlebell.png");
+    m_context.textures->load(TexturesID::CASE, "res/case.png");
+    m_context.textures->load(TexturesID::METEORITE, "res/meteorite.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 }
@@ -168,8 +173,8 @@ void World::build_scene() {
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
-    team1->add_weapon(LASER);
-    auto weapon = std::make_unique<Laser>(*this, m_active_unit);
+    team1->add_weapon(ARMAGEDDON);
+    auto weapon = std::make_unique<Armageddon>(*this, m_active_unit);
     m_active_unit->attach_child(std::move(weapon));
 
     /*std::unique_ptr<Unit> worm2 =
@@ -181,8 +186,8 @@ void World::build_scene() {
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));*/
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
-        &m_camera, m_active_unit, .5f, 3.f
+    m_camera.set_follow_strategy(std::make_unique<ControlledFollowStrategy>(
+        &m_camera
     ));
     std::unique_ptr<Map> map =
         std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
@@ -256,11 +261,7 @@ void World::update(sf::Time delta_time) {
     m_collision_listener->reset();
     m_destruction_listener->reset();
     m_camera.update(delta_time);
-    if (m_active_unit) {
-        m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
-                &m_camera, m_active_unit, .5f, 3.f
-        ));
-    }
+    execute_processes(delta_time);
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {
@@ -274,4 +275,21 @@ void World::go_to_next_team() {
 
 void World::go_to_next_unit() {
     m_active_unit = m_team_manager.get_active_team()->activate_next_unit();
+}
+
+sf::Vector2f World::get_camera_position() const {
+    return m_camera.get_offset();
+}
+
+void World::add_process(std::unique_ptr<Process> process) {
+    m_processes.push_back(std::move(process));
+}
+
+void World::execute_processes(sf::Time delta_time) {
+    for (auto it = m_processes.begin(); it != m_processes.end(); it++) {
+        if (it->get()->update(delta_time)) {
+            it = m_processes.erase(it);
+            it--;
+        }
+    }
 }

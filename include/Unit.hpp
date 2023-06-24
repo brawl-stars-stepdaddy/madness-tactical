@@ -18,6 +18,8 @@ public:
 
     Unit(World &world, Type type, sf::Vector2f, float, int);
 
+    sf::Vector2f get_camera_position() const;
+
     UnitBody &get_body() override;
     EntityType get_type() override;
 

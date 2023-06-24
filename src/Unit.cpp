@@ -216,3 +216,7 @@ void Unit::kill_unit() {
         std::make_unique<DestructionEventData>(this)
     );
 }
+
+sf::Vector2f Unit::get_camera_position() const {
+    return m_world->get_camera_position();
+}
