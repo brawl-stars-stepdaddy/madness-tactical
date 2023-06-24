@@ -42,6 +42,10 @@ void SmoothFollowStrategy::update(sf::Time delta_time) {
     float length2 = sqrt(pow(delta_target2.x, 2) + pow(delta_target2.y, 2));
     float delta_angle =
         m_target->getRotation() / (180.f / M_PI) - m_camera->get_angle();
+    delta_angle -= floor(delta_angle / M_PI) * M_PI;
+    if (delta_angle > M_PI_2) {
+        delta_angle = M_PI - delta_angle;
+    }
     float delta_rotation = delta_angle / length * length2;
     m_camera->set_angle(
         m_target->getRotation() / (180.f / M_PI) - delta_rotation
