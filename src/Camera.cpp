@@ -75,6 +75,10 @@ void Camera::update(sf::Time delta_time) {
     }
     m_current_zoom += final_delta;
     m_zooming = 1;
+    m_is_moving_left = false;
+    m_is_moving_right = false;
+    m_is_moving_up = false;
+    m_is_moving_down = false;
 }
 
 sf::Vector2f Camera::get_offset() const {
@@ -113,4 +117,66 @@ float Camera::get_angle() const {
 
 void Camera::set_angle(float angle) {
     m_angle = angle;
+}
+
+void Camera::move_left() {
+    m_is_moving_left = true;
+}
+
+void Camera::move_right() {
+    m_is_moving_right = true;
+}
+
+void Camera::move_up() {
+    m_is_moving_up = true;
+}
+
+void Camera::move_down() {
+    m_is_moving_down = true;
+}
+
+bool Camera::is_moving_left() {
+    return m_is_moving_left;
+}
+
+bool Camera::is_moving_right() {
+    return m_is_moving_right;
+}
+
+bool Camera::is_moving_up() {
+    return m_is_moving_up;
+}
+
+bool Camera::is_moving_down() {
+    return m_is_moving_down;
+}
+
+ControlledFollowStrategy::ControlledFollowStrategy(Camera *camera) : m_camera(camera) {
+
+}
+
+void ControlledFollowStrategy::update(sf::Time delta_time) {
+    float x_speed = 0;
+    float y_speed = 0;
+    float angle = atan2(m_camera->get_offset().y, m_camera->get_offset().x);
+    if (m_camera->is_moving_left()) {
+        angle -= m_rotation_speed * delta_time.asSeconds();
+    }
+    if (m_camera->is_moving_right()) {
+        angle += m_rotation_speed * delta_time.asSeconds();
+    }
+    m_camera->set_angle(angle + M_PI_2);
+    float dist = sqrtf(powf(m_camera->get_offset().x, 2) + powf(m_camera->get_offset().y, 2));
+    m_camera->set_offset(sf::Vector2f(cos(angle), sin(angle)) * dist);
+    if (m_camera->is_moving_up()) {
+        x_speed += cos(angle);
+        y_speed += sin(angle);
+    }
+    if (m_camera->is_moving_down()) {
+        x_speed -= cos(angle);
+        y_speed -= sin(angle);
+    }
+    x_speed *= m_move_speed * delta_time.asSeconds() * m_camera->get_zoom();
+    y_speed *= m_move_speed * delta_time.asSeconds() * m_camera->get_zoom();
+    m_camera->set_offset(m_camera->get_offset() + sf::Vector2f(x_speed, y_speed));
 }

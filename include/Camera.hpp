@@ -32,6 +32,20 @@ private:
     float m_convergence_factor;
 };
 
+struct ControlledFollowStrategy : FollowStrategy {
+public:
+    explicit ControlledFollowStrategy(
+            Camera *camera
+    );
+
+    void update(sf::Time delta_time) override;
+
+private:
+    Camera *m_camera;
+    float m_move_speed = 10.f;
+    float m_rotation_speed = 1.f;
+};
+
 struct Camera {
 public:
     explicit Camera(std::nullptr_t);
@@ -52,6 +66,16 @@ public:
     void zoom_in();
     void zoom_out();
 
+    void move_left();
+    void move_right();
+    void move_up();
+    void move_down();
+
+    bool is_moving_left();
+    bool is_moving_right();
+    bool is_moving_up();
+    bool is_moving_down();
+
 private:
     sf::Vector2f m_offset = {0, 0};
     float m_angle;
@@ -62,6 +86,11 @@ private:
     float m_expected_zoom;
     std::unique_ptr<FollowStrategy> m_follow_strategy;
     float m_zooming = 1;
+
+    bool m_is_moving_left = false;
+    bool m_is_moving_right = false;
+    bool m_is_moving_up = false;
+    bool m_is_moving_down = false;
 };
 
 #endif

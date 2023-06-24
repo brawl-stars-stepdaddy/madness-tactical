@@ -128,3 +128,35 @@ void ZoomOutEventListener::process([[maybe_unused]] const EventData &event) {
 ActionEventListener::ActionEventListener(World &world, GameLogic &game_logic)
     : m_world(&world), m_game_logic(&game_logic) {
 }
+
+CameraMoveLeftEventListener::CameraMoveLeftEventListener(Camera *camera) : m_camera(camera) {
+
+}
+
+void CameraMoveLeftEventListener::process(const EventData &event) {
+    m_camera->move_left();
+}
+
+CameraMoveRightEventListener::CameraMoveRightEventListener(Camera *camera) : m_camera(camera) {
+
+}
+
+void CameraMoveRightEventListener::process(const EventData &event) {
+    m_camera->move_right();
+}
+
+CameraMoveUpEventListener::CameraMoveUpEventListener(Camera *camera) : m_camera(camera) {
+
+}
+
+void CameraMoveUpEventListener::process(const EventData &event) {
+    m_camera->move_up();
+}
+
+CameraMoveDownEventListener::CameraMoveDownEventListener(Camera *camera) : m_camera(camera) {
+
+}
+
+void CameraMoveDownEventListener::process(const EventData &event) {
+    m_camera->move_down();
+}

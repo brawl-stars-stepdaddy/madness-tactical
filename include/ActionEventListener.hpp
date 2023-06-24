@@ -85,4 +85,40 @@ private:
     Camera *m_camera;
 };
 
+struct CameraMoveLeftEventListener : EventListener {
+public:
+    explicit CameraMoveLeftEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
+struct CameraMoveRightEventListener : EventListener {
+public:
+    explicit CameraMoveRightEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
+struct CameraMoveUpEventListener : EventListener {
+public:
+    explicit CameraMoveUpEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
+struct CameraMoveDownEventListener : EventListener {
+public:
+    explicit CameraMoveDownEventListener(Camera *camera);
+    void process(const EventData &event) override;
+
+private:
+    Camera *m_camera;
+};
+
 #endif  // MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP

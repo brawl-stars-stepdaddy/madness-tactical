@@ -15,7 +15,6 @@ void TitleState::draw() {
         {static_cast<float>(get_context().window->getSize().x),
          static_cast<float>(get_context().window->getSize().y)}
     );
-    // std::cout << fade.getSize().x << ' ' << fade.getSize().y << std::endl;
     fade.setFillColor(sf::Color(
         0, 0, 0,
         sf::Uint8(
@@ -38,6 +37,9 @@ bool TitleState::update(sf::Time delta_time) {
 }
 
 bool TitleState::handle_input(const sf::Event &event) {
+    if (event.type == sf::Event::KeyReleased) {
+        m_time = sf::Time::Zero;
+    }
     return false;
 }
 
