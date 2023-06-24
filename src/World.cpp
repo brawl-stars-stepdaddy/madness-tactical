@@ -3,8 +3,10 @@
 #include <random>
 #include <vector>
 #include "ActionEventData.hpp"
+#include "Armageddon.hpp"
 #include "ActionEventListener.hpp"
 #include "Bazooka.hpp"
+#include "Kettlebell.hpp"
 #include "CollisionEventListener.hpp"
 #include "DestructionEventListener.hpp"
 #include "EventManager.hpp"
@@ -35,7 +37,6 @@ World::World(State::Context &context, EventManager &event_manager)
       m_camera(nullptr),
       m_scene_graph(*this) {
     load_resources();
-    build_scene();
     m_event_manager->add_listener(
         std::make_unique<ExplosionEventListener>(), EventType::EXPLOSION
     );
@@ -126,6 +127,9 @@ void World::load_resources() {
     m_context.textures->load(TexturesID::PLANET_CORE, "res/planet_core.png");
     m_context.textures->load(TexturesID::LAND_MINE, "res/landmine.png");
     m_context.textures->load(TexturesID::LASER, "res/laser.png");
+    m_context.textures->load(TexturesID::KETTLEBELL, "res/kettlebell.png");
+    m_context.textures->load(TexturesID::CASE, "res/case.png");
+    m_context.textures->load(TexturesID::METEORITE, "res/meteorite.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 }
@@ -169,8 +173,8 @@ void World::build_scene() {
     m_active_unit = worm1.get();
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     team1->add_unit(m_active_unit);
-    team1->add_weapon(LASER);
-    auto weapon = std::make_unique<Laser>(*this, m_active_unit);
+    team1->add_weapon(ARMAGEDDON);
+    auto weapon = std::make_unique<Armageddon>(*this, m_active_unit);
     m_active_unit->attach_child(std::move(weapon));
 
     /*std::unique_ptr<Unit> worm2 =
@@ -182,8 +186,8 @@ void World::build_scene() {
     m_scene_layers[ENTITIES]->attach_child(std::move(worm2));*/
 
     m_camera = Camera(m_active_unit->get_body().get_position(), 2);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
-        &m_camera, m_active_unit, .5f, 3.f
+    m_camera.set_follow_strategy(std::make_unique<ControlledFollowStrategy>(
+        &m_camera
     ));
     std::unique_ptr<Map> map =
         std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
@@ -191,6 +195,47 @@ void World::build_scene() {
     m_scene_layers[MAP]->attach_child(std::move(map));
 
     m_active_unit->set_activeness(true);
+}
+
+void World::build_start_scene() {
+    for (std::size_t i = 0; i < LAYER_COUNT; i++) {
+        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
+        m_scene_layers[i] = layer.get();
+        m_scene_graph.attach_child(std::move(layer));
+    }
+    std::unique_ptr<SpriteNode> background_sprite =
+            std::make_unique<SpriteNode>(
+                    *this, m_context.textures->get(TexturesID::BACKGROUND),
+                    sf::IntRect(
+                            m_world_bounds.left * World::SCALE,
+                            m_world_bounds.top * World::SCALE,
+                            m_world_bounds.width * World::SCALE,
+                            m_world_bounds.height * World::SCALE
+                    )
+            );
+    background_sprite->setPosition(
+            m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE
+    );
+    m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
+
+    std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 5);
+    m_scene_layers[ENTITIES]->attach_child(std::move(core));
+
+    std::unique_ptr<Unit> unit = std::make_unique<Unit>(
+            *this, Unit::Type::WORM, sf::Vector2f{0, -48}, 5, 0
+    );
+    auto body = unit->get_body().get_b2Body();
+    body->SetLinearVelocity({14, 0});
+    m_scene_layers[ENTITIES]->attach_child(std::move(unit));
+
+    m_camera = Camera({0, 0}, 10);
+
+    std::unique_ptr<Map> map =
+            std::make_unique<Map>(*this, MapGenerator(1000, 1, 0.008f, 3.0f, 10.0f, 3).get_chains());
+    m_map = map.get();
+    m_scene_layers[MAP]->attach_child(std::move(map));
+
+    m_moves_timer = 1e9;
 }
 
 void World::draw() {
@@ -216,9 +261,7 @@ void World::update(sf::Time delta_time) {
     m_collision_listener->reset();
     m_destruction_listener->reset();
     m_camera.update(delta_time);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
-        &m_camera, m_active_unit, .5f, 3.f
-    ));
+    execute_processes(delta_time);
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {
@@ -232,4 +275,21 @@ void World::go_to_next_team() {
 
 void World::go_to_next_unit() {
     m_active_unit = m_team_manager.get_active_team()->activate_next_unit();
+}
+
+sf::Vector2f World::get_camera_position() const {
+    return m_camera.get_offset();
+}
+
+void World::add_process(std::unique_ptr<Process> process) {
+    m_processes.push_back(std::move(process));
+}
+
+void World::execute_processes(sf::Time delta_time) {
+    for (auto it = m_processes.begin(); it != m_processes.end(); it++) {
+        if (it->get()->update(delta_time)) {
+            it = m_processes.erase(it);
+            it--;
+        }
+    }
 }

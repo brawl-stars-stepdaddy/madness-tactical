@@ -30,14 +30,14 @@ TimerProjectile::TimerProjectile(
 }
 
 void TimerProjectile::explode() {
-    if (m_explosion_timer <= 0 && !is_exploded) {
+    if (m_explosion_timer <= 0 && !m_is_exploded) {
         m_world->add_entity(std::make_unique<ExplosionEntity>(
             *m_world, Explosion(
-                          {m_body.get_position().x, m_body.get_position().y},
-                          explosion_radius
+                        {m_body.get_position().x, m_body.get_position().y},
+                        m_explosion_radius
                       )
         ));
-        is_exploded = true;
+        m_is_exploded = true;
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(
             std::make_unique<DestructionEventData>(this)

@@ -6,9 +6,7 @@
 #include "SFML/Graphics.hpp"
 #include "SceneNode.hpp"
 
-enum WeaponType { BAZOOKA, LASER, GRENADE, LAND_MINE, CONCRETE_DONKEY };
-
-const int WEAPON_TYPES_NUMBER = 3;
+enum WeaponType { BAZOOKA, LASER, GRENADE, LAND_MINE, KETTLEBELL, ARMAGEDDON, WEAPON_TYPES_NUMBER };
 
 struct Unit;
 

@@ -9,38 +9,26 @@ CollisionEventListener::CollisionEventListener(World &world)
 void CollisionEventListener::process(const EventData &event) {
     assert(event.get_event_type() == EventType::COLLISION);
     auto collision_event = static_cast<const CollisionEventData &>(event);
-    if (processed_collisions.find(
-            {collision_event.get_first_object(),
-             collision_event.get_second_object()}
-        ) == processed_collisions.end() &&
-        processed_collisions.find(
-            {collision_event.get_second_object(),
-             collision_event.get_first_object()}
-        ) == processed_collisions.end()) {
+    auto first = collision_event.get_first_object();
+    auto second = collision_event.get_second_object();
+    if (processed_collisions.find({first, second}) == processed_collisions.end() &&
+            processed_collisions.find({second, first}) == processed_collisions.end()) {
         if (collision_event.get_collision_type() ==
-            CollisionEventData::CollisionType::BEGIN_CONTACT) {
-            collision_event.get_first_object()->on_collision(
-                collision_event.get_second_object()
-            );
-            collision_event.get_second_object()->on_collision(
-                collision_event.get_first_object()
-            );
-        } else {
-            if (collision_event.get_first_object()->get_type() ==
-                EntityType::JUMP_SENSOR) {
-                static_cast<JumpSensor *>(collision_event.get_first_object())
-                    ->end_collision(collision_event.get_second_object());
+                CollisionEventData::CollisionType::BEGIN_CONTACT) {
+            first->on_collision(second);
+            second->on_collision(first);
+        }
+        else {
+            if (first->get_type() ==
+                    EntityType::JUMP_SENSOR) {
+                static_cast<JumpSensor *>(first)->end_collision(second);
             }
-            if (collision_event.get_second_object()->get_type() ==
-                EntityType::JUMP_SENSOR) {
-                static_cast<JumpSensor *>(collision_event.get_second_object())
-                    ->end_collision(collision_event.get_first_object());
+            if (second->get_type() ==
+                    EntityType::JUMP_SENSOR) {
+                static_cast<JumpSensor *>(second)->end_collision(first);
             }
         }
-        processed_collisions.insert(
-            {collision_event.get_first_object(),
-             collision_event.get_second_object()}
-        );
+        processed_collisions.insert({first, second});
     }
 }
 

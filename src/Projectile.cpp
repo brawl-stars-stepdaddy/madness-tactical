@@ -23,7 +23,7 @@ Projectile::Projectile(
           is_sensor,
           is_static
       )),
-      explosion_radius(explosion_radius) {
+      m_explosion_radius(explosion_radius) {
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setScale(
         radius * World::SCALE * 2 / bounds.width,
