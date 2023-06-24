@@ -60,7 +60,9 @@ Camera::Camera(sf::Vector2f offset, float zoom)
 }
 
 void Camera::update(sf::Time delta_time) {
-    m_follow_strategy->update(delta_time);
+    if (m_follow_strategy) {
+        m_follow_strategy->update(delta_time);
+    }
     m_expected_zoom *= pow(m_zooming, delta_time.asSeconds());
     float delta_zoom = m_expected_zoom - m_current_zoom;
     float zoom_speed = delta_zoom * m_zoom_convergence_factor;

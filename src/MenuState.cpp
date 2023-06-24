@@ -5,6 +5,7 @@
 
 MenuState::MenuState(StateStack &stack, State::Context context)
     : State(stack, context), m_gui_container(), m_event_manager(), m_background_world(context, m_event_manager) {
+    m_background_world.build_start_scene();
     auto play_button = std::make_unique<GUI::Button>(*context.fonts);
     play_button->setPosition(context.window->getView().getSize() / 2.f);
     play_button->set_text("Play");

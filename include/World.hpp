@@ -29,6 +29,10 @@ public:
     };
 
     World(State::Context &context, EventManager &event_manager);
+
+    void build_scene();
+    void build_start_scene();
+
     void update(sf::Time delta_time);
     void draw();
 
@@ -67,9 +71,8 @@ public:
 
     static constexpr float SCALE = 100.f;
 
-private:
+protected:
     void load_resources();
-    void build_scene();
 
     State::Context m_context;
     sf::View m_world_view;

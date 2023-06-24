@@ -35,7 +35,6 @@ World::World(State::Context &context, EventManager &event_manager)
       m_camera(nullptr),
       m_scene_graph(*this) {
     load_resources();
-    build_scene();
     m_event_manager->add_listener(
         std::make_unique<ExplosionEventListener>(), EventType::EXPLOSION
     );
@@ -177,6 +176,47 @@ void World::build_scene() {
     m_active_unit->set_activeness(true);
 }
 
+void World::build_start_scene() {
+    for (std::size_t i = 0; i < LAYER_COUNT; i++) {
+        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
+        m_scene_layers[i] = layer.get();
+        m_scene_graph.attach_child(std::move(layer));
+    }
+    std::unique_ptr<SpriteNode> background_sprite =
+            std::make_unique<SpriteNode>(
+                    *this, m_context.textures->get(TexturesID::BACKGROUND),
+                    sf::IntRect(
+                            m_world_bounds.left * World::SCALE,
+                            m_world_bounds.top * World::SCALE,
+                            m_world_bounds.width * World::SCALE,
+                            m_world_bounds.height * World::SCALE
+                    )
+            );
+    background_sprite->setPosition(
+            m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE
+    );
+    m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
+
+    std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 5);
+    m_scene_layers[ENTITIES]->attach_child(std::move(core));
+
+    std::unique_ptr<Unit> unit = std::make_unique<Unit>(
+            *this, Unit::Type::WORM, sf::Vector2f{0, -48}, 5, 0
+    );
+    auto body = unit->get_body().get_b2Body();
+    body->SetLinearVelocity({14, 0});
+    m_scene_layers[ENTITIES]->attach_child(std::move(unit));
+
+    m_camera = Camera({0, 0}, 10);
+
+    std::unique_ptr<Map> map =
+            std::make_unique<Map>(*this, MapGenerator(1000, 1, 0.008f, 3.0f, 10.0f, 3).get_chains());
+    m_map = map.get();
+    m_scene_layers[MAP]->attach_child(std::move(map));
+
+    m_moves_timer = 1e9;
+}
+
 void World::draw() {
     m_world_view = m_context.window->getDefaultView();
     m_world_view.setCenter(m_camera.get_offset() * SCALE);
@@ -200,9 +240,11 @@ void World::update(sf::Time delta_time) {
     m_collision_listener->reset();
     m_destruction_listener->reset();
     m_camera.update(delta_time);
-    m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
-        &m_camera, m_active_unit, .5f, 3.f
-    ));
+    if (m_active_unit) {
+        m_camera.set_follow_strategy(std::make_unique<SmoothFollowStrategy>(
+                &m_camera, m_active_unit, .5f, 3.f
+        ));
+    }
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {

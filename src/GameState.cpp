@@ -4,6 +4,7 @@ GameState::GameState(StateStack &stack, State::Context context)
     : State(stack, context),
       m_controller(*this),
       m_world(context, m_event_manager) {
+    m_world.build_scene();
 }
 
 void GameState::draw() {
