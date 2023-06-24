@@ -22,7 +22,7 @@ bool ArmageddonProcess::update(sf::Time delta_time) {
         m_world->get_layer(World::Layer::ENTITIES)
                 ->attach_child(std::make_unique<CollisionProjectile>(
                         *m_world, start_position, impulse, m_projectile_radius,
-                        m_explosion_radius, true, false, TexturesID::METEORITE
+                        m_explosion_radius, false, false, TexturesID::METEORITE
                 ));
 
         m_launch_timer = m_default_launch_time;
