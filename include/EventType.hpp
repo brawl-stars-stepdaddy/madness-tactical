@@ -16,7 +16,11 @@ enum class EventType {
     ZOOM_IN,
     ZOOM_OUT,
     MOVE_TRANSITION,
-    GAME_OVER
+    GAME_OVER,
+    CAMERA_MOVE_LEFT,
+    CAMERA_MOVE_RIGHT,
+    CAMERA_MOVE_UP,
+    CAMERA_MOVE_DOWN,
 };
 
 #endif

@@ -93,6 +93,22 @@ World::World(State::Context &context, EventManager &event_manager)
     m_event_manager->add_listener(
         std::make_unique<GameOverEventListener>(), EventType::GAME_OVER
     );
+    m_event_manager->add_listener(
+            std::make_unique<CameraMoveLeftEventListener>(&m_camera),
+            EventType::CAMERA_MOVE_LEFT
+    );
+    m_event_manager->add_listener(
+            std::make_unique<CameraMoveRightEventListener>(&m_camera),
+            EventType::CAMERA_MOVE_RIGHT
+    );
+    m_event_manager->add_listener(
+            std::make_unique<CameraMoveUpEventListener>(&m_camera),
+            EventType::CAMERA_MOVE_UP
+    );
+    m_event_manager->add_listener(
+            std::make_unique<CameraMoveDownEventListener>(&m_camera),
+            EventType::CAMERA_MOVE_DOWN
+    );
 }
 
 void World::load_resources() {

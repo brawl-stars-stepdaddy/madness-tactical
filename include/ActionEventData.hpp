@@ -73,4 +73,34 @@ public:
     }
 };
 
+struct CameraMoveLeftEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::CAMERA_MOVE_LEFT;
+    }
+};
+
+struct CameraMoveRightEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::CAMERA_MOVE_RIGHT;
+    }
+};
+
+
+struct CameraMoveUpEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::CAMERA_MOVE_UP;
+    }
+};
+
+
+struct CameraMoveDownEventData : EventData {
+public:
+    [[nodiscard]] EventType get_event_type() const override {
+        return EventType::CAMERA_MOVE_DOWN;
+    }
+};
+
 #endif  // ACTION_EVENT_DATA_HPP_

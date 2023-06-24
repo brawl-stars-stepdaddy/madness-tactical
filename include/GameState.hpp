@@ -5,6 +5,7 @@
 #include "GameController.hpp"
 #include "StateStack.hpp"
 #include "World.hpp"
+#include "DistantWeaponController.hpp"
 
 struct GameState : State {
 public:
