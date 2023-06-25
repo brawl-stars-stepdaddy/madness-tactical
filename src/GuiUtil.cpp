@@ -21,6 +21,12 @@ void center(sf::Text &text) {
     );
 }
 
+void center(sf::Shape &shape) {
+    shape.setOrigin(
+            shape.getLocalBounds().width / 2, shape.getLocalBounds().height / 2
+    );
+}
+
 void resize(sf::Sprite &sprite, sf::Vector2<unsigned int> size) {
     sprite.setScale(
         size.x / sprite.getLocalBounds().width,

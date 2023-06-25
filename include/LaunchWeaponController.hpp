@@ -1,13 +1,13 @@
-#ifndef MADNESS_TACTICAL_DEFAULTWEAPONCONTROLLER_HPP
-#define MADNESS_TACTICAL_DEFAULTWEAPONCONTROLLER_HPP
+#ifndef MADNESS_TACTICAL_LAUNCHWEAPONCONTROLLER_HPP
+#define MADNESS_TACTICAL_LAUNCHWEAPONCONTROLLER_HPP
 
 #include "Controller.hpp"
 
 struct GameState;
 
-struct DefaultWeaponController : Controller {
+struct LaunchWeaponController : Controller {
 public:
-    DefaultWeaponController(GameState &game_state);
+    LaunchWeaponController(GameState &game_state);
 
 private:
     GameState *m_game_state;

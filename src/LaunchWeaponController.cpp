@@ -1,9 +1,9 @@
-#include "DefaultWeaponController.hpp"
+#include "LaunchWeaponController.hpp"
 #include "ActionEventData.hpp"
 #include "EventManager.hpp"
 #include "GameState.hpp"
 
-DefaultWeaponController::DefaultWeaponController(GameState &game_state)
+LaunchWeaponController::LaunchWeaponController(GameState &game_state)
     : m_game_state(&game_state) {
     assign_key(
         EventType::MOVE_LEFT, sf::Keyboard::Left,

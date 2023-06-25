@@ -22,16 +22,27 @@ MenuState::MenuState(StateStack &stack, State::Context context)
     exit_button->set_text("Exit");
     exit_button->set_callback([this]() { request_stack_pop(); });
     m_gui_container.pack(std::move(exit_button));
+    get_context().textures->load(TexturesID::GAME_TITLE, "res/madness_tactical.png");
+    m_game_title_sprite.setTexture(get_context().textures->get(TexturesID::GAME_TITLE));
+    GuiUtil::center(m_game_title_sprite);
+    m_game_title_sprite.setPosition(get_context().window->getView().getCenter().x, m_game_title_sprite.getLocalBounds().height);
 }
 
 void MenuState::draw() {
     // TODO: draw background
     m_background_world.draw();
     get_context().window->setView(get_context().window->getDefaultView());
+    sf::IntRect old_game_title_sprite_rect = m_game_title_sprite.getTextureRect();
+    sf::IntRect new_game_title_sprite_rect = old_game_title_sprite_rect;
+    new_game_title_sprite_rect.width -= new_game_title_sprite_rect.width * pow(std::max(0.f, (3.f - m_current_time.asSeconds()) * 2.f), 5) / 25.f / 32.f;
+    m_game_title_sprite.setTextureRect(new_game_title_sprite_rect);
+    get_context().window->draw(m_game_title_sprite);
     get_context().window->draw(m_gui_container);
+    m_game_title_sprite.setTextureRect(old_game_title_sprite_rect);
 }
 
 bool MenuState::update(sf::Time delta_time) {
+    m_current_time += delta_time;
     m_background_world.update(delta_time);
     m_event_manager.update();
     return false;
