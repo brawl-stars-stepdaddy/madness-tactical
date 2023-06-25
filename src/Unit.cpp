@@ -86,7 +86,9 @@ void Unit::on_explosion(const Explosion &explosion) {
     float y_impulse = 100 * y_vector / pow(distance, 2);
     physic_body->ApplyLinearImpulseToCenter({x_impulse, y_impulse}, true);
 
-    m_health -= sqrt(pow(x_impulse, 2) + pow(y_impulse, 2));
+    change_health(static_cast<int>(
+            std::max(static_cast<float>(-m_health), -sqrtf(powf(x_impulse, 2) + powf(y_impulse, 2))))
+    );
     if (m_health <= 0) {
         kill_unit();
     }
@@ -206,13 +208,16 @@ void Unit::set_activeness(bool new_value) {
 
 void Unit::change_health(int value) {
     m_health += value;
+    if (m_team){
+        m_team->change_health(value);
+    }
 }
 
 void Unit::kill_unit() {
-    m_health = 0;
     if (m_team) {
         m_team->remove_unit(this);
     }
+    m_health = 0;
     m_body.get_b2Body()->SetEnabled(false);
     m_world->get_event_manager()->queue_event(
         std::make_unique<DestructionEventData>(this)

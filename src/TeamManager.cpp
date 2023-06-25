@@ -9,22 +9,25 @@ Team *TeamManager::create_team(sf::Color color) {
 
 void TeamManager::move_transition() {
     m_teams[m_active_team]->deactivate_team();
-    remove_empty_teams();
-    m_active_team = (m_active_team + 1) % m_team_number;
-    m_teams[m_active_team]->activate_team();
+    if (!get_number_available_teams()) {
+        do {
+            m_active_team = (m_active_team + 1) % m_team_number;
+        } while (m_teams[m_active_team]->get_team_size() == 0);
+        m_teams[m_active_team]->activate_team();
+    }
 }
 
 Team *TeamManager::get_active_team() const {
-    return m_teams[m_active_team].get();
+    if (!get_number_available_teams()) {
+        return m_teams[m_active_team].get();
+    }
+    else {
+        return nullptr;
+    }
 }
 
-void TeamManager::remove_empty_teams() {
-    m_teams.erase(
-        std::remove_if(
-            m_teams.begin(), m_teams.end(),
-            [](const auto &team) { return team->get_team_size() == 0; }
-        ),
-        m_teams.end()
-    );
-    m_team_number = static_cast<int>(m_teams.size());
+int TeamManager::get_number_available_teams() const {
+    return static_cast<int>(std::count_if(m_teams.begin(), m_teams.end(), [](const auto &team){
+        return team->get_team_size() > 0;
+    }));
 }
