@@ -32,11 +32,11 @@ CircleBody::CircleBody(
     m_body->CreateFixture(&m_fixture_def);
 }
 
-sf::Vector2f CircleBody::get_position() {
+sf::Vector2f CircleBody::get_position() const {
     b2Vec2 pos = m_body->GetPosition();
     return {pos.x, pos.y};
 }
 
-float CircleBody::get_rotation() {
+float CircleBody::get_rotation() const {
     return m_body->GetAngle();
 }

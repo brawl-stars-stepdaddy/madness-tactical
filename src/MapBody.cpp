@@ -38,11 +38,11 @@ MapBody::MapBody(
     apply_explosion(Explosion({0, 0}, 0));
 }
 
-sf::Vector2f MapBody::get_position() {
+sf::Vector2f MapBody::get_position() const {
     return {0, 0};
 }
 
-float MapBody::get_rotation() {
+float MapBody::get_rotation() const {
     return 0;
 }
 

@@ -10,8 +10,8 @@ struct RectBody : Body {
 public:
     RectBody();
     RectBody(Entity *, b2World &world, sf::FloatRect);
-    sf::Vector2f get_position() override;
-    float get_rotation() override;
+    sf::Vector2f get_position() const override;
+    float get_rotation() const override;
 };
 
 #endif

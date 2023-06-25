@@ -50,6 +50,8 @@ public:
     void set_activeness(bool);
     void kill_unit();
 
+    const sf::Sprite &get_sprite() const;
+
 private:
     void draw_current(sf::RenderTarget &target, sf::RenderStates)
         const override;

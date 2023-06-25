@@ -21,11 +21,11 @@ RectBody::RectBody(Entity *parent, b2World &world, sf::FloatRect rect) {
     m_body->CreateFixture(&m_fixture_def);
 }
 
-sf::Vector2f RectBody::get_position() {
+sf::Vector2f RectBody::get_position() const {
     b2Vec2 pos = m_body->GetPosition();
     return {pos.x, pos.y};
 }
 
-float RectBody::get_rotation() {
+float RectBody::get_rotation() const {
     return m_body->GetAngle();
 }

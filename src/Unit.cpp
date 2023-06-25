@@ -210,7 +210,9 @@ void Unit::change_health(int value) {
 
 void Unit::kill_unit() {
     m_health = 0;
-    m_team->remove_unit(this);
+    if (m_team) {
+        m_team->remove_unit(this);
+    }
     m_body.get_b2Body()->SetEnabled(false);
     m_world->get_event_manager()->queue_event(
         std::make_unique<DestructionEventData>(this)
@@ -219,4 +221,8 @@ void Unit::kill_unit() {
 
 sf::Vector2f Unit::get_camera_position() const {
     return m_world->get_camera_position();
+}
+
+const sf::Sprite &Unit::get_sprite() const {
+    return m_sprite;
 }

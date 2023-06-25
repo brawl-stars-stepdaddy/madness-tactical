@@ -25,11 +25,11 @@ UnitBody::UnitBody(
     m_body->CreateFixture(&unit_body_fixture);
 }
 
-sf::Vector2f UnitBody::get_position() {
+sf::Vector2f UnitBody::get_position() const {
     b2Vec2 pos = m_body->GetPosition();
     return {pos.x, pos.y};
 }
 
-float UnitBody::get_rotation() {
+float UnitBody::get_rotation() const {
     return m_body->GetAngle();
 }
