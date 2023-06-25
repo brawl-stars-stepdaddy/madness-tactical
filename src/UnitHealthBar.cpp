@@ -7,18 +7,16 @@
 UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
     : SceneNode(world), m_parent(parent) {
     m_text.setFont(font);
-    m_text.setCharacterSize(150);
-    m_text.setOutlineThickness(5);
+    m_text.setCharacterSize(m_parent->get_sprite().getGlobalBounds().width / 3.f);
+    m_text.setOutlineThickness(m_parent->get_sprite().getGlobalBounds().width / 60.f);
     m_text.setOutlineColor(sf::Color(0, 0, 0));
     if (parent->get_team()) {
         m_text.setFillColor(parent->get_team()->get_team_color());
     }
     m_text.setString(std::to_string(m_parent->get_health()));
 
-    sf::FloatRect bounds = get_text().getLocalBounds();
-    setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    setPosition(30, -150);
-    setScale({0.4, 0.4});
+    GuiUtil::center(m_text);
+    setPosition(30, -m_parent->get_sprite().getGlobalBounds().height / 2 - m_text.getCharacterSize());
 }
 
 void UnitHealthBar::draw_current(

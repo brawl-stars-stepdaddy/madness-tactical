@@ -6,7 +6,10 @@
 struct World;
 
 struct ArmageddonProcess : Process {
-    explicit ArmageddonProcess(World *);
+    explicit ArmageddonProcess(World *world);
+    ArmageddonProcess(World *world, float end_time, float launch_time,
+                      float start_distance, float start_impulse,
+                      float projectile_radius, float explosion_radius);
     bool update(sf::Time) override;
 
 private:

@@ -17,8 +17,8 @@ public:
 
     void apply_explosion(const Explosion &);
 
-    sf::Vector2f get_position() override;
-    float get_rotation() override;
+    sf::Vector2f get_position() const override;
+    float get_rotation() const override;
 
 private:
     std::vector<std::vector<b2Vec2>> m_chains;

@@ -13,8 +13,8 @@ public:
         sf::Vector2f center,
         float radius
     );
-    sf::Vector2f get_position() override;
-    float get_rotation() override;
+    sf::Vector2f get_position() const override;
+    float get_rotation() const override;
 };
 
 #endif  // JUMP_SENSOR_BODY_HPP_

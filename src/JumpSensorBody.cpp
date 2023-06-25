@@ -29,11 +29,11 @@ JumpSensorBody::JumpSensorBody(
     m_body->CreateFixture(&unit_sensor_fixture);
 }
 
-sf::Vector2f JumpSensorBody::get_position() {
+sf::Vector2f JumpSensorBody::get_position() const {
     b2Vec2 pos = m_body->GetPosition();
     return {pos.x, pos.y};
 }
 
-float JumpSensorBody::get_rotation() {
+float JumpSensorBody::get_rotation() const {
     return m_body->GetAngle();
 }

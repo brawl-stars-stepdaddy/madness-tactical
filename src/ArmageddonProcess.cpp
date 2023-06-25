@@ -6,6 +6,18 @@
 
 ArmageddonProcess::ArmageddonProcess(World *world) : m_world(world) {}
 
+ArmageddonProcess::ArmageddonProcess(World *world, float end_time, float launch_time,
+                                     float start_distance, float start_impulse,
+                                     float projectile_radius, float explosion_radius)
+                                     :   m_world(world),
+                                         m_end_timer(end_time),
+                                         m_launch_timer(launch_time),
+                                         m_default_launch_time(launch_time),
+                                         m_start_distance(start_distance),
+                                         m_start_impulse(start_impulse),
+                                         m_projectile_radius(projectile_radius),
+                                         m_explosion_radius(explosion_radius) {}
+
 bool ArmageddonProcess::update(sf::Time delta_time) {
     m_end_timer -= delta_time.asSeconds();
     m_launch_timer -= delta_time.asSeconds();

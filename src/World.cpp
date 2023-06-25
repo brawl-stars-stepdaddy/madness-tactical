@@ -4,6 +4,7 @@
 #include <vector>
 #include "ActionEventData.hpp"
 #include "Armageddon.hpp"
+#include "ArmageddonProcess.hpp"
 #include "ActionEventListener.hpp"
 #include "Bazooka.hpp"
 #include "Kettlebell.hpp"
@@ -236,6 +237,8 @@ void World::build_start_scene() {
     m_scene_layers[MAP]->attach_child(std::move(map));
 
     m_moves_timer = 1e9;
+
+    add_process(std::make_unique<ArmageddonProcess>(this, 1e9, 3.0f, 100.0f, 1000.0f, 5.0f, 10.0f));
 }
 
 void World::draw() {
@@ -256,12 +259,12 @@ void World::update(sf::Time delta_time) {
         m_moves_timer = 5;
     }
     m_event_manager->update();
+    execute_processes(delta_time);
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
     m_collision_listener->reset();
     m_destruction_listener->reset();
     m_camera.update(delta_time);
-    execute_processes(delta_time);
 }
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {

@@ -17,13 +17,15 @@ struct Team {
     void add_weapon(WeaponType);
     void remove_weapon(WeaponType);
 
-    int get_available_number(WeaponType);
+    int get_available_number_weapons(WeaponType);
     sf::Color get_team_color();
 
     void activate_team();
     void deactivate_team();
 
     Unit *activate_next_unit();
+
+    void change_health(int value);
 
     [[nodiscard]] Unit *get_active_unit() const;
     [[nodiscard]] int get_team_size() const;
@@ -35,8 +37,6 @@ private:
     int m_active_unit = 0;
     int m_team_size = 0;
     int m_summary_health = 0;
-
-    void update_health();
 };
 
 #endif  // TEAM_HPP_
