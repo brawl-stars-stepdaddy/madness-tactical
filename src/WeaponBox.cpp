@@ -18,11 +18,13 @@ void WeaponBox::on_collision(Entity *other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
         Unit *unit = static_cast<Unit *>(other_object);
         Team *team = unit->get_team();
-        auto type = static_cast<WeaponType>(random() % WEAPON_TYPES_NUMBER);
-        team->add_weapon(type);
+        if (team) {
+            auto type = static_cast<WeaponType>(random() % WEAPON_TYPES_NUMBER);
+            team->add_weapon(type);
+        }
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(
-            std::make_unique<DestructionEventData>(this)
+                std::make_unique<DestructionEventData>(this)
         );
     }
 }
