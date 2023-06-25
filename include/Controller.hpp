@@ -7,6 +7,12 @@
 #include <set>
 #include "EventType.hpp"
 
+enum class ControllerStrategy {
+    None,
+    LaunchWeapon,
+    DistantWeapon,
+};
+
 struct Controller {
 public:
     enum class ActionActivationType {

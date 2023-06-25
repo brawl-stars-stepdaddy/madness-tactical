@@ -18,6 +18,9 @@ private:
     GUI::Container m_gui_container;
     EventManager m_event_manager;
     World m_background_world;
+    sf::Sprite m_game_title_sprite;
+
+    sf::Time m_current_time = sf::Time::Zero;
 };
 
 #endif

@@ -2,7 +2,7 @@
 #define MADNESS_TACTICAL_GAMESTATE_HPP
 
 #include "EventManager.hpp"
-#include "GameController.hpp"
+#include "LaunchWeaponController.hpp"
 #include "StateStack.hpp"
 #include "World.hpp"
 #include "DistantWeaponController.hpp"
@@ -19,7 +19,7 @@ public:
 private:
     EventManager m_event_manager;
     World m_world;
-    GameController m_controller;
+    DistantWeaponController m_controller;
 };
 
 #endif

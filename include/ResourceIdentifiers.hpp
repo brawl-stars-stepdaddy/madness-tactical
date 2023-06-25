@@ -25,7 +25,8 @@ enum class TexturesID {
     LASER,
     CASE,
     KETTLEBELL,
-    METEORITE
+    METEORITE,
+    GAME_TITLE,
 };
 
 enum class FontsID {
