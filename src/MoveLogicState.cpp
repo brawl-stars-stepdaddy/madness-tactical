@@ -29,9 +29,8 @@ bool MoveLogicState::update(sf::Time delta_time) {
     m_timer_text.setString(std::to_string(static_cast<int>(m_timer.asSeconds())));
     GuiUtil::center(m_timer_text);
     if (m_timer <= sf::Time::Zero) {
-        m_game_state->get_team_manager()->move_transition();
-        request_stack_pop();
-        request_stack_push(StatesID::Move);
+        request_stack_clear();
+        request_stack_push(StatesID::BloodyFatality);
     }
     return false;
 }

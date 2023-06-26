@@ -1,12 +1,20 @@
 #include "GameState.hpp"
 #include "MoveLogicState.hpp"
+#include "PostMoveLogicState.hpp"
+#include "BloodyFatalityLogicState.hpp"
+#include "MoveTransitionLogicState.hpp"
 
 GameState::GameState(StateStack &stack, State::Context context)
     : State(stack, context),
       m_world(context, m_event_manager, m_team_manager),
       m_logic_state_stack(context) {
     m_world.build_scene();
+
     m_logic_state_stack.register_state<MoveLogicState, GameState>(StatesID::Move, *this);
+    m_logic_state_stack.register_state<PostMoveLogicState, GameState>(StatesID::PostMove, *this);
+    m_logic_state_stack.register_state<BloodyFatalityLogicState, GameState>(StatesID::BloodyFatality, *this);
+    m_logic_state_stack.register_state<MoveTransitionLogicState, GameState>(StatesID::MoveTransition, *this);
+
     m_logic_state_stack.push_state(StatesID::Move);
 }
 

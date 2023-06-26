@@ -7,7 +7,7 @@ struct GameState;
 
 struct LaunchWeaponController : Controller {
 public:
-    LaunchWeaponController(GameState &game_state);
+    explicit LaunchWeaponController(GameState &game_state);
 
 private:
     GameState *m_game_state;

@@ -89,8 +89,8 @@ void Unit::on_explosion(const Explosion &explosion) {
     change_health(static_cast<int>(
             std::max(static_cast<float>(-m_health), -sqrtf(powf(x_impulse, 2) + powf(y_impulse, 2))))
     );
-    if (m_health <= 0) {
-        kill_unit();
+    if (m_health == 0) {
+        m_world->add_bloody_fatality_candidate(this);
     }
 }
 
@@ -207,6 +207,9 @@ void Unit::set_activeness(bool new_value) {
 }
 
 void Unit::change_health(int value) {
+    if (m_is_active) {
+        // TODO
+    }
     m_health += value;
     if (m_team){
         m_team->change_health(value);
@@ -217,11 +220,8 @@ void Unit::kill_unit() {
     if (m_team) {
         m_team->remove_unit(this);
     }
-    m_health = 0;
-    m_body.get_b2Body()->SetEnabled(false);
-    m_world->get_event_manager()->queue_event(
-        std::make_unique<DestructionEventData>(this)
-    );
+    m_body.get_b2Body()->GetWorld()->DestroyBody(m_body.get_b2Body());
+    detach();
 }
 
 sf::Vector2f Unit::get_camera_position() const {

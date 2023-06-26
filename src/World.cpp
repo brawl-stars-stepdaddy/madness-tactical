@@ -111,8 +111,6 @@ World::World(State::Context &context, EventManager &event_manager, TeamManager &
 
 void World::load_resources() {
     m_context.textures->load(TexturesID::BACKGROUND, "res/star_sky.jpg");
-    m_context.textures->load(TexturesID::ENGINEER, "res/Engineer.jpg");
-    m_context.textures->load(TexturesID::HALO, "res/HaloRender.jpg");
     m_context.textures->load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
     m_context.textures->load(TexturesID::WORM, "res/wheel_amogus.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
@@ -150,12 +148,6 @@ void World::build_scene() {
         m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE
     );
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
-    m_scene_layers[ENTITIES]->attach_child(
-        std::make_unique<WeaponBox>(*this, sf::FloatRect(50, -50, 1.5, 1))
-    );
-    m_scene_layers[ENTITIES]->attach_child(
-        std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1))
-    );
 
     Team *team1 = m_team_manager->create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager->create_team(sf::Color(0, 0, 255));
@@ -168,8 +160,8 @@ void World::build_scene() {
     );
     auto first_unit = worm1.get();
     team1->add_unit(worm1.get());
-    team1->add_weapon(ARMAGEDDON);
-    auto weapon = std::make_unique<Armageddon>(*this, first_unit);
+    team1->add_weapon(BAZOOKA);
+    auto weapon = std::make_unique<Bazooka>(*this, first_unit);
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     first_unit->attach_child(std::move(weapon));
 
@@ -230,8 +222,6 @@ void World::build_start_scene() {
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
-    m_moves_timer = 1e9;
-
     add_process(std::make_unique<ArmageddonProcess>(this, 1e9, 3.0f, 100.0f, 1000.0f, 5.0f, 10.0f));
 }
 
@@ -276,4 +266,20 @@ void World::execute_processes(sf::Time delta_time) {
 
 Camera *World::get_camera() {
     return &m_camera;
+}
+
+void World::add_bloody_fatality_candidate(Unit *unit) {
+    m_bloody_fatality_candidates.push_back(unit);
+}
+
+std::vector<Unit *> &World::get_bloody_fatality_candidates() {
+    return m_bloody_fatality_candidates;
+}
+
+void World::reset_bloody_fatality_candidates() {
+    m_bloody_fatality_candidates.clear();
+}
+
+std::array<SceneNode *, World::Layer::LAYER_COUNT> &World::get_scene_layers() {
+    return m_scene_layers;
 }

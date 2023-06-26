@@ -80,6 +80,12 @@ public:
     void add_process(std::unique_ptr<Process>);
     void execute_processes(sf::Time);
 
+    void add_bloody_fatality_candidate(Unit *);
+    std::vector<Unit *> &get_bloody_fatality_candidates();
+    void reset_bloody_fatality_candidates();
+
+    std::array<SceneNode *, LAYER_COUNT> &get_scene_layers();
+
 protected:
     void load_resources();
 
@@ -100,8 +106,7 @@ protected:
     EventManager *m_event_manager;
 
     std::vector<std::unique_ptr<Process>> m_processes;
-
-    float m_moves_timer = 100;
+    std::vector<Unit *> m_bloody_fatality_candidates;
 };
 
 #endif

@@ -41,7 +41,7 @@ EntityType PlanetCore::get_type() {
 void PlanetCore::on_collision(Entity *other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
         auto unit = static_cast<Unit *>(other_object);
-        unit->kill_unit();
+        unit->change_health(-unit->get_health());
     }
 }
 
