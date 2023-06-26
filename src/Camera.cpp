@@ -5,14 +5,10 @@
 
 SmoothFollowStrategy::SmoothFollowStrategy(
     Camera *camera,
-    Entity *target,
-    float min_speed,
-    float convergence_factor
+    Entity *target
 )
     : m_camera(camera),
-      m_target(target),
-      m_min_speed(min_speed),
-      m_convergence_factor(convergence_factor) {
+      m_target(target) {
 }
 
 void SmoothFollowStrategy::update(sf::Time delta_time) {

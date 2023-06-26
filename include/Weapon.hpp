@@ -7,6 +7,7 @@
 #include "SceneNode.hpp"
 
 enum WeaponType { BAZOOKA, LASER, GRENADE, LAND_MINE, KETTLEBELL, ARMAGEDDON, WEAPON_TYPES_NUMBER };
+enum WeaponControllerType { LAUNCH, DISTANT };
 
 struct Unit;
 
@@ -14,6 +15,7 @@ struct Weapon : SceneNode {
     explicit Weapon(World &world);
 
     virtual void launch() = 0;
+    virtual WeaponControllerType get_controller_type() = 0;
     void set_hidden(bool);
 
 protected:

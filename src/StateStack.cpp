@@ -76,3 +76,4 @@ void StateStack::apply_pending_changes() {
         }
     }
 }
+

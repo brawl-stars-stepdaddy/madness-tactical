@@ -8,6 +8,7 @@ public:
     Armageddon(World &, Unit *);
 
     void launch() override;
+    virtual WeaponControllerType get_controller_type() override;
 
 private:
     void update_current(sf::Time delta_time) override;

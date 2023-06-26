@@ -15,11 +15,14 @@ public:
     virtual bool handle_input(const sf::Event &event) override;
     virtual bool handle_realtime_input() override;
     EventManager *get_event_manager();
+    TeamManager *get_team_manager();
+    World *get_world();
 
 private:
     EventManager m_event_manager;
+    TeamManager m_team_manager;
     World m_world;
-    DistantWeaponController m_controller;
+    StateStack m_logic_state_stack;
 };
 
 #endif

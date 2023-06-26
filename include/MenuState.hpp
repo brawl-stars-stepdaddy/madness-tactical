@@ -17,6 +17,7 @@ public:
 private:
     GUI::Container m_gui_container;
     EventManager m_event_manager;
+    TeamManager m_team_manager;
     World m_background_world;
     sf::Sprite m_game_title_sprite;
 

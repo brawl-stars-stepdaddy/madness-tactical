@@ -6,6 +6,7 @@ enum class StatesID {
     Menu,
     Game,
     Pause,
+    Move,
 };
 
 #endif

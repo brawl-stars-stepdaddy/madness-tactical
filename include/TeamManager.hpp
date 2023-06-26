@@ -12,6 +12,7 @@ struct TeamManager {
     Team *create_team(sf::Color);
 
     void move_transition();
+    void init();
 
     [[nodiscard]] Team *get_active_team() const;
     [[nodiscard]] int get_number_available_teams() const;

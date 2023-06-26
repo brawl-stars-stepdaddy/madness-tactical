@@ -18,9 +18,7 @@ struct SmoothFollowStrategy : FollowStrategy {
 public:
     SmoothFollowStrategy(
         Camera *camera,
-        Entity *target,
-        float min_speed,
-        float convergence_factor
+        Entity *target
     );
 
     void update(sf::Time delta_time) override;
@@ -28,8 +26,8 @@ public:
 private:
     Camera *m_camera;
     Entity *m_target;
-    float m_min_speed;
-    float m_convergence_factor;
+    float m_min_speed = 0.5f;
+    float m_convergence_factor = 3.f;
 };
 
 struct ControlledFollowStrategy : FollowStrategy {

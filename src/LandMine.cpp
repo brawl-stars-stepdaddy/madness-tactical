@@ -42,3 +42,7 @@ void LandMine::launch() {
             TexturesID::LAND_MINE
         ));
 }
+
+WeaponControllerType LandMine::get_controller_type() {
+    return LAUNCH;
+}

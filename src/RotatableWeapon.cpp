@@ -32,3 +32,7 @@ void RotatableWeapon::reset() {
 
 RotatableWeapon::RotatableWeapon(World &world) : Weapon(world) {
 }
+
+WeaponControllerType RotatableWeapon::get_controller_type() {
+    return LAUNCH;
+}

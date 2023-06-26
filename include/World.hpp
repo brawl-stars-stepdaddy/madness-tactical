@@ -29,7 +29,7 @@ public:
         LAYER_COUNT,
     };
 
-    World(State::Context &context, EventManager &event_manager);
+    World(State::Context &context, EventManager &event_manager, TeamManager &team_manager);
 
     void build_scene();
     void build_start_scene();
@@ -42,6 +42,8 @@ public:
     }
 
     sf::Vector2f get_camera_position() const;
+
+    Camera *get_camera();
 
     Map *get_map() {
         return m_map;
@@ -59,8 +61,9 @@ public:
         return m_active_unit;
     }
 
-    void go_to_next_team();
-    void go_to_next_unit();
+    void set_active_unit(Unit *unit) {
+        m_active_unit = unit;
+    }
 
     SceneNode *get_layer(Layer layer) {
         return m_scene_layers[layer];
@@ -86,7 +89,6 @@ protected:
     std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
 
     sf::FloatRect m_world_bounds;
-    sf::Vector2f m_spawn_position;
     Unit *m_active_unit;
     b2World m_physics_world;
     Map *m_map;
@@ -94,7 +96,7 @@ protected:
     DestructionEventListener *m_destruction_listener;
     GameLogic m_game_logic;
     Camera m_camera;
-    TeamManager m_team_manager;
+    TeamManager *m_team_manager;
     EventManager *m_event_manager;
 
     std::vector<std::unique_ptr<Process>> m_processes;

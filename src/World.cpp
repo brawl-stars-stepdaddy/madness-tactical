@@ -19,18 +19,17 @@
 #include "LandMine.hpp"
 #include "Laser.hpp"
 #include "MapGenerator.hpp"
-#include "MoveTransitionEventListener.hpp"
 #include "PlanetCore.hpp"
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
 #include "WeaponBox.hpp"
 
-World::World(State::Context &context, EventManager &event_manager)
+World::World(State::Context &context, EventManager &event_manager, TeamManager &team_manager)
     : m_context(context),
       m_event_manager(&event_manager),
+      m_team_manager(&team_manager),
       m_world_view(context.window->getDefaultView()),
       m_world_bounds(-200, -200, 400, 400),
-      m_spawn_position(5.f, 5.f),
       m_active_unit(nullptr),
       m_physics_world({0, 0}),
       m_map(nullptr),
@@ -88,10 +87,6 @@ World::World(State::Context &context, EventManager &event_manager)
     );
     m_event_manager->add_listener(
         std::make_unique<ZoomOutEventListener>(&m_camera), EventType::ZOOM_OUT
-    );
-    m_event_manager->add_listener(
-        std::make_unique<MoveTransitionEventListener>(this),
-        EventType::MOVE_TRANSITION
     );
     m_event_manager->add_listener(
         std::make_unique<GameOverEventListener>(), EventType::GAME_OVER
@@ -162,8 +157,8 @@ void World::build_scene() {
         std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1))
     );
 
-    Team *team1 = m_team_manager.create_team(sf::Color(255, 0, 0));
-    Team *team2 = m_team_manager.create_team(sf::Color(0, 0, 255));
+    Team *team1 = m_team_manager->create_team(sf::Color(255, 0, 0));
+    Team *team2 = m_team_manager->create_team(sf::Color(0, 0, 255));
 
     std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
@@ -171,31 +166,30 @@ void World::build_scene() {
     std::unique_ptr<Unit> worm1 = std::make_unique<Unit>(
         *this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0
     );
-    m_active_unit = worm1.get();
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
-    team1->add_unit(m_active_unit);
+    auto first_unit = worm1.get();
+    team1->add_unit(worm1.get());
     team1->add_weapon(ARMAGEDDON);
-    auto weapon = std::make_unique<Armageddon>(*this, m_active_unit);
-    m_active_unit->attach_child(std::move(weapon));
+    auto weapon = std::make_unique<Armageddon>(*this, first_unit);
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
+    first_unit->attach_child(std::move(weapon));
 
-    /*std::unique_ptr<Unit> worm2 =
+    std::unique_ptr<Unit> worm2 =
             std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1},
-    1, 1); auto second_unit = worm2.get(); team2->add_unit(second_unit);
+    1, 1);
+    auto second_unit = worm2.get();
+    team2->add_unit(second_unit);
     team2->add_weapon(LAND_MINE);
-    weapon = std::make_unique<LandMine>(*this, second_unit);
-    second_unit->attach_child(std::move(weapon));
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));*/
+    auto weapon2 = std::make_unique<LandMine>(*this, second_unit);
+    second_unit->attach_child(std::move(weapon2));
+    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
 
-    m_camera = Camera(m_active_unit->get_body().get_position(), 2);
-    m_camera.set_follow_strategy(std::make_unique<ControlledFollowStrategy>(
-        &m_camera
-    ));
     std::unique_ptr<Map> map =
         std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
 
-    m_active_unit->set_activeness(true);
+    m_camera = Camera({0, 0}, 2);
+    m_team_manager->init();
 }
 
 void World::build_start_scene() {
@@ -251,14 +245,6 @@ void World::draw() {
 }
 
 void World::update(sf::Time delta_time) {
-    m_moves_timer -= delta_time.asSeconds();
-    if (m_moves_timer <= 0) {
-        m_event_manager->queue_event(std::make_unique<MoveTransitionEventData>(
-            MoveTransitionEventData::TransitionType::OTHER_PLAYER
-        ));
-        m_moves_timer = 5;
-    }
-    m_event_manager->update();
     execute_processes(delta_time);
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
@@ -269,15 +255,6 @@ void World::update(sf::Time delta_time) {
 
 void World::add_entity(std::unique_ptr<Entity> ptr) {
     m_scene_layers[ENTITIES]->attach_child(std::move(ptr));
-}
-
-void World::go_to_next_team() {
-    m_team_manager.move_transition();
-    m_active_unit = m_team_manager.get_active_team()->get_active_unit();
-}
-
-void World::go_to_next_unit() {
-    m_active_unit = m_team_manager.get_active_team()->activate_next_unit();
 }
 
 sf::Vector2f World::get_camera_position() const {
@@ -295,4 +272,8 @@ void World::execute_processes(sf::Time delta_time) {
             it--;
         }
     }
+}
+
+Camera *World::get_camera() {
+    return &m_camera;
 }

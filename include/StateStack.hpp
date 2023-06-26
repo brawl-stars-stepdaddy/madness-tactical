@@ -23,6 +23,8 @@ public:
     void handle_input(const sf::Event &event);
     void handle_realtime_input();
     void push_state(StatesID state_id);
+    template <typename T, typename U>
+    void register_state(StatesID state_id, U &t);
     void pop_state();
     void clear_states();
 
@@ -47,6 +49,13 @@ template <typename T>
 void StateStack::register_state(StatesID state_id) {
     m_factories[state_id] = [this]() {
         return State::Ptr(new T(*this, m_context));
+    };
+}
+
+template<typename T, typename U>
+void StateStack::register_state(StatesID state_id, U &arg1) {
+    m_factories[state_id] = [this, &arg1]() {
+        return State::Ptr(new T(*this, m_context, arg1));
     };
 }
 
