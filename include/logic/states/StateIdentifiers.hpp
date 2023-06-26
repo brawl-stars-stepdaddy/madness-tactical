@@ -1,0 +1,18 @@
+#ifndef STATE_IDENTIFIERS_HPP_
+#define STATE_IDENTIFIERS_HPP_
+
+enum class StatesID {
+    TITLE,
+    MENU,
+    GAME,
+    PAUSE,
+    INIT,
+    MOVE,
+    POST_MOVE,
+    BLOODY_FATALITY,
+    MOVE_TRANSITION,
+    GAME_OVER,
+    WEAPON_SELECT,
+};
+
+#endif // STATE_IDENTIFIERS_HPP_
