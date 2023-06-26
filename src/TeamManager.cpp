@@ -7,18 +7,22 @@ Team *TeamManager::create_team(sf::Color color) {
     return m_teams[m_team_number - 1].get();
 }
 
-void TeamManager::move_transition() {
+void TeamManager::move_transition(bool init_state) {
     m_teams[m_active_team]->deactivate_team();
-    if (get_number_available_teams()) {
+    if (!init_state && get_number_available_teams()) {
         do {
             m_active_team = (m_active_team + 1) % m_team_number;
         } while (m_teams[m_active_team]->get_team_size() == 0);
         m_teams[m_active_team]->activate_team();
     }
+    else if (init_state) {
+        m_active_team = (m_active_team + 1) % m_team_number;
+        m_teams[m_active_team]->activate_team();
+    }
 }
 
-Team *TeamManager::get_active_team() const {
-    if (get_number_available_teams()) {
+Team *TeamManager::get_active_team(bool init_state) const {
+    if (init_state || get_number_available_teams()) {
         return m_teams[m_active_team].get();
     }
     else {
@@ -32,8 +36,10 @@ int TeamManager::get_number_available_teams() const {
     }));
 }
 
-void TeamManager::init() {
-    if (get_number_available_teams() > 0) {
-        m_teams[0]->activate_team();
+int TeamManager::get_number_available_units() const {
+    int number = 0;
+    for (const auto &team : m_teams) {
+        number += team->get_team_size();
     }
+    return number;
 }

@@ -87,6 +87,8 @@ public:
 
     State *get_game_state();
 
+    void create_unit();
+
 protected:
     void load_resources();
 

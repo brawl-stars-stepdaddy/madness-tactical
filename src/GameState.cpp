@@ -3,6 +3,7 @@
 #include "PostMoveLogicState.hpp"
 #include "BloodyFatalityLogicState.hpp"
 #include "MoveTransitionLogicState.hpp"
+#include "InitLogicState.hpp"
 #include "GameOverLogicState.hpp"
 
 GameState::GameState(StateStack &stack, State::Context context)
@@ -11,13 +12,14 @@ GameState::GameState(StateStack &stack, State::Context context)
       m_logic_state_stack(context) {
     m_world.build_scene();
 
+    m_logic_state_stack.register_state<InitLogicState, GameState>(StatesID::Init, *this);
     m_logic_state_stack.register_state<MoveLogicState, GameState>(StatesID::Move, *this);
     m_logic_state_stack.register_state<PostMoveLogicState, GameState>(StatesID::PostMove, *this);
     m_logic_state_stack.register_state<BloodyFatalityLogicState, GameState>(StatesID::BloodyFatality, *this);
     m_logic_state_stack.register_state<MoveTransitionLogicState, GameState>(StatesID::MoveTransition, *this);
     m_logic_state_stack.register_state<GameOverLogicState, GameState>(StatesID::GameOver, *this);
 
-    m_logic_state_stack.push_state(StatesID::Move);
+    m_logic_state_stack.push_state(StatesID::Init);
 }
 
 void GameState::draw() {
