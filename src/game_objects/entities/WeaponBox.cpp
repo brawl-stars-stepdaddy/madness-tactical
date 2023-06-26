@@ -1,8 +1,9 @@
 #include "game_objects/entities/WeaponBox.hpp"
+#include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"
 #include "utils/GuiUtil.hpp"
-#include "utils/ResourceIdentifiers.hpp"
+#include "utils/ResourceHolder.hpp"
 
 WeaponBox::WeaponBox(World &world, sf::FloatRect rect) : Box(world) {
     m_sprite = static_cast<sf::Sprite>(

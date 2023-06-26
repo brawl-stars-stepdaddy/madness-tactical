@@ -1,10 +1,10 @@
-#include "game_objects/weapons/Bazooka.hpp"
 #include <cmath>
+#include "game_objects/weapons/Bazooka.hpp"
 #include "game_objects/entities/CollisionProjectile.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Bazooka::Bazooka(World &world, Unit *parent) : ChargeableWeapon(world) {
     m_parent = parent;
@@ -40,7 +40,7 @@ void Bazooka::launch() {
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;
     }
-    angle += Weapon::m_parent->getRotation() / (180 / M_PI);
+    angle += static_cast<float>(Weapon::m_parent->getRotation() / (180 / M_PI));
     m_charge_level = m_init_charge_level;
     sf::Vector2f start_position = {
         m_parent->get_body().get_position().x + cos(angle) * 2,

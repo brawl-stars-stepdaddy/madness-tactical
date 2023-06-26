@@ -1,19 +1,19 @@
-#ifndef MADNESS_TACTICAL_GAMESTATE_HPP
-#define MADNESS_TACTICAL_GAMESTATE_HPP
+#ifndef GAME_STATE_HPP_
+#define GAME_STATE_HPP_
 
 #include "StateStack.hpp"
 #include "logic/World.hpp"
-#include "logic/controllers/DistantWeaponController.hpp"
-#include "logic/controllers/LaunchWeaponController.hpp"
 #include "logic/events/EventManager.hpp"
 
 struct GameState : State {
 public:
     GameState(StateStack &stack, Context context);
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
+
     EventManager *get_event_manager();
     TeamManager *get_team_manager();
     StateStack *get_logic_state_stack();
@@ -26,4 +26,4 @@ private:
     StateStack m_logic_state_stack;
 };
 
-#endif
+#endif // GAME_STATE_HPP_

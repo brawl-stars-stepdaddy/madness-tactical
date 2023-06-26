@@ -8,30 +8,30 @@
 struct World;
 
 struct Projectile : Entity {
-    Projectile(
-        World &,
-        sf::Vector2f,
-        sf::Vector2f,
-        float,
-        float,
-        bool,
-        bool,
-        TexturesID
-    );
+public:
+    Projectile(World &world,
+               sf::Vector2f center,
+               sf::Vector2f impulse,
+               float radius,
+               float explosion_radius,
+               bool is_sensor,
+               bool is_static,
+               TexturesID texture
+               );
 
     CircleBody &get_body() override;
     EntityType get_type() override;
 
-    void on_collision(std::shared_ptr<Entity>) override;
-    void on_explosion(const Explosion &) override;
+    void on_collision(std::shared_ptr<Entity> other_object) override;
+    void on_explosion(const Explosion &explosion) override;
 
 protected:
-    void draw_current(sf::RenderTarget &target, sf::RenderStates)
-        const override;
+    void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;
     void update_current(sf::Time delta_time) override;
 
     sf::Sprite m_sprite;
     CircleBody m_body;
+
     bool m_is_exploded = false;
     float m_explosion_radius;
 };

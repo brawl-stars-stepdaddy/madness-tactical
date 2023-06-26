@@ -2,8 +2,8 @@
 #include "game_objects/entities/KettlebellProjectile.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Kettlebell::Kettlebell(World &world, Unit *parent) : Weapon(world) {
     m_parent = parent;

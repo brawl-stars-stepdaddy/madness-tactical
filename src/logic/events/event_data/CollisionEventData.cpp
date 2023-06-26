@@ -1,5 +1,4 @@
 #include "logic/events/event_data/CollisionEventData.hpp"
-#include <utility>
 
 CollisionEventData::CollisionEventData(
     std::shared_ptr<Entity> first_object,

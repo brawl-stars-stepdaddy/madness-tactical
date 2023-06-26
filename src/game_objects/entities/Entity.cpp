@@ -2,16 +2,14 @@
 #include "game_objects/bodies/Body.hpp"
 #include "logic/World.hpp"
 
-Entity::Entity(World &world) : SceneNode(world) {
-}
+Entity::Entity(World &world) : SceneNode(world) {}
 
 void Entity::update_current([[maybe_unused]] sf::Time delta_time) {
     auto [x, y] = get_body().get_position();
     float gravitation_rotation = atan2(x, y);
     setPosition({x * World::SCALE, y * World::SCALE});
     setRotation(
-        -(get_body().get_rotation() + gravitation_rotation + M_PI) *
-        (180.0f / M_PI)
+        static_cast<float>(-(get_body().get_rotation() + gravitation_rotation + M_PI) * (180.0f / M_PI))
     );
 
     b2Body *body = get_body().get_b2Body();

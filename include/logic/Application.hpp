@@ -1,13 +1,9 @@
-#ifndef GAME_HPP_
-#define GAME_HPP_
+#ifndef APPLICATION_HPP_
+#define APPLICATION_HPP_
 
 #include <SFML/Graphics.hpp>
-#include "GameLogic.hpp"
-#include "World.hpp"
-#include "controllers/Controller.hpp"
 #include "states/StateStack.hpp"
 #include "utils/ResourceHolder.hpp"
-#include "utils/ResourceIdentifiers.hpp"
 
 struct Application {
 public:
@@ -25,10 +21,11 @@ private:
     sf::Text m_statistics_text;
     sf::Font m_statistics_font;
     sf::Time m_statistics_update_time;
-    int m_statistics_num_frames;
+    int m_statistics_num_frames{};
+
     StateStack m_state_stack;
     TextureHolder m_textures;
     FontHolder m_font_holder;
 };
 
-#endif
+#endif // APPLICATION_HPP_

@@ -1,5 +1,4 @@
 #include "utils/ContactListener.hpp"
-#include <memory>
 #include "game_objects/entities/Entity.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/CollisionEventData.hpp"
@@ -46,5 +45,4 @@ void ContactListener::EndContact(b2Contact *contact) {
     );
 }
 
-ContactListener::ContactListener(World &world) : m_world(&world) {
-}
+ContactListener::ContactListener(World &world) : m_world(&world) {}

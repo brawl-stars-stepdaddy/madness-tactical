@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_DISTANTWEAPONCONTROLLER_HPP
-#define MADNESS_TACTICAL_DISTANTWEAPONCONTROLLER_HPP
+#ifndef DISTANT_WEAPON_CONTROLLER_HPP_
+#define DISTANT_WEAPON_CONTROLLER_HPP_
 
 #include "Controller.hpp"
 
@@ -13,4 +13,4 @@ private:
     GameState *m_game_state;
 };
 
-#endif
+#endif // DISTANT_WEAPON_CONTROLLER_HPP_

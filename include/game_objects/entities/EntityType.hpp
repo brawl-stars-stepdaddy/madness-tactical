@@ -3,12 +3,11 @@
 
 enum class EntityType {
     BOX,
-    MAP,
-    PROJECTILE,
     EXPLOSION,
-    UNIT,
-    JUMP_SENSOR,
-    PLANET_CORE
+    MAP,
+    PLANET_CORE,
+    PROJECTILE,
+    UNIT
 };
 
 #endif  // ENTITY_TYPE_HPP_

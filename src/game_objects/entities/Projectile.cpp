@@ -2,6 +2,7 @@
 #include "game_objects/entities/ExplosionEntity.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Projectile::Projectile(
     World &world,
@@ -52,8 +53,6 @@ EntityType Projectile::get_type() {
     return EntityType::PROJECTILE;
 }
 
-void Projectile::on_collision(std::shared_ptr<Entity> other_object) {
-}
+void Projectile::on_collision(std::shared_ptr<Entity> other_object) {}
 
-void Projectile::on_explosion(const Explosion &) {
-}
+void Projectile::on_explosion(const Explosion &) {}

@@ -1,10 +1,6 @@
 #include "logic/controllers/Controller.hpp"
-#include "logic/events/EventManager.hpp"
-#include "logic/events/EventType.hpp"
-#include "logic/events/event_data/ActionEventData.hpp"
 
-Controller::Controller() {
-}
+Controller::Controller() = default;
 
 void Controller::handle_input(const sf::Event &event) {
     EventType action;

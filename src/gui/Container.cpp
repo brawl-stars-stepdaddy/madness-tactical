@@ -1,8 +1,8 @@
 #include "gui/Container.hpp"
 
 namespace GUI {
-Container::Container() : m_children(), m_selected_child(-1) {
-}
+
+Container::Container() : m_children(), m_selected_child(-1) {}
 
 void Container::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
@@ -58,7 +58,7 @@ void Container::select_next() {
     }
     int next = m_selected_child;
     do {
-        next = (next + 1) % m_children.size();
+        next = static_cast<int>((next + 1) % m_children.size());
     } while (!m_children[next]->is_selectable());
     select(next);
 }
@@ -69,8 +69,9 @@ void Container::select_previous() {
     }
     int prev = m_selected_child;
     do {
-        prev = (prev + m_children.size() - 1) % m_children.size();
+        prev = static_cast<int>((prev + m_children.size() - 1) % m_children.size());
     } while (!m_children[prev]->is_selectable());
     select(prev);
 }
+
 }  // namespace GUI

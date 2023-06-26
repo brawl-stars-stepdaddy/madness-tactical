@@ -29,8 +29,8 @@ void center(sf::Shape &shape) {
 
 void resize(sf::Sprite &sprite, sf::Vector2<unsigned int> size) {
     sprite.setScale(
-        size.x / sprite.getLocalBounds().width,
-        size.y / sprite.getLocalBounds().height
+        static_cast<float>(size.x) / sprite.getLocalBounds().width,
+        static_cast<float>(size.y) / sprite.getLocalBounds().height
     );
 }
 }  // namespace GuiUtil

@@ -9,11 +9,13 @@ struct World;
 
 struct ExplosionEntity : Entity {
 public:
-    ExplosionEntity(World &world, Explosion);
+    ExplosionEntity(World &world, Explosion explosion);
+
     EntityType get_type() override;
     Body &get_body() override;
-    void on_explosion(const Explosion &) override{};
-    void on_collision(std::shared_ptr<Entity>) override;
+
+    void on_explosion(const Explosion &explosion) override {};
+    void on_collision(std::shared_ptr<Entity> other_object) override;
 
 private:
     Explosion m_explosion;

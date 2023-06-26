@@ -1,5 +1,4 @@
 #include "logic/states/TitleState.hpp"
-#include <iostream>
 #include "utils/GuiUtil.hpp"
 
 TitleState::TitleState(StateStack &stack, State::Context context)
@@ -104,7 +103,8 @@ void TitleState::draw() {
         ));
         get_context().window->draw(m_logo_sprite);
         get_context().window->draw(fade);
-    } else if (m_current_time <= m_show_text_time * 2.f + m_time_per_logo * static_cast<float>(m_n_logos) + sf::seconds(1)) {
+    }
+    else if (m_current_time <= m_show_text_time * 2.f + m_time_per_logo * static_cast<float>(m_n_logos) + sf::seconds(1)) {
         sf::Time t1 =
             m_current_time - (m_show_text_time * 2.f +
                               m_time_per_logo * static_cast<float>(m_n_logos) +
@@ -153,7 +153,7 @@ bool TitleState::update(sf::Time delta_time) {
     m_current_time += delta_time;
     if (m_current_time >= m_total_title_time) {
         request_stack_pop();
-        request_stack_push(StatesID::Menu);
+        request_stack_push(StatesID::MENU);
     }
     return false;
 }
@@ -161,7 +161,7 @@ bool TitleState::update(sf::Time delta_time) {
 bool TitleState::handle_input(const sf::Event &event) {
     if (event.type == sf::Event::KeyReleased) {
         request_stack_pop();
-        request_stack_push(StatesID::Menu);
+        request_stack_push(StatesID::MENU);
     }
     return false;
 }

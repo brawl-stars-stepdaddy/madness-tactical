@@ -13,25 +13,25 @@ GameState::GameState(StateStack &stack, State::Context context)
     m_world.build_scene();
 
     m_logic_state_stack.register_state<InitLogicState, GameState>(
-        StatesID::Init, *this
+            StatesID::INIT, *this
     );
     m_logic_state_stack.register_state<MoveLogicState, GameState>(
-        StatesID::Move, *this
+            StatesID::MOVE, *this
     );
     m_logic_state_stack.register_state<PostMoveLogicState, GameState>(
-        StatesID::PostMove, *this
+            StatesID::POST_MOVE, *this
     );
     m_logic_state_stack.register_state<BloodyFatalityLogicState, GameState>(
-        StatesID::BloodyFatality, *this
+            StatesID::BLOODY_FATALITY, *this
     );
     m_logic_state_stack.register_state<MoveTransitionLogicState, GameState>(
-        StatesID::MoveTransition, *this
+            StatesID::MOVE_TRANSITION, *this
     );
     m_logic_state_stack.register_state<GameOverLogicState, GameState>(
-        StatesID::GameOver, *this
+            StatesID::GAME_OVER, *this
     );
 
-    m_logic_state_stack.push_state(StatesID::Init);
+    m_logic_state_stack.push_state(StatesID::INIT);
 }
 
 void GameState::draw() {
@@ -50,7 +50,7 @@ bool GameState::handle_input(const sf::Event &event) {
     m_logic_state_stack.handle_input(event);
     if (event.type == sf::Event::KeyReleased &&
         event.key.code == sf::Keyboard::Escape) {
-        request_stack_push(StatesID::Pause);
+        request_stack_push(StatesID::PAUSE);
     }
     return false;
 }

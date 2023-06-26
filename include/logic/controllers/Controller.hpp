@@ -1,16 +1,15 @@
-#ifndef MADNESS_TACTICAL_CONTROLLER_HPP
-#define MADNESS_TACTICAL_CONTROLLER_HPP
+#ifndef MADNESS_TACTICAL_CONTROLLER_HPP_
+#define MADNESS_TACTICAL_CONTROLLER_HPP_
 
 #include <SFML/Window/Event.hpp>
 #include <functional>
 #include <map>
-#include <set>
 #include "logic/events/EventType.hpp"
 
 enum class ControllerStrategy {
-    None,
-    LaunchWeapon,
-    DistantWeapon,
+    NONE,
+    LAUNCH_WEAPON,
+    DISTANT_WEAPON
 };
 
 struct Controller {
@@ -37,4 +36,4 @@ protected:
     std::map<EventType, std::function<void()>> m_action_binding;
 };
 
-#endif  // MADNESS_TACTICAL_CONTROLLER_HPP
+#endif  // MADNESS_TACTICAL_CONTROLLER_HPP_

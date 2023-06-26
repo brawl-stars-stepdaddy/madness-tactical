@@ -1,6 +1,7 @@
+#include <CDT.h>
+#include <clipper2/clipper.h>
 #include "game_objects/bodies/MapBody.hpp"
-#include "CDT.h"
-#include "clipper2/clipper.h"
+#include "utils/Explosion.hpp"
 
 MapBody::MapBody(
     Map *parent,
@@ -60,7 +61,7 @@ float MapBody::get_rotation() const {
             );
             edges.emplace_back(index + i, index + (i + 1) % chain.size());
         }
-        index += chain.size();
+        index += static_cast<int>(chain.size());
     }
 
     cdt.insertVertices(vertices);

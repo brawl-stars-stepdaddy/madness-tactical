@@ -1,25 +1,18 @@
 #ifndef WORLD_HPP_
 #define WORLD_HPP_
 
-#include <SFML/Graphics.hpp>
 #include <array>
-#include "GameLogic.hpp"
-#include "box2d/box2d.h"
+#include <box2d/box2d.h>
 #include "events/EventManager.hpp"
-#include "game_objects/SceneNode.hpp"
-#include "game_objects/entities/Entity.hpp"
-#include "game_objects/entities/Map.hpp"
-#include "game_objects/entities/Unit.hpp"
 #include "game_objects/weapons/Process.hpp"
+#include "logic/TeamManager.hpp"
 #include "states/State.hpp"
 #include "utils/Camera.hpp"
-#include "utils/ResourceHolder.hpp"
-#include "utils/ResourceIdentifiers.hpp"
 
-struct GameState;
-struct Map;
 struct CollisionEventListener;
 struct DestructionEventListener;
+struct GameState;
+struct Map;
 
 struct World {
 public:
@@ -30,12 +23,13 @@ public:
         LAYER_COUNT,
     };
 
-    World(
-        State &game_state,
-        State::Context &context,
-        EventManager &event_manager,
-        TeamManager &team_manager
-    );
+    static constexpr float SCALE = 100.f;
+
+    World(State &game_state,
+          State::Context &context,
+          EventManager &event_manager,
+          TeamManager &team_manager
+          );
 
     void build_scene();
     void build_start_scene();
@@ -51,15 +45,11 @@ public:
 
     Camera *get_camera();
 
-    Map *get_map() {
-        return m_map;
-    }
-
-    TextureHolder &get_texture_holder() {
+    TextureHolder &get_texture_holder() const {
         return *m_context.textures;
     }
 
-    FontHolder &get_font_holder() {
+    FontHolder &get_font_holder() const {
         return *m_context.fonts;
     }
 
@@ -81,8 +71,6 @@ public:
         return m_event_manager;
     }
 
-    static constexpr float SCALE = 100.f;
-
     void add_process(std::unique_ptr<Process>);
     void execute_processes(sf::Time);
 
@@ -95,7 +83,7 @@ public:
     void create_unit();
 
 protected:
-    void load_resources();
+    void load_resources() const;
 
     State *m_game_state;
     State::Context m_context;
@@ -106,10 +94,8 @@ protected:
     sf::FloatRect m_world_bounds;
     Unit *m_active_unit;
     b2World m_physics_world;
-    Map *m_map;
     CollisionEventListener *m_collision_listener;
     DestructionEventListener *m_destruction_listener;
-    GameLogic m_game_logic;
     Camera m_camera;
     TeamManager *m_team_manager;
     EventManager *m_event_manager;
@@ -118,4 +104,4 @@ protected:
     std::vector<Unit *> m_bloody_fatality_candidates;
 };
 
-#endif
+#endif // WORLD_HPP_

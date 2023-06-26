@@ -2,6 +2,6 @@
 
 void ExplosionEventListener::process(const EventData &event) {
     assert(event.get_event_type() == EventType::EXPLOSION);
-    auto explosion_event = static_cast<const ExplosionEventData &>(event);
+    auto explosion_event = dynamic_cast<const ExplosionEventData &>(event);
     explosion_event.get_object()->on_explosion(explosion_event.get_explosion());
 }

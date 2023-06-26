@@ -1,7 +1,6 @@
 #ifndef TEAM_MANAGER_HPP_
 #define TEAM_MANAGER_HPP_
 
-#include <algorithm>
 #include <memory>
 #include <vector>
 #include "Team.hpp"

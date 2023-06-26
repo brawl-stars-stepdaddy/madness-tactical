@@ -1,5 +1,4 @@
 #include "utils/Camera.hpp"
-#include <utility>
 #include "game_objects/bodies/Body.hpp"
 #include "game_objects/entities/Entity.hpp"
 #include "logic/World.hpp"
@@ -17,52 +16,49 @@ void SmoothFollowStrategy::update(sf::Time delta_time) {
     }
     sf::Vector2f delta_target =
         m_target->get_body().get_position() - m_camera->get_offset();
-    float length = sqrt(pow(delta_target.x, 2) + pow(delta_target.y, 2));
+    float length = sqrtf(powf(delta_target.x, 2) + powf(delta_target.y, 2));
     sf::Vector2f delta_move = delta_target * m_convergence_factor;
-    float speed = sqrt(pow(delta_move.x, 2) + pow(delta_move.y, 2));
+    float speed = sqrtf(powf(delta_move.x, 2) + powf(delta_move.y, 2));
     if (speed == 0) {
         return;
     }
     float target_distance =
-        sqrt(pow(delta_target.x, 2) + pow(delta_target.y, 2));
+        sqrtf(powf(delta_target.x, 2) + powf(delta_target.y, 2));
     if (speed < m_min_speed) {
         delta_move *= m_min_speed / speed;
         speed = m_min_speed;
     }
     if (speed * delta_time.asSeconds() > target_distance) {
         delta_move *= target_distance / speed;
-        speed = target_distance / delta_time.asSeconds();
     }
     m_camera->set_offset(
         m_camera->get_offset() + delta_move * delta_time.asSeconds()
     );
     sf::Vector2f delta_target2 =
         m_target->get_body().get_position() - m_camera->get_offset();
-    float length2 = sqrt(pow(delta_target2.x, 2) + pow(delta_target2.y, 2));
+    float length2 = sqrtf(powf(delta_target2.x, 2) + powf(delta_target2.y, 2));
     float delta_angle =
-        m_target->getRotation() / (180.f / M_PI) - m_camera->get_angle();
-    delta_angle -= floor(delta_angle / M_PI) * M_PI;
-    if (delta_angle > M_PI_2) {
-        delta_angle = M_PI - delta_angle;
+        m_target->getRotation() / (180.f / M_PIf) - m_camera->get_angle();
+    delta_angle -= floor(delta_angle / M_PIf) * M_PIf;
+    if (delta_angle > M_PI_2f) {
+        delta_angle = M_PIf - delta_angle;
     }
     float delta_rotation = delta_angle / length * length2;
     m_camera->set_angle(
-        m_target->getRotation() / (180.f / M_PI) - delta_rotation
+        m_target->getRotation() / (180.f / M_PIf) - delta_rotation
     );
 }
 
-Camera::Camera(std::nullptr_t) {
-}
+Camera::Camera(std::nullptr_t) {}
 
 Camera::Camera(sf::Vector2f offset, float zoom)
-    : m_offset(offset), m_current_zoom(zoom), m_expected_zoom(zoom) {
-}
+    : m_offset(offset), m_current_zoom(zoom), m_expected_zoom(zoom) {}
 
 void Camera::update(sf::Time delta_time) {
     if (m_follow_strategy) {
         m_follow_strategy->update(delta_time);
     }
-    m_expected_zoom *= pow(m_zooming, delta_time.asSeconds());
+    m_expected_zoom *= powf(m_zooming, delta_time.asSeconds());
     float delta_zoom = m_expected_zoom - m_current_zoom;
     float zoom_speed = delta_zoom * m_zoom_convergence_factor;
     if (zoom_speed < 0) {
@@ -136,19 +132,19 @@ void Camera::move_down() {
     m_is_moving_down = true;
 }
 
-bool Camera::is_moving_left() {
+bool Camera::is_moving_left() const {
     return m_is_moving_left;
 }
 
-bool Camera::is_moving_right() {
+bool Camera::is_moving_right() const {
     return m_is_moving_right;
 }
 
-bool Camera::is_moving_up() {
+bool Camera::is_moving_up() const {
     return m_is_moving_up;
 }
 
-bool Camera::is_moving_down() {
+bool Camera::is_moving_down() const {
     return m_is_moving_down;
 }
 
@@ -166,7 +162,7 @@ void ControlledFollowStrategy::update(sf::Time delta_time) {
     if (m_camera->is_moving_right()) {
         angle += m_rotation_speed * delta_time.asSeconds();
     }
-    m_camera->set_angle(angle + M_PI_2);
+    m_camera->set_angle(angle + M_PI_2f);
     float dist = sqrtf(
         powf(m_camera->get_offset().x, 2) + powf(m_camera->get_offset().y, 2)
     );

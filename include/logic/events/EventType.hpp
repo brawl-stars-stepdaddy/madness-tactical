@@ -1,5 +1,5 @@
-#ifndef EVENT_TYPE_HPP
-#define EVENT_TYPE_HPP
+#ifndef EVENT_TYPE_HPP_
+#define EVENT_TYPE_HPP_
 
 enum class EventType {
     EXPLOSION,
@@ -23,4 +23,4 @@ enum class EventType {
     ADD_UNIT
 };
 
-#endif
+#endif // EVENT_TYPE_HPP_

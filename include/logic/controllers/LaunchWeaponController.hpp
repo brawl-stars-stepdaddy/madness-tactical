@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_LAUNCHWEAPONCONTROLLER_HPP
-#define MADNESS_TACTICAL_LAUNCHWEAPONCONTROLLER_HPP
+#ifndef LAUNCH_WEAPON_CONTROLLER_HPP_
+#define LAUNCH_WEAPON_CONTROLLER_HPP_
 
 #include "Controller.hpp"
 
@@ -13,4 +13,4 @@ private:
     GameState *m_game_state;
 };
 
-#endif
+#endif // LAUNCH_WEAPON_CONTROLLER_HPP_

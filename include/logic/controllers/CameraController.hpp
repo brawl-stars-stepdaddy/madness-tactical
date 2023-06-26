@@ -13,4 +13,4 @@ private:
     GameState *m_game_state;
 };
 
-#endif  // CAMERA_CONTROLLER_HPP_
+#endif // CAMERA_CONTROLLER_HPP_

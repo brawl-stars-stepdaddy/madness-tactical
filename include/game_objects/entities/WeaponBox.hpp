@@ -2,11 +2,12 @@
 #define WEAPON_BOX_HPP_
 
 #include "Box.hpp"
-#include "game_objects/weapons/Weapon.hpp"
 
 struct WeaponBox : Box {
-    WeaponBox(World &, sf::FloatRect);
-    void on_collision(std::shared_ptr<Entity>) override;
+public:
+    WeaponBox(World &world, sf::FloatRect rect);
+
+    void on_collision(std::shared_ptr<Entity> other_object) override;
 };
 
 #endif  // WEAPON_BOX_HPP_

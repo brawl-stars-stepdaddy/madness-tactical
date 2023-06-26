@@ -1,17 +1,17 @@
-#ifndef MADNESS_TACTICAL_STATEIDENTIFIERS_HPP
-#define MADNESS_TACTICAL_STATEIDENTIFIERS_HPP
+#ifndef STATE_IDENTIFIERS_HPP_
+#define STATE_IDENTIFIERS_HPP_
 
 enum class StatesID {
-    Title,
-    Menu,
-    Game,
-    Pause,
-    Init,
-    Move,
-    PostMove,
-    BloodyFatality,
-    MoveTransition,
-    GameOver
+    TITLE,
+    MENU,
+    GAME,
+    PAUSE,
+    INIT,
+    MOVE,
+    POST_MOVE,
+    BLOODY_FATALITY,
+    MOVE_TRANSITION,
+    GAME_OVER
 };
 
-#endif
+#endif // STATE_IDENTIFIERS_HPP_

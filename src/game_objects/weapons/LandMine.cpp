@@ -2,7 +2,7 @@
 #include "game_objects/entities/TimerProjectile.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
+#include "utils/ResourceHolder.hpp"
 
 LandMine::LandMine(World &world, Unit *parent) : Weapon(world) {
     m_parent = parent;

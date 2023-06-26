@@ -1,8 +1,7 @@
-#include "logic/states/logic_states/MoveTransitionLogicState.hpp"
 #include <random>
+#include "logic/states/logic_states/MoveTransitionLogicState.hpp"
 #include "game_objects/entities/HealingBox.hpp"
 #include "game_objects/entities/WeaponBox.hpp"
-#include "game_objects/weapons/Weapon.hpp"
 
 MoveTransitionLogicState::MoveTransitionLogicState(
     StateStack &stack,
@@ -40,8 +39,7 @@ MoveTransitionLogicState::MoveTransitionLogicState(
     layer->attach_child(std::move(box));
 }
 
-void MoveTransitionLogicState::draw() {
-}
+void MoveTransitionLogicState::draw() {}
 
 bool MoveTransitionLogicState::update(sf::Time delta_time) {
     m_timer -= delta_time;
@@ -49,10 +47,10 @@ bool MoveTransitionLogicState::update(sf::Time delta_time) {
         request_stack_clear();
         if (m_game_state->get_team_manager()->get_number_available_teams() <=
             1) {
-            request_stack_push(StatesID::GameOver);
+            request_stack_push(StatesID::GAME_OVER);
         } else {
             m_game_state->get_team_manager()->move_transition();
-            request_stack_push(StatesID::Move);
+            request_stack_push(StatesID::MOVE);
         }
     }
     return false;

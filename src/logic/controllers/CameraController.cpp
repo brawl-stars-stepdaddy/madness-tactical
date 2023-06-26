@@ -1,5 +1,4 @@
 #include "logic/controllers/CameraController.hpp"
-#include "logic/events/EventManager.hpp"
 #include "logic/events/event_data/ActionEventData.hpp"
 #include "logic/states/GameState.hpp"
 

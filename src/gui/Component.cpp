@@ -1,8 +1,6 @@
 #include "gui/Component.hpp"
 
 namespace GUI {
-Component::Component() : m_is_selected(false), m_is_active(false) {
-}
 
 bool Component::is_selected() const {
     return m_is_selected;

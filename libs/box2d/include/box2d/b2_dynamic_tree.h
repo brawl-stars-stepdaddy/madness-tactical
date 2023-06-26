@@ -80,7 +80,7 @@ public:
 	/// Destroy a proxy. This asserts if the id is invalid.
 	void DestroyProxy(int32 proxyId);
 
-	/// Move a proxy with a swepted AABB. If the proxy has moved outside of its fattened AABB,
+	/// MOVE a proxy with a swepted AABB. If the proxy has moved outside of its fattened AABB,
 	/// then the proxy is removed from the tree and re-inserted. Otherwise
 	/// the function returns immediately.
 	/// @return true if the proxy was re-inserted.

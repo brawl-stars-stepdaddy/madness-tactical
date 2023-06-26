@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_STATESTACK_HPP
-#define MADNESS_TACTICAL_STATESTACK_HPP
+#ifndef STATE_STACK_HPP_
+#define STATE_STACK_HPP_
 
 #include <SFML/Graphics.hpp>
 #include <functional>
@@ -16,15 +16,21 @@ public:
     };
 
     explicit StateStack(State::Context context);
+
     template <typename T>
     void register_state(StatesID state_id);
+
     void update(sf::Time delta_time);
     void draw();
+
     void handle_input(const sf::Event &event);
     void handle_realtime_input();
+
     void push_state(StatesID state_id);
+
     template <typename T, typename U>
-    void register_state(StatesID state_id, U &t);
+    void register_state(StatesID state_id, U &arg);
+
     void pop_state();
     void clear_states();
 
@@ -53,10 +59,10 @@ void StateStack::register_state(StatesID state_id) {
 }
 
 template <typename T, typename U>
-void StateStack::register_state(StatesID state_id, U &arg1) {
-    m_factories[state_id] = [this, &arg1]() {
-        return State::Ptr(new T(*this, m_context, arg1));
+void StateStack::register_state(StatesID state_id, U &arg) {
+    m_factories[state_id] = [this, &arg]() {
+        return State::Ptr(new T(*this, m_context, arg));
     };
 }
 
-#endif
+#endif // STATE_STACK_HPP_

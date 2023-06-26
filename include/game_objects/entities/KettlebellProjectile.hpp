@@ -4,12 +4,19 @@
 #include "Projectile.hpp"
 
 struct KettlebellProjectile : Projectile {
-    KettlebellProjectile(World &, sf::Vector2f, float, float, TexturesID);
+public:
+    KettlebellProjectile(World &world,
+                         sf::Vector2f center,
+                         float radius,
+                         float explosion_radius,
+                         TexturesID texture
+                         );
 
     void on_collision(std::shared_ptr<Entity>) override;
 
 private:
     void update_current(sf::Time delta_time) override;
+
     float m_radius;
 };
 

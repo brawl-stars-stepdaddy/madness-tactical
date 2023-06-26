@@ -25,7 +25,7 @@ bool InitLogicState::update(sf::Time delta_time) {
     if (m_game_state->get_team_manager()->get_number_available_units() >=
         m_team_number * m_team_size) {
         request_stack_clear();
-        request_stack_push(StatesID::Move);
+        request_stack_push(StatesID::MOVE);
     }
     return false;
 }

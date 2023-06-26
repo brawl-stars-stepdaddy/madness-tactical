@@ -1,6 +1,10 @@
-#include "logic/states/logic_states/MoveLogicState.hpp"
+#include "game_objects/entities/Unit.hpp"
 #include "game_objects/weapons/Weapon.hpp"
+#include "logic/states/logic_states/MoveLogicState.hpp"
+#include "logic/controllers/LaunchWeaponController.hpp"
+#include "logic/controllers/DistantWeaponController.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 MoveLogicState::MoveLogicState(
     StateStack &stack,
@@ -34,7 +38,7 @@ MoveLogicState::MoveLogicState(
     m_timer_text.setCharacterSize(80);
     m_timer_text.setPosition(
         get_context().window->getView().getSize().x / 2.f,
-        m_timer_text.getCharacterSize()
+        static_cast<float>(m_timer_text.getCharacterSize())
     );
 }
 
@@ -50,7 +54,7 @@ bool MoveLogicState::update(sf::Time delta_time) {
     GuiUtil::center(m_timer_text);
     if (m_timer <= sf::Time::Zero) {
         request_stack_clear();
-        request_stack_push(StatesID::BloodyFatality);
+        request_stack_push(StatesID::BLOODY_FATALITY);
     }
     return false;
 }

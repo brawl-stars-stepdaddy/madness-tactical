@@ -1,9 +1,10 @@
-#ifndef MADNESS_TACTICAL_CONTAINER_HPP
-#define MADNESS_TACTICAL_CONTAINER_HPP
+#ifndef CONTAINER_HPP_
+#define CONTAINER_HPP_
 
 #include "Component.hpp"
 
 namespace GUI {
+
 struct Container : Component {
 public:
     Container();
@@ -13,8 +14,7 @@ public:
     void handle_input(const sf::Event &event) override;
 
 private:
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states)
-        const override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     bool has_selection() const;
     void select(int index);
@@ -24,6 +24,7 @@ private:
     std::vector<Component::Ptr> m_children;
     int m_selected_child;
 };
+
 }  // namespace GUI
 
-#endif
+#endif // CONTAINER_HPP_

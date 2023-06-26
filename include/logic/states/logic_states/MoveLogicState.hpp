@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_LOGICMOVESTATE_HPP
-#define MADNESS_TACTICAL_LOGICMOVESTATE_HPP
+#ifndef LOGIC_MOVE_STATE_HPP_
+#define LOGIC_MOVE_STATE_HPP_
 
 #include "logic/controllers/Controller.hpp"
 #include "logic/states/GameState.hpp"
@@ -7,10 +7,11 @@
 struct MoveLogicState : State {
 public:
     MoveLogicState(StateStack &stack, Context context, GameState &game_state);
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
 
 private:
     sf::Time m_timer = sf::seconds(10);
@@ -19,4 +20,4 @@ private:
     sf::Text m_timer_text;
 };
 
-#endif
+#endif // LOGIC_MOVE_STATE_HPP_

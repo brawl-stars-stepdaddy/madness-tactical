@@ -13,4 +13,4 @@ private:
     GameState *m_game_state;
 };
 
-#endif  // INIT_CONTROLLER_HPP_
+#endif // INIT_CONTROLLER_HPP_

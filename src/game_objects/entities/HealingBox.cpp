@@ -1,8 +1,9 @@
 #include "game_objects/entities/HealingBox.hpp"
+#include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"
 #include "utils/GuiUtil.hpp"
-#include "utils/ResourceIdentifiers.hpp"
+#include "utils/ResourceHolder.hpp"
 
 HealingBox::HealingBox(World &world, sf::FloatRect rect) : Box(world) {
     m_sprite = static_cast<sf::Sprite>(

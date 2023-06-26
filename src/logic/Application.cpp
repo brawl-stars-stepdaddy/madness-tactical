@@ -18,11 +18,11 @@ Application::Application()
 }
 
 void Application::register_states() {
-    m_state_stack.register_state<TitleState>(StatesID::Title);
-    m_state_stack.register_state<MenuState>(StatesID::Menu);
-    m_state_stack.register_state<GameState>(StatesID::Game);
-    m_state_stack.register_state<PauseState>(StatesID::Pause);
-    m_state_stack.push_state(StatesID::Title);
+    m_state_stack.register_state<TitleState>(StatesID::TITLE);
+    m_state_stack.register_state<MenuState>(StatesID::MENU);
+    m_state_stack.register_state<GameState>(StatesID::GAME);
+    m_state_stack.register_state<PauseState>(StatesID::PAUSE);
+    m_state_stack.push_state(StatesID::TITLE);
 }
 
 void Application::run() {
@@ -50,7 +50,7 @@ void Application::run() {
 }
 
 void Application::process_input() {
-    sf::Event event;
+    sf::Event event{};
     while (m_window.pollEvent(event)) {
         m_state_stack.handle_input(event);
         switch (event.type) {

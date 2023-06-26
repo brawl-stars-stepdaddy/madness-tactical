@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_TITLESTATE_HPP
-#define MADNESS_TACTICAL_TITLESTATE_HPP
+#ifndef TITLE_STATE_HPP_
+#define TITLE_STATE_HPP_
 
 #include <SFML/Graphics.hpp>
 #include "State.hpp"
@@ -7,10 +7,11 @@
 struct TitleState : State {
 public:
     TitleState(StateStack &stack, Context context);
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
 
 private:
     sf::Sprite m_logo_sprite;
@@ -32,11 +33,11 @@ private:
     sf::Time m_time_per_logo = sf::seconds(.15f);
     sf::Time m_total_title_time = sf::seconds(
         m_show_text_time.asSeconds() * 4 +
-        m_time_per_logo.asSeconds() * m_n_logos + 1.f
+        m_time_per_logo.asSeconds() * static_cast<float>(m_n_logos) + 1.f
     );
     sf::Text m_brawl_stars_stepdaddy_text;
     sf::Text m_in_association_with_text;
     sf::Text m_presents;
 };
 
-#endif
+#endif // TITLE_STATE_HPP_

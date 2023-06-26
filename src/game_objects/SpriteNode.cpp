@@ -19,3 +19,7 @@ void SpriteNode::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
     target.draw(m_sprite, states);
 }
+
+sf::Sprite SpriteNode::get_sprite() {
+    return m_sprite;
+}

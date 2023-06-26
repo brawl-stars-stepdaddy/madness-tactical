@@ -1,9 +1,9 @@
-#ifndef EVENT_MANAGER_HPP
-#define EVENT_MANAGER_HPP
+#ifndef EVENT_MANAGER_HPP_
+#define EVENT_MANAGER_HPP_
 
 #include <list>
+#include <map>
 #include <memory>
-#include <unordered_map>
 #include "EventType.hpp"
 #include "logic/events/event_listeners/EventListener.hpp"
 
@@ -16,10 +16,9 @@ public:
 
     bool add_listener(EventListenerPtr event_listener, const EventType &type);
 
-    bool
-    remove_listener(const EventListener &event_listener, const EventType &type);
+    bool remove_listener(const EventListener &event_listener, const EventType &type);
 
-    bool trigger_event(EventDataPtr event) const;
+    [[nodiscard]] bool trigger_event(EventDataPtr event) const;
 
     bool queue_event(EventDataPtr event);
 
@@ -35,4 +34,4 @@ private:
     int m_current_queue = 0;
 };
 
-#endif
+#endif // EVENT_MANAGER_HPP_

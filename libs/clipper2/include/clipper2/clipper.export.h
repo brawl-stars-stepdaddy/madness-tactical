@@ -122,7 +122,7 @@ namespace Clipper2Lib {
     EXTERN_DLL_EXPORT void DisposeExportedCPolyTreeD(CPolyTreeD*& cpt);
 
 // Boolean clipping:
-// cliptype: None=0, Intersection=1, Union=2, Difference=3, Xor=4
+// cliptype: NONE=0, Intersection=1, Union=2, Difference=3, Xor=4
 // fillrule: EvenOdd=0, NonZero=1, Positive=2, Negative=3
     EXTERN_DLL_EXPORT int BooleanOp64(uint8_t cliptype,
                                       uint8_t fillrule, const CPaths64 subjects,

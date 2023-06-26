@@ -1,7 +1,6 @@
 #include "game_objects/bodies/RectBody.hpp"
 
-RectBody::RectBody() {
-}
+RectBody::RectBody() = default;
 
 RectBody::RectBody(Entity *parent, b2World &world, sf::FloatRect rect) {
     b2BodyDef m_body_def;

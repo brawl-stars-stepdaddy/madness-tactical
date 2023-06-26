@@ -1,5 +1,4 @@
 #include "game_objects/UnitHealthBar.hpp"
-#include <string>
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
 #include "utils/GuiUtil.hpp"
@@ -8,7 +7,7 @@ UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
     : SceneNode(world), m_parent(parent) {
     m_text.setFont(font);
     m_text.setCharacterSize(
-        m_parent->get_sprite().getGlobalBounds().width / 3.f
+        static_cast<int>(m_parent->get_sprite().getGlobalBounds().width / 3.f)
     );
     m_text.setOutlineThickness(
         m_parent->get_sprite().getGlobalBounds().width / 60.f
@@ -22,7 +21,7 @@ UnitHealthBar::UnitHealthBar(World &world, Unit *parent, const sf::Font &font)
     GuiUtil::center(m_text);
     setPosition(
         30, -m_parent->get_sprite().getGlobalBounds().height / 2 -
-                m_text.getCharacterSize()
+                static_cast<float>(m_text.getCharacterSize())
     );
 }
 

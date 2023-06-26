@@ -8,7 +8,7 @@ CollisionEventListener::CollisionEventListener(World &world)
 
 void CollisionEventListener::process(const EventData &event) {
     assert(event.get_event_type() == EventType::COLLISION);
-    auto collision_event = static_cast<const CollisionEventData &>(event);
+    auto collision_event = dynamic_cast<const CollisionEventData &>(event);
     auto first = collision_event.get_first_object();
     auto second = collision_event.get_second_object();
     if (processed_collisions.find({first, second}) ==

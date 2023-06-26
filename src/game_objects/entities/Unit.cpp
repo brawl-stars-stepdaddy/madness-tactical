@@ -1,40 +1,20 @@
-#include "game_objects/entities/Unit.hpp"
 #include <cmath>
-#include <iostream>
+#include "game_objects/entities/Unit.hpp"
 #include "game_objects/UnitHealthBar.hpp"
-#include "game_objects/weapons/Weapon.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
-#include "logic/events/event_data/DestructionEventData.hpp"
 #include "logic/events/event_data/ExplosionEventData.hpp"
 #include "logic/states/GameState.hpp"
 #include "utils/GuiUtil.hpp"
 #include "utils/ResourceHolder.hpp"
 
-TexturesID to_texture_id(Unit::Type type) {
-    switch (type) {
-        case Unit::Type::ENGINEER:
-            return TexturesID::ENGINEER;
-        case Unit::Type::WORM:
-            return TexturesID::WORM;
-        default:
-            throw std::runtime_error("to_texture_id - failed to map Unit::Type"
-            );
-    }
-}
-
 Unit::Unit(
     World &world,
-    Unit::Type type,
     sf::Vector2f center,
-    float radius,
-    int player_id
+    float radius
 )
     : Entity(world),
-      m_type(type),
-      m_sprite(m_world->get_texture_holder().get(to_texture_id(type))),
-      m_body(UnitBody(this, m_world->get_physics_world(), center, radius)),
-      m_player_id(player_id) {
+      m_sprite(m_world->get_texture_holder().get(TexturesID::UNIT)),
+      m_body(UnitBody(this, m_world->get_physics_world(), center, radius)) {
     GuiUtil::shrink_to_rect_scale(m_sprite, radius * 2, radius * 2);
     GuiUtil::center(m_sprite);
 
@@ -82,9 +62,9 @@ void Unit::on_explosion(const Explosion &explosion) {
     auto physic_body = m_body.get_b2Body();
     float x_vector = x - x_explosion;
     float y_vector = y - y_explosion;
-    float distance = sqrt(pow(x_vector, 2) + pow(y_vector, 2));
-    float x_impulse = 100 * x_vector / pow(distance, 2);
-    float y_impulse = 100 * y_vector / pow(distance, 2);
+    float distance = sqrtf(powf(x_vector, 2) + powf(y_vector, 2));
+    float x_impulse = 100 * x_vector / powf(distance, 2);
+    float y_impulse = 100 * y_vector / powf(distance, 2);
     physic_body->ApplyLinearImpulseToCenter({x_impulse, y_impulse}, true);
 
     change_health(static_cast<int>(std::max(
@@ -125,7 +105,7 @@ void Unit::move(sf::Time delta_time, float direction) {
                 b2Min(abs(horizontal_projection + 5.0f * direction), 5.0f) -
             horizontal_projection;
         float impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
-        float angle = atan2(normal.x, normal.y);
+        float angle = atan2f(normal.x, normal.y);
 
         m_body.get_b2Body()->ApplyLinearImpulseToCenter(
             {impulse * sin(angle), impulse * cos(angle)}, true
@@ -136,8 +116,8 @@ void Unit::move(sf::Time delta_time, float direction) {
 void Unit::stop_move(sf::Time delta_time) {
     if (!m_moving_active && m_dumping_active) {
         auto current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_change = -current_velocity.x * 0.9;
-        float vertical_change = -current_velocity.y * 0.9;
+        float horizontal_change = -current_velocity.x * 0.9f;
+        float vertical_change = -current_velocity.y * 0.9f;
         b2Vec2 impulse = {
             m_body.get_b2Body()->GetMass() * horizontal_change,
             m_body.get_b2Body()->GetMass() * vertical_change,
@@ -207,9 +187,9 @@ void Unit::set_activeness(bool new_value) {
 
 void Unit::change_health(int value) {
     if (m_is_active && value < 0) {
-        auto game_state = static_cast<GameState *>(m_world->get_game_state());
+        auto game_state = dynamic_cast<GameState *>(m_world->get_game_state());
         game_state->get_logic_state_stack()->clear_states();
-        game_state->get_logic_state_stack()->push_state(StatesID::BloodyFatality
+        game_state->get_logic_state_stack()->push_state(StatesID::BLOODY_FATALITY
         );
     }
     m_health += value;

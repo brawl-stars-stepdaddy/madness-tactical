@@ -28,9 +28,8 @@ MapGenerator::MapGenerator(
         auto y = static_cast<float>(row - map_size / 2);
         for (int col = 0; col < map_size; ++col) {
             auto x = static_cast<float>(col - map_size / 2);
-            float noise =
-                simplex.fractal(octaves, x + x_offset, y + y_offset) / 2 + 0.5;
-            float multiplier = pow(x * x + y * y, 0.5) / map_size;
+            float noise = simplex.fractal(octaves, x + x_offset, y + y_offset) / 2 + 0.5;
+            float multiplier = powf(x * x + y * y, 0.5) / map_size;
             noise /= std::max(0.001f, multiplier);
             m_noise_map[row][col] = noise > threshold;
         }

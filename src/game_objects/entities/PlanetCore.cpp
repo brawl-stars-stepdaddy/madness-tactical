@@ -1,6 +1,8 @@
 #include "game_objects/entities/PlanetCore.hpp"
+#include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"
+#include "utils/ResourceHolder.hpp"
 
 PlanetCore::PlanetCore(World &world, float radius)
     : Entity(world),
@@ -14,8 +16,8 @@ PlanetCore::PlanetCore(World &world, float radius)
           true
       )) {
     m_sprite.setScale(
-        radius * World::SCALE * 2.1 / m_sprite.getLocalBounds().width,
-        radius * World::SCALE * 2.1 / m_sprite.getLocalBounds().height
+        static_cast<float>(radius * World::SCALE * 2.1 / m_sprite.getLocalBounds().width),
+        static_cast<float>(radius * World::SCALE * 2.1 / m_sprite.getLocalBounds().height)
     );
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);

@@ -1,30 +1,18 @@
 #include "logic/World.hpp"
-#include <chrono>
-#include <random>
-#include <vector>
 #include "game_objects/SpriteNode.hpp"
-#include "game_objects/entities/HealingBox.hpp"
+#include "game_objects/entities/Map.hpp"
 #include "game_objects/entities/PlanetCore.hpp"
 #include "game_objects/entities/Unit.hpp"
-#include "game_objects/entities/WeaponBox.hpp"
-#include "game_objects/weapons/Armageddon.hpp"
 #include "game_objects/weapons/ArmageddonProcess.hpp"
 #include "game_objects/weapons/Bazooka.hpp"
-#include "game_objects/weapons/Grenade.hpp"
-#include "game_objects/weapons/Kettlebell.hpp"
-#include "game_objects/weapons/LandMine.hpp"
-#include "game_objects/weapons/Laser.hpp"
-#include "logic/events/EventManager.hpp"
-#include "logic/events/EventType.hpp"
-#include "logic/events/event_data/ActionEventData.hpp"
 #include "logic/events/event_listeners/ActionEventListener.hpp"
 #include "logic/events/event_listeners/AddUnitEventListener.hpp"
 #include "logic/events/event_listeners/CollisionEventListener.hpp"
 #include "logic/events/event_listeners/DestructionEventListener.hpp"
 #include "logic/events/event_listeners/ExplosionEventListener.hpp"
 #include "logic/events/event_listeners/GameOverEventListener.hpp"
-#include "logic/states/GameState.hpp"
 #include "utils/MapGenerator.hpp"
+#include "utils/ResourceHolder.hpp"
 
 World::World(
     State &game_state,
@@ -40,8 +28,6 @@ World::World(
       m_world_bounds(-200, -200, 400, 400),
       m_active_unit(nullptr),
       m_physics_world({0, 0}),
-      m_map(nullptr),
-      m_game_logic(this),
       m_camera(nullptr),
       m_scene_graph(*this) {
     load_resources();
@@ -59,35 +45,35 @@ World::World(
         std::move(destruction_listener), EventType::DESTRUCTION
     );
     m_event_manager->add_listener(
-        std::make_unique<MoveRightEventListener>(*this, m_game_logic),
+        std::make_unique<MoveRightEventListener>(*this),
         EventType::MOVE_RIGHT
     );
     m_event_manager->add_listener(
-        std::make_unique<MoveLeftEventListener>(*this, m_game_logic),
+        std::make_unique<MoveLeftEventListener>(*this),
         EventType::MOVE_LEFT
     );
     m_event_manager->add_listener(
-        std::make_unique<ChangeAngleUpEventListener>(*this, m_game_logic),
+        std::make_unique<ChangeAngleUpEventListener>(*this),
         EventType::CHANGE_ANGLE_UP
     );
     m_event_manager->add_listener(
-        std::make_unique<ChangeAngleDownEventListener>(*this, m_game_logic),
+        std::make_unique<ChangeAngleDownEventListener>(*this),
         EventType::CHANGE_ANGLE_DOWN
     );
     m_event_manager->add_listener(
-        std::make_unique<JumpForwardEventListener>(*this, m_game_logic),
+        std::make_unique<JumpForwardEventListener>(*this),
         EventType::JUMP_FORWARD
     );
     m_event_manager->add_listener(
-        std::make_unique<JumpBackwardEventListener>(*this, m_game_logic),
+        std::make_unique<JumpBackwardEventListener>(*this),
         EventType::JUMP_BACKWARD
     );
     m_event_manager->add_listener(
-        std::make_unique<BeginChargeWeaponEventListener>(*this, m_game_logic),
+        std::make_unique<BeginChargeWeaponEventListener>(*this),
         EventType::BEGIN_CHARGE_WEAPON
     );
     m_event_manager->add_listener(
-        std::make_unique<LaunchProjectileEventListener>(*this, m_game_logic),
+        std::make_unique<LaunchProjectileEventListener>(*this),
         EventType::LAUNCH_PROJECTILE
     );
     m_event_manager->add_listener(
@@ -120,10 +106,10 @@ World::World(
     );
 }
 
-void World::load_resources() {
+void World::load_resources() const {
     m_context.textures->load(TexturesID::BACKGROUND, "res/star_sky.jpg");
     m_context.textures->load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
-    m_context.textures->load(TexturesID::WORM, "res/wheel_amogus.png");
+    m_context.textures->load(TexturesID::UNIT, "res/wheel_amogus.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
     m_context.textures->load(TexturesID::WEAPON_BOX, "res/weapon_box.png");
     m_context.textures->load(TexturesID::HEALING_BOX, "res/healing_box.png");
@@ -149,10 +135,10 @@ void World::build_scene() {
         std::make_unique<SpriteNode>(
             *this, m_context.textures->get(TexturesID::BACKGROUND),
             sf::IntRect(
-                m_world_bounds.left * World::SCALE,
-                m_world_bounds.top * World::SCALE,
-                m_world_bounds.width * World::SCALE,
-                m_world_bounds.height * World::SCALE
+                static_cast<int>(m_world_bounds.left * World::SCALE),
+                static_cast<int>(m_world_bounds.top * World::SCALE),
+                static_cast<int>(m_world_bounds.width * World::SCALE),
+                static_cast<int>(m_world_bounds.height * World::SCALE)
             )
         );
     background_sprite->setPosition(
@@ -163,9 +149,7 @@ void World::build_scene() {
     std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
-    std::unique_ptr<Map> map =
-        std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
-    m_map = map.get();
+    std::shared_ptr<Map> map = std::make_shared<Map>(*this, MapGenerator(1000).get_chains());
     m_scene_layers[MAP]->attach_child(std::move(map));
 
     m_camera = Camera({0, 0}, 2);
@@ -181,10 +165,10 @@ void World::build_start_scene() {
         std::make_unique<SpriteNode>(
             *this, m_context.textures->get(TexturesID::BACKGROUND),
             sf::IntRect(
-                m_world_bounds.left * World::SCALE,
-                m_world_bounds.top * World::SCALE,
-                m_world_bounds.width * World::SCALE,
-                m_world_bounds.height * World::SCALE
+                static_cast<int>(m_world_bounds.left * World::SCALE),
+                static_cast<int>(m_world_bounds.top * World::SCALE),
+                static_cast<int>(m_world_bounds.width * World::SCALE),
+                static_cast<int>(m_world_bounds.height * World::SCALE)
             )
         );
     background_sprite->setPosition(
@@ -195,20 +179,17 @@ void World::build_start_scene() {
     std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 5);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
 
-    std::unique_ptr<Unit> unit = std::make_unique<Unit>(
-        *this, Unit::Type::WORM, sf::Vector2f{0, -48}, 5, 0
-    );
-    auto body = unit->get_body().get_b2Body();
-    body->SetLinearVelocity({14, 0});
-    m_scene_layers[ENTITIES]->attach_child(std::move(unit));
-
     m_camera = Camera({0, 0}, 10);
 
     std::unique_ptr<Map> map = std::make_unique<Map>(
         *this, MapGenerator(1000, 1, 0.008f, 3.0f, 10.0f, 3).get_chains()
     );
-    m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
+
+    std::unique_ptr<Unit> unit = std::make_unique<Unit>(*this, sf::Vector2f{0, -48}, 5);
+    auto body = unit->get_body().get_b2Body();
+    body->SetLinearVelocity({14, 0});
+    m_scene_layers[ENTITIES]->attach_child(std::move(unit));
 
     add_process(std::make_unique<ArmageddonProcess>(
         this, 1e9, 3.0f, 100.0f, 1000.0f, 5.0f, 10.0f
@@ -219,7 +200,7 @@ void World::draw() {
     m_world_view = m_context.window->getDefaultView();
     m_world_view.setCenter(m_camera.get_offset() * SCALE);
     m_world_view.zoom(m_camera.get_zoom());
-    m_world_view.setRotation(m_camera.get_angle() * 180 / M_PI);
+    m_world_view.setRotation(m_camera.get_angle() * 180 / M_PIf);
     m_context.window->setView(m_world_view);
     m_context.window->draw(m_scene_graph);
 }
@@ -278,7 +259,7 @@ void World::create_unit() {
     auto position = m_camera.get_offset();
 
     std::shared_ptr<Unit> unit =
-        std::make_shared<Unit>(*this, Unit::Type::WORM, position, 1, 0);
+        std::make_shared<Unit>(*this, position, 1);
     m_team_manager->get_active_team(true)->add_unit(unit.get());
     auto weapon = std::make_shared<Bazooka>(*this, unit.get());
     m_scene_layers[ENTITIES]->attach_child(unit);

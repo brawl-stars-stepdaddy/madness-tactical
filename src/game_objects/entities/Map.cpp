@@ -1,4 +1,7 @@
 #include "game_objects/entities/Map.hpp"
+#include "logic/World.hpp"
+#include "utils/Explosion.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Map::Map(
     World &world,
@@ -42,8 +45,7 @@ void Map::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     }
 }
 
-void Map::update_current(sf::Time delta_time) {
-}
+void Map::update_current(sf::Time delta_time) {}
 
 MapBody &Map::get_body() {
     return m_body;
@@ -53,8 +55,7 @@ EntityType Map::get_type() {
     return EntityType::MAP;
 }
 
-void Map::on_collision(std::shared_ptr<Entity>) {
-}
+void Map::on_collision(std::shared_ptr<Entity>) {}
 
 void Map::on_explosion(const Explosion &explosion) {
     m_body.apply_explosion(explosion);
@@ -75,5 +76,4 @@ void Map::on_explosion(const Explosion &explosion) {
     circle.setTexture(&m_world->get_texture_holder().get(TexturesID::BACKGROUND)
     );
     m_explosions.emplace_back(circle);
-    // TODO: make shaders
 }

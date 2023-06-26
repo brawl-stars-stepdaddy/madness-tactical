@@ -1198,7 +1198,7 @@ void Triangulation<T, TNearPointLocator>::edgeFlipInfo(
  *  2.  One of the shared vertices is super-tri:
  *      check if on point is same side of line formed by non-super-tri
  * vertices as the non-super-tri shared vertex
- *  3.  None of the vertices are super-tri: normal circumcircle test
+ *  3.  NONE of the vertices are super-tri: normal circumcircle test
  */
 /*
  *                       v4         original edge: (v2, v4)

@@ -14,7 +14,7 @@ MenuState::MenuState(StateStack &stack, State::Context context)
     play_button->set_text("Play");
     play_button->set_callback([this]() {
         request_stack_pop();
-        request_stack_push(StatesID::Game);
+        request_stack_push(StatesID::GAME);
     });
     m_gui_container.pack(std::move(play_button));
 
@@ -46,9 +46,8 @@ void MenuState::draw() {
         m_game_title_sprite.getTextureRect();
     sf::IntRect new_game_title_sprite_rect = old_game_title_sprite_rect;
     new_game_title_sprite_rect.width -=
-        new_game_title_sprite_rect.width *
-        pow(std::max(0.f, (3.f - m_current_time.asSeconds()) * 2.f), 5) / 25.f /
-        32.f;
+        static_cast<int>(new_game_title_sprite_rect.width *
+        pow(std::max(0.f, (3.f - m_current_time.asSeconds()) * 2.f), 5) / 25.f / 32.f);
     m_game_title_sprite.setTextureRect(new_game_title_sprite_rect);
     get_context().window->draw(m_game_title_sprite);
     get_context().window->draw(m_gui_container);

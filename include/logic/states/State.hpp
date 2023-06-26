@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_STATE_HPP
-#define MADNESS_TACTICAL_STATE_HPP
+#ifndef STATE_HPP_
+#define STATE_HPP_
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <memory>
@@ -14,11 +14,10 @@ public:
 
     struct Context {
     public:
-        Context(
-            sf::RenderWindow &window,
-            TextureHolder &textures,
-            FontHolder &fonts
-        );
+        Context(sf::RenderWindow &window,
+                TextureHolder &textures,
+                FontHolder &fonts
+                );
 
         sf::RenderWindow *window;
         TextureHolder *textures;
@@ -26,7 +25,9 @@ public:
     };
 
     State(StateStack &stack, Context context);
+
     virtual ~State() = default;
+
     virtual void draw() = 0;
     virtual bool update(sf::Time delta_time) = 0;
     virtual bool handle_input(const sf::Event &event) = 0;
@@ -44,4 +45,4 @@ private:
     Context m_context;
 };
 
-#endif
+#endif // STATE_HPP_

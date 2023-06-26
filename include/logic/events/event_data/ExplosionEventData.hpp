@@ -1,5 +1,5 @@
-#ifndef EXPLOSION_EVENT_DATA_HPP
-#define EXPLOSION_EVENT_DATA_HPP
+#ifndef EXPLOSION_EVENT_DATA_HPP_
+#define EXPLOSION_EVENT_DATA_HPP_
 
 #include "EventData.hpp"
 #include "game_objects/entities/Entity.hpp"
@@ -29,4 +29,4 @@ private:
     std::shared_ptr<Entity> m_object;
 };
 
-#endif
+#endif // EXPLOSION_EVENT_DATA_HPP_

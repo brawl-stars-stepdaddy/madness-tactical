@@ -1,8 +1,7 @@
-#include "logic/states/StateStack.hpp"
 #include <cassert>
+#include "logic/states/StateStack.hpp"
 
-StateStack::StateStack(State::Context context) : m_context(context) {
-}
+StateStack::StateStack(State::Context context) : m_context(context) {}
 
 void StateStack::update(sf::Time delta_time) {
     for (auto it = m_stack.rbegin(); it != m_stack.rend(); it++) {
@@ -14,8 +13,8 @@ void StateStack::update(sf::Time delta_time) {
 }
 
 void StateStack::draw() {
-    for (auto it = m_stack.begin(); it != m_stack.end(); it++) {
-        (*it)->draw();
+    for (auto & it : m_stack) {
+        it->draw();
     }
 }
 

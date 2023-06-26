@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_PAUSESTATE_HPP
-#define MADNESS_TACTICAL_PAUSESTATE_HPP
+#ifndef PAUSE_STATE_HPP_
+#define PAUSE_STATE_HPP_
 
 #include <SFML/Graphics.hpp>
 #include "State.hpp"
@@ -8,10 +8,11 @@
 struct PauseState : State {
 public:
     PauseState(StateStack &stack, Context context);
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
 
 private:
     GUI::Container m_gui_container;
@@ -20,4 +21,4 @@ private:
     bool m_show_text;
 };
 
-#endif
+#endif // PAUSE_STATE_HPP_

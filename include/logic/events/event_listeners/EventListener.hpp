@@ -1,5 +1,5 @@
-#ifndef EVENT_LISTENER_HPP
-#define EVENT_LISTENER_HPP
+#ifndef EVENT_LISTENER_HPP_
+#define EVENT_LISTENER_HPP_
 
 #include "logic/events/event_data/EventData.hpp"
 
@@ -10,4 +10,4 @@ public:
     virtual ~EventListener() = default;
 };
 
-#endif
+#endif // EVENT_LISTENER_HPP_

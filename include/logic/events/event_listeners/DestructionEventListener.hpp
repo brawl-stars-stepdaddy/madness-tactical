@@ -1,7 +1,6 @@
 #ifndef DESTRUCTION_EVENT_LISTENER_HPP_
 #define DESTRUCTION_EVENT_LISTENER_HPP_
 
-#include <cassert>
 #include <set>
 #include "EventListener.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"

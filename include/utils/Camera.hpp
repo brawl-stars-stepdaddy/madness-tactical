@@ -2,7 +2,7 @@
 #define CAMERA_HPP_
 
 #include <memory>
-#include "SFML/Graphics.hpp"
+#include <SFML/Graphics.hpp>
 
 struct Entity;
 struct Camera;
@@ -64,19 +64,19 @@ public:
     void move_up();
     void move_down();
 
-    bool is_moving_left();
-    bool is_moving_right();
-    bool is_moving_up();
-    bool is_moving_down();
+    bool is_moving_left() const;
+    bool is_moving_right() const;
+    bool is_moving_up() const;
+    bool is_moving_down() const;
 
 private:
     sf::Vector2f m_offset = {0, 0};
-    float m_angle;
+    float m_angle{};
     float m_zoom_factor = 2.5f;
     float m_min_zoom_speed = .5f;
     float m_zoom_convergence_factor = 5.f;
-    float m_current_zoom;
-    float m_expected_zoom;
+    float m_current_zoom{};
+    float m_expected_zoom{};
     std::unique_ptr<FollowStrategy> m_follow_strategy;
     float m_zooming = 1;
 
@@ -86,4 +86,4 @@ private:
     bool m_is_moving_down = false;
 };
 
-#endif
+#endif // CAMERA_HPP_

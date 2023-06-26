@@ -1,7 +1,6 @@
 #ifndef TEAM_HPP_
 #define TEAM_HPP_
 
-#include <algorithm>
 #include <map>
 #include <vector>
 #include "game_objects/weapons/Weapon.hpp"

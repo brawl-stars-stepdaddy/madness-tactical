@@ -1,5 +1,6 @@
-#include "logic/states/logic_states/BloodyFatalityLogicState.hpp"
 #include "game_objects/weapons/Weapon.hpp"
+#include "game_objects/entities/Unit.hpp"
+#include "logic/states/logic_states/BloodyFatalityLogicState.hpp"
 #include "logic/controllers/CameraController.hpp"
 
 BloodyFatalityLogicState::BloodyFatalityLogicState(
@@ -21,14 +22,13 @@ BloodyFatalityLogicState::BloodyFatalityLogicState(
     );
 }
 
-void BloodyFatalityLogicState::draw() {
-}
+void BloodyFatalityLogicState::draw() {}
 
 bool BloodyFatalityLogicState::update(sf::Time delta_time) {
     m_timer -= delta_time;
     if (m_timer <= sf::Time::Zero) {
         request_stack_clear();
-        request_stack_push(StatesID::MoveTransition);
+        request_stack_push(StatesID::MOVE_TRANSITION);
     }
     return false;
 }

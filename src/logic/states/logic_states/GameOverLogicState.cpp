@@ -1,6 +1,6 @@
 #include "logic/states/logic_states/GameOverLogicState.hpp"
-#include "game_objects/weapons/Weapon.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 GameOverLogicState::GameOverLogicState(
     StateStack &stack,

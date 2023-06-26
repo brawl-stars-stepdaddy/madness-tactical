@@ -15,9 +15,11 @@ CircleBody::CircleBody(
     m_body_def.fixedRotation = false;
     m_body_def.position.Set(center.x, center.y);
     m_body_def.userData.pointer = reinterpret_cast<uintptr_t>(parent);
+
     if (!is_static) {
         m_body_def.type = b2_dynamicBody;
-    } else {
+    }
+    else {
         m_body_def.type = b2_staticBody;
     }
 

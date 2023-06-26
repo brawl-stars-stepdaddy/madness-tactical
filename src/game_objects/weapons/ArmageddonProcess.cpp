@@ -1,11 +1,9 @@
-#include "game_objects/weapons/ArmageddonProcess.hpp"
-#include <cmath>
 #include <random>
+#include "game_objects/weapons/ArmageddonProcess.hpp"
 #include "game_objects/entities/CollisionProjectile.hpp"
 #include "logic/World.hpp"
 
-ArmageddonProcess::ArmageddonProcess(World *world) : m_world(world) {
-}
+ArmageddonProcess::ArmageddonProcess(World *world) : m_world(world) {}
 
 ArmageddonProcess::ArmageddonProcess(
     World *world,
@@ -32,7 +30,7 @@ bool ArmageddonProcess::update(sf::Time delta_time) {
     if (m_launch_timer <= 0) {
         std::uniform_real_distribution<> range(0, M_PI * 2);
         std::mt19937 rand_gen((std::random_device()()));
-        float angle = range(rand_gen);
+        auto angle = static_cast<float>(range(rand_gen));
         float x_norm = cos(angle);
         float y_norm = sin(angle);
 

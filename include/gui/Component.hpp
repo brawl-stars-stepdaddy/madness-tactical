@@ -1,32 +1,36 @@
-#ifndef MADNESS_TACTICAL_COMPONENT_HPP
-#define MADNESS_TACTICAL_COMPONENT_HPP
+#ifndef COMPONENT_HPP_
+#define COMPONENT_HPP_
 
 #include <SFML/Graphics.hpp>
 #include <memory>
 
 namespace GUI {
+
 struct Component : sf::Drawable, sf::Transformable {
 public:
     typedef std::unique_ptr<Component> Ptr;
 
-    Component();
+    Component() = default;
     ~Component() override = default;
+
     virtual bool is_selectable() = 0;
     bool is_selected() const;
+
     virtual void select();
     virtual void deselect();
     virtual bool is_active();
     virtual void activate();
     virtual void deactivate();
+
     virtual void handle_input(const sf::Event &event) = 0;
 
 private:
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states)
-        const = 0;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override = 0;
 
-    bool m_is_selected;
-    bool m_is_active;
+    bool m_is_selected = false;
+    bool m_is_active = false;
 };
+
 }  // namespace GUI
 
-#endif
+#endif // COMPONENT_HPP_

@@ -5,14 +5,13 @@
 
 struct Grenade : ChargeableWeapon {
 public:
-    explicit Grenade(World &, Unit *);
+    explicit Grenade(World &world, Unit *parent);
 
     void launch() override;
 
 private:
     void update_current(sf::Time delta_time) override;
-    void draw_current(sf::RenderTarget &target, sf::RenderStates states)
-        const override;
+    void draw_current(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     float m_projectile_radius = 0.5f;
     float m_explosion_radius = 3.0f;

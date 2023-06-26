@@ -1,7 +1,7 @@
+#include <algorithm>
 #include "logic/events/EventManager.hpp"
 
-EventManager::EventManager() {
-}
+EventManager::EventManager() = default;
 
 bool EventManager::add_listener(
     EventListenerPtr event_listener,

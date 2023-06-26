@@ -1,5 +1,5 @@
+#include "game_objects/entities/Unit.hpp"
 #include "logic/states/logic_states/PostMoveLogicState.hpp"
-#include "game_objects/weapons/Weapon.hpp"
 #include "logic/controllers/PostMoveController.hpp"
 
 PostMoveLogicState::PostMoveLogicState(
@@ -27,7 +27,7 @@ bool PostMoveLogicState::update(sf::Time delta_time) {
     m_timer -= delta_time;
     if (m_timer <= sf::Time::Zero) {
         request_stack_clear();
-        request_stack_push(StatesID::BloodyFatality);
+        request_stack_push(StatesID::BLOODY_FATALITY);
     }
     return false;
 }

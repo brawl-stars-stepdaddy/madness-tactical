@@ -11,10 +11,10 @@ public:
         Context context,
         GameState &game_state
     );
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
 
 private:
     sf::Time m_timer = sf::seconds(1);

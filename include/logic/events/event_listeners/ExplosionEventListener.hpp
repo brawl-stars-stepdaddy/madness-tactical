@@ -2,7 +2,6 @@
 #define EXPLOSION_EVENT_LISTENER_HPP_
 
 #include "EventListener.hpp"
-#include "logic/World.hpp"
 #include "logic/events/event_data/ExplosionEventData.hpp"
 
 struct ExplosionEventListener : EventListener {

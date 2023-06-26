@@ -1,10 +1,9 @@
 #include "game_objects/weapons/Laser.hpp"
-#include <cmath>
 #include "game_objects/entities/ExplosionEntity.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Laser::Laser(World &world, Unit *parent) : RotatableWeapon(world) {
     m_parent = parent;
@@ -48,7 +47,7 @@ void Laser::launch() {
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;
     }
-    angle += Weapon::m_parent->getRotation() / (180 / M_PI);
+    angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
     m_start_position = {
         m_parent->get_body().get_position().x + cos(angle) * 1.5f,
         m_parent->get_body().get_position().y + sin(angle) * 1.5f};
@@ -58,8 +57,8 @@ void Laser::launch() {
 
 void Laser::create_new_explosion() {
     sf::Vector2f position = m_start_position;
-    position.x += m_direction.x * m_explosions_number;
-    position.y += m_direction.y * m_explosions_number;
+    position.x += m_direction.x * static_cast<float>(m_explosions_number);
+    position.y += m_direction.y * static_cast<float>(m_explosions_number);
     m_world->add_entity(std::make_unique<ExplosionEntity>(
         *m_world, Explosion({position.x, position.y}, m_ray_radius)
     ));

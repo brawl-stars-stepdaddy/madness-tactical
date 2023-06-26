@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_MENUSTATE_HPP
-#define MADNESS_TACTICAL_MENUSTATE_HPP
+#ifndef MENU_STATE_HPP_
+#define MENU_STATE_HPP_
 
 #include <SFML/Graphics.hpp>
 #include "State.hpp"
@@ -9,10 +9,11 @@
 struct MenuState : State {
 public:
     MenuState(StateStack &stack, Context context);
-    virtual void draw() override;
-    virtual bool update(sf::Time delta_time) override;
-    virtual bool handle_input(const sf::Event &event) override;
-    virtual bool handle_realtime_input() override;
+
+    void draw() override;
+    bool update(sf::Time delta_time) override;
+    bool handle_input(const sf::Event &event) override;
+    bool handle_realtime_input() override;
 
 private:
     GUI::Container m_gui_container;
@@ -24,4 +25,4 @@ private:
     sf::Time m_current_time = sf::Time::Zero;
 };
 
-#endif
+#endif // MENU_STATE_HPP_

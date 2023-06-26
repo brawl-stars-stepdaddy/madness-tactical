@@ -1,10 +1,9 @@
-#include "game_objects/weapons/Grenade.hpp"
 #include <cmath>
+#include "game_objects/weapons/Grenade.hpp"
 #include "game_objects/entities/TimerProjectile.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
-#include "logic/events/EventManager.hpp"
-#include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Grenade::Grenade(World &world, Unit *parent) : ChargeableWeapon(world) {
     m_parent = parent;
@@ -42,7 +41,7 @@ void Grenade::launch() {
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;
     }
-    angle += Weapon::m_parent->getRotation() / (180 / M_PI);
+    angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
     m_charge_level = m_init_charge_level;
     sf::Vector2f start_position = {
         m_parent->get_body().get_position().x + cos(angle) * 2,

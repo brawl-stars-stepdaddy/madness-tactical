@@ -10,14 +10,16 @@ struct World;
 
 struct Entity : SceneNode {
 public:
-    Entity(World &world);
+    explicit Entity(World &world);
+
     virtual Body &get_body() = 0;
     virtual EntityType get_type() = 0;
-    virtual void on_collision(std::shared_ptr<Entity>) = 0;
-    virtual void on_explosion(const Explosion &) = 0;
+
+    virtual void on_collision(std::shared_ptr<Entity> other_object) = 0;
+    virtual void on_explosion(const Explosion &explosion) = 0;
 
 protected:
     void update_current(sf::Time delta_time) override;
 };
 
-#endif
+#endif // ENTITY_HPP_

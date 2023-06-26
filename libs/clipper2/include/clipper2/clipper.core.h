@@ -93,7 +93,7 @@ namespace Clipper2Lib
         int64_t z;
 
     template <typename T2>
-    inline void Init(const T2 x_ = 0, const T2 y_ = 0, const int64_t z_ = 0)
+    inline void INIT(const T2 x_ = 0, const T2 y_ = 0, const int64_t z_ = 0)
     {
       if constexpr (std::numeric_limits<T>::is_integer &&
         !std::numeric_limits<T2>::is_integer)
@@ -115,14 +115,14 @@ namespace Clipper2Lib
     template <typename T2>
     Point(const T2 x_, const T2 y_, const int64_t z_ = 0)
     {
-      Init(x_, y_);
+      INIT(x_, y_);
       z = z_;
     }
 
     template <typename T2>
     explicit Point<T>(const Point<T2>& p)
     {
-      Init(p.x, p.y, p.z);
+      INIT(p.x, p.y, p.z);
     }
 
     Point operator * (const double scale) const

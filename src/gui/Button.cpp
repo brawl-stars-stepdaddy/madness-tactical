@@ -3,6 +3,7 @@
 #include "utils/ResourceHolder.hpp"
 
 namespace GUI {
+
 Button::Button(const FontHolder &fonts) {
     m_borders.setSize({160, 50});
     m_borders.setOrigin({80, 25});
@@ -60,4 +61,5 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(m_borders, states);
     target.draw(m_text, states);
 }
+
 }  // namespace GUI

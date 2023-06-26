@@ -2,12 +2,12 @@
 #define BODY_HPP_
 
 #include <SFML/Graphics.hpp>
-#include "box2d/box2d.h"
+#include <box2d/box2d.h>
 
 struct Body {
 public:
-    virtual sf::Vector2f get_position() const = 0;
-    virtual float get_rotation() const = 0;
+    [[nodiscard]] virtual sf::Vector2f get_position() const = 0;
+    [[nodiscard]] virtual float get_rotation() const = 0;
     b2Body *get_b2Body();
 
 protected:

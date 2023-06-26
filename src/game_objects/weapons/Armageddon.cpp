@@ -1,7 +1,9 @@
+#include "game_objects/entities/Unit.hpp"
 #include "game_objects/weapons/Armageddon.hpp"
 #include "game_objects/weapons/ArmageddonProcess.hpp"
 #include "logic/World.hpp"
 #include "utils/GuiUtil.hpp"
+#include "utils/ResourceHolder.hpp"
 
 Armageddon::Armageddon(World &world, Unit *parent) : Weapon(world) {
     m_parent = parent;

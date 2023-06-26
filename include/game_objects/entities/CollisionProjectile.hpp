@@ -4,18 +4,18 @@
 #include "Projectile.hpp"
 
 struct CollisionProjectile : Projectile {
-    CollisionProjectile(
-        World &,
-        sf::Vector2f,
-        sf::Vector2f,
-        float,
-        float,
-        bool,
-        bool,
-        TexturesID
-    );
+public:
+    CollisionProjectile(World &world,
+                        sf::Vector2f center,
+                        sf::Vector2f impulse,
+                        float radius,
+                        float explosion_radius,
+                        bool is_sensor,
+                        bool is_static,
+                        TexturesID texture
+                        );
 
-    void on_collision(std::shared_ptr<Entity>) override;
+    void on_collision(std::shared_ptr<Entity> other_object) override;
 };
 
 #endif  // COLLISION_PROJECTILE_HPP_

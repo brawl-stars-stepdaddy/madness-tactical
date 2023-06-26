@@ -1,5 +1,5 @@
-#ifndef MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
-#define MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
+#ifndef ACTION_EVENT_LISTENER_HPP_
+#define ACTION_EVENT_LISTENER_HPP_
 
 #include "EventListener.hpp"
 
@@ -8,60 +8,59 @@ struct World;
 
 struct ActionEventListener : EventListener {
 public:
-    ActionEventListener(World &world, GameLogic &game_logic);
+    explicit ActionEventListener(World &world);
     void process(const EventData &event) override = 0;
-    virtual ~ActionEventListener() = default;
+    ~ActionEventListener() override = default;
 
 protected:
     World *m_world;
-    GameLogic *m_game_logic;
 };
 
 struct ChangeAngleDownEventListener : ActionEventListener {
 public:
-    ChangeAngleDownEventListener(World &world, GameLogic &game_logic);
+    ChangeAngleDownEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct ChangeAngleUpEventListener : ActionEventListener {
 public:
-    ChangeAngleUpEventListener(World &world, GameLogic &game_logic);
+    ChangeAngleUpEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct MoveLeftEventListener : ActionEventListener {
 public:
-    MoveLeftEventListener(World &world, GameLogic &game_logic);
+    MoveLeftEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct MoveRightEventListener : ActionEventListener {
 public:
-    MoveRightEventListener(World &world, GameLogic &game_logic);
+    MoveRightEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct JumpForwardEventListener : ActionEventListener {
 public:
-    JumpForwardEventListener(World &world, GameLogic &game_logic);
+    JumpForwardEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct JumpBackwardEventListener : ActionEventListener {
 public:
-    JumpBackwardEventListener(World &world, GameLogic &game_logic);
+    JumpBackwardEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct BeginChargeWeaponEventListener : ActionEventListener {
 public:
-    BeginChargeWeaponEventListener(World &world, GameLogic &game_logic);
+    BeginChargeWeaponEventListener(World &world);
     void process(const EventData &event) override;
 };
 
 struct LaunchProjectileEventListener : ActionEventListener {
 public:
-    LaunchProjectileEventListener(World &world, GameLogic &game_logic);
+    LaunchProjectileEventListener(World &world);
     void process(const EventData &event) override;
 };
 
@@ -121,4 +120,4 @@ private:
     Camera *m_camera;
 };
 
-#endif  // MADNESS_TACTICAL_ACTIONEVENTLISTENER_HPP
+#endif // ACTION_EVENT_LISTENER_HPP_

@@ -2,6 +2,7 @@
 #include "utils/ResourceHolder.hpp"
 
 namespace GUI {
+
 Label::Label(const std::string &text, const FontHolder &fonts)
     : m_text(text, fonts.get(FontsID::SANSATION), 16) {
 }
@@ -18,4 +19,5 @@ void Label::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 void Label::set_text(const std::string &text) {
     m_text.setString(text);
 }
+
 }  // namespace GUI

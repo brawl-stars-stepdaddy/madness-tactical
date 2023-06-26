@@ -2,7 +2,6 @@
 #include "gui/Button.hpp"
 #include "utils/GuiUtil.hpp"
 #include "utils/ResourceHolder.hpp"
-#include "utils/ResourceIdentifiers.hpp"
 
 PauseState::PauseState(StateStack &stack, State::Context context)
     : State(stack, context),
@@ -27,7 +26,7 @@ PauseState::PauseState(StateStack &stack, State::Context context)
     exit_button->set_text("Exit to menu");
     exit_button->set_callback([this]() {
         request_stack_clear();
-        request_stack_push(StatesID::Menu);
+        request_stack_push(StatesID::MENU);
     });
     m_gui_container.pack(std::move(exit_button));
 }
