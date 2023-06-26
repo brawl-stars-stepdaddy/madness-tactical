@@ -28,6 +28,10 @@ void LandMine::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void LandMine::launch() {
+    Weapon::launch();
+    if (!Weapon::m_parent->get_jumping_active()) {
+        return;
+    }
     b2Vec2 position = {
         m_parent->get_body().get_position().x,
         m_parent->get_body().get_position().y};

@@ -18,14 +18,14 @@ struct SmoothFollowStrategy : FollowStrategy {
 public:
     SmoothFollowStrategy(
         Camera *camera,
-        Entity *target
+        std::shared_ptr<Entity> target
     );
 
     void update(sf::Time delta_time) override;
 
 private:
     Camera *m_camera;
-    Entity *m_target;
+    std::shared_ptr<Entity> m_target;
     float m_min_speed = 0.5f;
     float m_convergence_factor = 3.f;
 };

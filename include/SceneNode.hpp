@@ -9,7 +9,7 @@ struct World;
 
 struct SceneNode : sf::Transformable, sf::Drawable, private sf::NonCopyable {
 public:
-    typedef std::unique_ptr<SceneNode> Ptr;
+    typedef std::shared_ptr<SceneNode> Ptr;
 
     SceneNode(World &world);
 
@@ -21,6 +21,8 @@ public:
 
     [[nodiscard]] sf::Transform get_world_transform() const;
     [[nodiscard]] sf::Vector2f get_world_position() const;
+
+    Ptr get_pointer();
 
 protected:
     World *m_world;

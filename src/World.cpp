@@ -23,9 +23,11 @@
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
 #include "WeaponBox.hpp"
+#include "GameState.hpp"
 
-World::World(State::Context &context, EventManager &event_manager, TeamManager &team_manager)
-    : m_context(context),
+World::World(State &game_state, State::Context &context, EventManager &event_manager, TeamManager &team_manager)
+    : m_game_state(&game_state),
+      m_context(context),
       m_event_manager(&event_manager),
       m_team_manager(&team_manager),
       m_world_view(context.window->getDefaultView()),
@@ -111,8 +113,6 @@ World::World(State::Context &context, EventManager &event_manager, TeamManager &
 
 void World::load_resources() {
     m_context.textures->load(TexturesID::BACKGROUND, "res/star_sky.jpg");
-    m_context.textures->load(TexturesID::ENGINEER, "res/Engineer.jpg");
-    m_context.textures->load(TexturesID::HALO, "res/HaloRender.jpg");
     m_context.textures->load(TexturesID::MAP_TEXTURE, "res/dirt.jpg");
     m_context.textures->load(TexturesID::WORM, "res/wheel_amogus.png");
     m_context.textures->load(TexturesID::CANON_BALL, "res/canon_ball.png");
@@ -132,8 +132,8 @@ void World::load_resources() {
 
 void World::build_scene() {
     for (std::size_t i = 0; i < LAYER_COUNT; i++) {
-        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
-        m_scene_layers[i] = layer.get();
+        auto layer = std::make_shared<SceneNode>(*this);
+        m_scene_layers[i] = layer;
         m_scene_graph.attach_child(std::move(layer));
     }
     std::unique_ptr<SpriteNode> background_sprite =
@@ -150,12 +150,6 @@ void World::build_scene() {
         m_world_bounds.left * World::SCALE, m_world_bounds.top * World::SCALE
     );
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
-    m_scene_layers[ENTITIES]->attach_child(
-        std::make_unique<WeaponBox>(*this, sf::FloatRect(50, -50, 1.5, 1))
-    );
-    m_scene_layers[ENTITIES]->attach_child(
-        std::make_unique<HealingBox>(*this, sf::FloatRect(-50, 50, 1.5, 1))
-    );
 
     Team *team1 = m_team_manager->create_team(sf::Color(255, 0, 0));
     Team *team2 = m_team_manager->create_team(sf::Color(0, 0, 255));
@@ -174,8 +168,7 @@ void World::build_scene() {
     first_unit->attach_child(std::move(weapon));
 
     std::unique_ptr<Unit> worm2 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1},
-    1, 1);
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
     auto second_unit = worm2.get();
     team2->add_unit(second_unit);
     team2->add_weapon(LAND_MINE);
@@ -194,8 +187,8 @@ void World::build_scene() {
 
 void World::build_start_scene() {
     for (std::size_t i = 0; i < LAYER_COUNT; i++) {
-        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
-        m_scene_layers[i] = layer.get();
+        auto layer = std::make_shared<SceneNode>(*this);
+        m_scene_layers[i] = layer;
         m_scene_graph.attach_child(std::move(layer));
     }
     std::unique_ptr<SpriteNode> background_sprite =
@@ -229,8 +222,6 @@ void World::build_start_scene() {
             std::make_unique<Map>(*this, MapGenerator(1000, 1, 0.008f, 3.0f, 10.0f, 3).get_chains());
     m_map = map.get();
     m_scene_layers[MAP]->attach_child(std::move(map));
-
-    m_moves_timer = 1e9;
 
     add_process(std::make_unique<ArmageddonProcess>(this, 1e9, 3.0f, 100.0f, 1000.0f, 5.0f, 10.0f));
 }
@@ -276,4 +267,20 @@ void World::execute_processes(sf::Time delta_time) {
 
 Camera *World::get_camera() {
     return &m_camera;
+}
+
+void World::add_bloody_fatality_candidate(Unit *unit) {
+    m_bloody_fatality_candidates.push_back(unit);
+}
+
+std::vector<Unit *> &World::get_bloody_fatality_candidates() {
+    return m_bloody_fatality_candidates;
+}
+
+void World::reset_bloody_fatality_candidates() {
+    m_bloody_fatality_candidates.clear();
+}
+
+State *World::get_game_state() {
+    return m_game_state;
 }

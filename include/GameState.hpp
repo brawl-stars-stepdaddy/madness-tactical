@@ -16,6 +16,7 @@ public:
     virtual bool handle_realtime_input() override;
     EventManager *get_event_manager();
     TeamManager *get_team_manager();
+    StateStack *get_logic_state_stack();
     World *get_world();
 
 private:

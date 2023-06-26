@@ -35,7 +35,7 @@ public:
     void set_weapon(Weapon *);
     Weapon *get_weapon() const;
 
-    void on_collision(Entity *) override;
+    void on_collision(std::shared_ptr<Entity>) override;
     void on_explosion(const Explosion &) override;
 
     void set_moving_active(bool);
@@ -46,6 +46,8 @@ public:
     void stop_move(sf::Time);
     void jump_forward();
     void jump_backward();
+
+    bool get_jumping_active() const;
 
     void set_activeness(bool);
     void kill_unit();

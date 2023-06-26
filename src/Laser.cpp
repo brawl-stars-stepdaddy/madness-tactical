@@ -28,7 +28,6 @@ void Laser::update_current(sf::Time delta_time) {
     }
     if (m_active_time < 0) {
         m_is_active = false;
-        m_is_rotation_blocked = false;
         m_active_time = m_default_active_time;
         m_explosions_number = 0;
     }
@@ -43,8 +42,8 @@ void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Laser::launch() {
+    Weapon::launch();
     m_is_active = true;
-    m_is_rotation_blocked = true;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;

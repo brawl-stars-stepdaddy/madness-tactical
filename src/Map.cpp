@@ -53,7 +53,7 @@ EntityType Map::get_type() {
     return EntityType::MAP;
 }
 
-void Map::on_collision(Entity *) {
+void Map::on_collision(std::shared_ptr<Entity>) {
 }
 
 void Map::on_explosion(const Explosion &explosion) {

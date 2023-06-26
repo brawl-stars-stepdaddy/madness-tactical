@@ -7,6 +7,10 @@ enum class StatesID {
     Game,
     Pause,
     Move,
+    PostMove,
+    BloodyFatality,
+    MoveTransition,
+    GameOver
 };
 
 #endif

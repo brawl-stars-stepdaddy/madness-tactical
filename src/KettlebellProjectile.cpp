@@ -21,7 +21,7 @@ KettlebellProjectile::KettlebellProjectile(
     ),
     m_radius(radius) {}
 
-void KettlebellProjectile::on_collision(Entity *other_object) {
+void KettlebellProjectile::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() != EntityType::EXPLOSION) {
         m_is_exploded = true;
     }

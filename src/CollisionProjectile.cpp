@@ -25,7 +25,7 @@ CollisionProjectile::CollisionProjectile(
           texture
       ) {}
 
-void CollisionProjectile::on_collision(Entity *other_object) {
+void CollisionProjectile::on_collision(std::shared_ptr<Entity> other_object) {
     if (!m_is_exploded
         && other_object->get_type() != EntityType::PROJECTILE
         && other_object->get_type() != EntityType::EXPLOSION

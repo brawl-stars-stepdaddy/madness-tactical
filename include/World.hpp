@@ -16,6 +16,7 @@
 #include "Process.hpp"
 #include "box2d/box2d.h"
 
+struct GameState;
 struct Map;
 struct CollisionEventListener;
 struct DestructionEventListener;
@@ -29,7 +30,7 @@ public:
         LAYER_COUNT,
     };
 
-    World(State::Context &context, EventManager &event_manager, TeamManager &team_manager);
+    World(State &game_state, State::Context &context, EventManager &event_manager, TeamManager &team_manager);
 
     void build_scene();
     void build_start_scene();
@@ -65,7 +66,7 @@ public:
         m_active_unit = unit;
     }
 
-    SceneNode *get_layer(Layer layer) {
+    std::shared_ptr<SceneNode> get_layer(Layer layer) {
         return m_scene_layers[layer];
     }
 
@@ -80,13 +81,20 @@ public:
     void add_process(std::unique_ptr<Process>);
     void execute_processes(sf::Time);
 
+    void add_bloody_fatality_candidate(Unit *);
+    std::vector<Unit *> &get_bloody_fatality_candidates();
+    void reset_bloody_fatality_candidates();
+
+    State *get_game_state();
+
 protected:
     void load_resources();
 
+    State *m_game_state;
     State::Context m_context;
     sf::View m_world_view;
     SceneNode m_scene_graph;
-    std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
+    std::array<std::shared_ptr<SceneNode>, LAYER_COUNT> m_scene_layers;
 
     sf::FloatRect m_world_bounds;
     Unit *m_active_unit;
@@ -100,8 +108,7 @@ protected:
     EventManager *m_event_manager;
 
     std::vector<std::unique_ptr<Process>> m_processes;
-
-    float m_moves_timer = 100;
+    std::vector<Unit *> m_bloody_fatality_candidates;
 };
 
 #endif

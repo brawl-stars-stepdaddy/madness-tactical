@@ -30,10 +30,11 @@ void Bazooka::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Bazooka::launch() {
+    Weapon::launch();
     if (!m_is_charging) {
         return;
     }
-    m_is_charging = false;
+    set_currently_charging(false);
     float impulse_value = m_charge_level * 20;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {

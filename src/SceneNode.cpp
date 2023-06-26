@@ -23,6 +23,7 @@ SceneNode::Ptr SceneNode::detach_child(const SceneNode &node) {
 }
 
 SceneNode::Ptr SceneNode::detach() {
+    assert(m_parent);
     auto found = std::find_if(
         m_parent->m_children.begin(), m_parent->m_children.end(),
         [this](const Ptr &p) { return p.get() == this; }
@@ -71,4 +72,13 @@ sf::Transform SceneNode::get_world_transform() const {
 
 sf::Vector2f SceneNode::get_world_position() const {
     return get_world_transform() * sf::Vector2f();
+}
+
+SceneNode::Ptr SceneNode::get_pointer() {
+    auto found = std::find_if(
+            m_parent->m_children.begin(), m_parent->m_children.end(),
+            [this](const Ptr &p) { return p.get() == this; }
+    );
+    assert(found != m_parent->m_children.end());
+    return *found;
 }

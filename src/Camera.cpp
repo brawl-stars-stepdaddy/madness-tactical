@@ -1,17 +1,22 @@
 #include "Camera.hpp"
+
+#include <utility>
 #include "Body.hpp"
 #include "Entity.hpp"
 #include "World.hpp"
 
 SmoothFollowStrategy::SmoothFollowStrategy(
     Camera *camera,
-    Entity *target
+    std::shared_ptr<Entity> target
 )
     : m_camera(camera),
-      m_target(target) {
+      m_target(std::move(target)) {
 }
 
 void SmoothFollowStrategy::update(sf::Time delta_time) {
+    if (!m_target) {
+        return;
+    }
     sf::Vector2f delta_target =
         m_target->get_body().get_position() - m_camera->get_offset();
     float length = sqrt(pow(delta_target.x, 2) + pow(delta_target.y, 2));

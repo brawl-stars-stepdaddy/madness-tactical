@@ -5,11 +5,11 @@
 #include "World.hpp"
 
 void ContactListener::BeginContact(b2Contact *contact) {
-    auto *first_object = reinterpret_cast<Entity *>(
-        contact->GetFixtureA()->GetBody()->GetUserData().pointer
+    auto first_object = std::static_pointer_cast<Entity>(reinterpret_cast<Entity *>(
+            contact->GetFixtureA()->GetBody()->GetUserData().pointer)->get_pointer()
     );
-    auto *second_object = reinterpret_cast<Entity *>(
-        contact->GetFixtureB()->GetBody()->GetUserData().pointer
+    auto second_object = std::static_pointer_cast<Entity>(reinterpret_cast<Entity *>(
+        contact->GetFixtureB()->GetBody()->GetUserData().pointer)->get_pointer()
     );
     m_world->get_event_manager()->queue_event(
         std::make_unique<CollisionEventData>(
@@ -20,11 +20,11 @@ void ContactListener::BeginContact(b2Contact *contact) {
 }
 
 void ContactListener::EndContact(b2Contact *contact) {
-    auto *first_object = reinterpret_cast<Entity *>(
-        contact->GetFixtureA()->GetBody()->GetUserData().pointer
+    auto first_object = std::static_pointer_cast<Entity>(reinterpret_cast<Entity *>(
+            contact->GetFixtureA()->GetBody()->GetUserData().pointer)->get_pointer()
     );
-    auto *second_object = reinterpret_cast<Entity *>(
-        contact->GetFixtureB()->GetBody()->GetUserData().pointer
+    auto second_object = std::static_pointer_cast<Entity>(reinterpret_cast<Entity *>(
+            contact->GetFixtureB()->GetBody()->GetUserData().pointer)->get_pointer()
     );
     m_world->get_event_manager()->queue_event(
         std::make_unique<CollisionEventData>(

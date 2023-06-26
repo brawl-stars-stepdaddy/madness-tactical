@@ -22,7 +22,7 @@ EntityType Box::get_type() {
     return EntityType::BOX;
 }
 
-void Box::on_collision(Entity *other_object) {
+void Box::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::PLANET_CORE) {
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(

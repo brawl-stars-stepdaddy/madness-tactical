@@ -17,7 +17,7 @@ public:
 private:
     World *m_world;
     ContactListener m_contact_listener;
-    std::set<std::pair<Entity *, Entity *>> processed_collisions;
+    std::set<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>> processed_collisions;
 };
 
 #endif  // COLLISION_EVENT_LISTENER_HPP_

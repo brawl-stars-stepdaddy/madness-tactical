@@ -21,7 +21,7 @@ public:
 
     EntityType get_type() override;
 
-    void on_collision(Entity *) override;
+    void on_collision(std::shared_ptr<Entity>) override;
     void on_explosion(const Explosion &) override;
 
 private:
