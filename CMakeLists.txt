@@ -14,7 +14,7 @@ add_subdirectory(libs/clipper2)
 add_subdirectory(libs/CDT)
 add_subdirectory(libs/SimplexNoise)
 
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(madness-tactical
         ${SOURCES}
