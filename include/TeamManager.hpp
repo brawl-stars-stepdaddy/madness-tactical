@@ -9,13 +9,14 @@
 struct Unit;
 
 struct TeamManager {
+public:
+    void move_transition(bool init_state = false);
+
     Team *create_team(sf::Color);
+    [[nodiscard]] Team *get_active_team(bool init_state = false) const;
 
-    void move_transition();
-    void init();
-
-    [[nodiscard]] Team *get_active_team() const;
     [[nodiscard]] int get_number_available_teams() const;
+    [[nodiscard]] int get_number_available_units() const;
 
 private:
     std::vector<std::unique_ptr<Team>> m_teams;

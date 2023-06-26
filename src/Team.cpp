@@ -31,12 +31,16 @@ void Team::remove_unit(Unit *unit) {
 }
 
 void Team::activate_team() {
-    m_active_unit = (m_active_unit + 1) % m_team_size;
-    m_team_units[m_active_unit]->set_activeness(true);
+    if (m_team_size) {
+        m_active_unit = (m_active_unit + 1) % m_team_size;
+        m_team_units[m_active_unit]->set_activeness(true);
+    }
 }
 
 void Team::deactivate_team() {
-    m_team_units[m_active_unit]->set_activeness(false);
+    if (m_active_unit < m_team_size) {
+        m_team_units[m_active_unit]->set_activeness(false);
+    }
 }
 
 Unit *Team::activate_next_unit() {

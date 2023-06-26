@@ -15,12 +15,12 @@ enum class EventType {
     BEGIN_CHARGE_WEAPON,
     ZOOM_IN,
     ZOOM_OUT,
-    MOVE_TRANSITION,
     GAME_OVER,
     CAMERA_MOVE_LEFT,
     CAMERA_MOVE_RIGHT,
     CAMERA_MOVE_UP,
     CAMERA_MOVE_DOWN,
+    ADD_UNIT
 };
 
 #endif

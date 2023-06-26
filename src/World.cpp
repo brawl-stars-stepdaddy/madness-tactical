@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 #include "ActionEventData.hpp"
+#include "AddUnitEventListener.hpp"
 #include "Armageddon.hpp"
 #include "ArmageddonProcess.hpp"
 #include "ActionEventListener.hpp"
@@ -109,6 +110,10 @@ World::World(State &game_state, State::Context &context, EventManager &event_man
             std::make_unique<CameraMoveDownEventListener>(&m_camera),
             EventType::CAMERA_MOVE_DOWN
     );
+    m_event_manager->add_listener(
+            std::make_unique<AddUnitEventListener>(*this),
+            EventType::ADD_UNIT
+    );
 }
 
 void World::load_resources() {
@@ -151,30 +156,8 @@ void World::build_scene() {
     );
     m_scene_layers[BACKGROUND]->attach_child(std::move(background_sprite));
 
-    Team *team1 = m_team_manager->create_team(sf::Color(255, 0, 0));
-    Team *team2 = m_team_manager->create_team(sf::Color(0, 0, 255));
-
     std::unique_ptr<PlanetCore> core = std::make_unique<PlanetCore>(*this, 10);
     m_scene_layers[ENTITIES]->attach_child(std::move(core));
-
-    std::unique_ptr<Unit> worm1 = std::make_unique<Unit>(
-        *this, Unit::Type::WORM, sf::Vector2f{0, 60}, 1, 0
-    );
-    auto first_unit = worm1.get();
-    team1->add_unit(worm1.get());
-    team1->add_weapon(ARMAGEDDON);
-    auto weapon = std::make_unique<Armageddon>(*this, first_unit);
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
-    first_unit->attach_child(std::move(weapon));
-
-    std::unique_ptr<Unit> worm2 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
-    auto second_unit = worm2.get();
-    team2->add_unit(second_unit);
-    team2->add_weapon(LAND_MINE);
-    auto weapon2 = std::make_unique<LandMine>(*this, second_unit);
-    second_unit->attach_child(std::move(weapon2));
-    m_scene_layers[ENTITIES]->attach_child(std::move(worm2));
 
     std::unique_ptr<Map> map =
         std::make_unique<Map>(*this, MapGenerator(1000).get_chains());
@@ -182,7 +165,6 @@ void World::build_scene() {
     m_scene_layers[MAP]->attach_child(std::move(map));
 
     m_camera = Camera({0, 0}, 2);
-    m_team_manager->init();
 }
 
 void World::build_start_scene() {
@@ -283,4 +265,18 @@ void World::reset_bloody_fatality_candidates() {
 
 State *World::get_game_state() {
     return m_game_state;
+}
+
+void World::create_unit() {
+    auto position = m_camera.get_offset();
+
+    std::shared_ptr<Unit> unit = std::make_shared<Unit>(
+            *this, Unit::Type::WORM, position, 1, 0
+    );
+    m_team_manager->get_active_team(true)->add_unit(unit.get());
+    auto weapon = std::make_shared<Bazooka>(*this, unit.get());
+    m_scene_layers[ENTITIES]->attach_child(unit);
+    unit->attach_child(weapon);
+
+    m_team_manager->move_transition(true);
 }
