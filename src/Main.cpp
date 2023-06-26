@@ -1,4 +1,4 @@
-#include "Application.hpp"
+#include "logic/Application.hpp"
 
 int main() {
     Application application;
