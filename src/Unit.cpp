@@ -231,3 +231,7 @@ sf::Vector2f Unit::get_camera_position() const {
 const sf::Sprite &Unit::get_sprite() const {
     return m_sprite;
 }
+
+bool Unit::get_jumping_active() const {
+    return m_jumping_active;
+}

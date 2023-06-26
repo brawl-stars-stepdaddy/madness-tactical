@@ -47,6 +47,8 @@ public:
     void jump_forward();
     void jump_backward();
 
+    bool get_jumping_active() const;
+
     void set_activeness(bool);
     void kill_unit();
 
