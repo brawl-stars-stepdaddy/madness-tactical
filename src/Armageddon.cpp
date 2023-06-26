@@ -22,6 +22,7 @@ void Armageddon::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Armageddon::launch() {
+    Weapon::launch();
     m_world->add_process(std::make_unique<ArmageddonProcess>(m_world));
 }
 

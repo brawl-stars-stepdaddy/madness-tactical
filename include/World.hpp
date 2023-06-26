@@ -16,6 +16,7 @@
 #include "Process.hpp"
 #include "box2d/box2d.h"
 
+struct GameState;
 struct Map;
 struct CollisionEventListener;
 struct DestructionEventListener;
@@ -29,7 +30,7 @@ public:
         LAYER_COUNT,
     };
 
-    World(State::Context &context, EventManager &event_manager, TeamManager &team_manager);
+    World(State &game_state, State::Context &context, EventManager &event_manager, TeamManager &team_manager);
 
     void build_scene();
     void build_start_scene();
@@ -86,9 +87,12 @@ public:
 
     std::array<SceneNode *, LAYER_COUNT> &get_scene_layers();
 
+    State *get_game_state();
+
 protected:
     void load_resources();
 
+    State *m_game_state;
     State::Context m_context;
     sf::View m_world_view;
     SceneNode m_scene_graph;

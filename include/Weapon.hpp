@@ -14,7 +14,7 @@ struct Unit;
 struct Weapon : SceneNode {
     explicit Weapon(World &world);
 
-    virtual void launch() = 0;
+    virtual void launch();
     virtual WeaponControllerType get_controller_type() = 0;
     void set_hidden(bool);
 

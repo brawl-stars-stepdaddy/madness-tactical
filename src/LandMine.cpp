@@ -28,6 +28,7 @@ void LandMine::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void LandMine::launch() {
+    Weapon::launch();
     if (!Weapon::m_parent->get_jumping_active()) {
         return;
     }

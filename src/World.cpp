@@ -23,9 +23,11 @@
 #include "SpriteNode.hpp"
 #include "Unit.hpp"
 #include "WeaponBox.hpp"
+#include "GameState.hpp"
 
-World::World(State::Context &context, EventManager &event_manager, TeamManager &team_manager)
-    : m_context(context),
+World::World(State &game_state, State::Context &context, EventManager &event_manager, TeamManager &team_manager)
+    : m_game_state(&game_state),
+      m_context(context),
       m_event_manager(&event_manager),
       m_team_manager(&team_manager),
       m_world_view(context.window->getDefaultView()),
@@ -160,14 +162,13 @@ void World::build_scene() {
     );
     auto first_unit = worm1.get();
     team1->add_unit(worm1.get());
-    team1->add_weapon(LASER);
-    auto weapon = std::make_unique<Laser>(*this, first_unit);
+    team1->add_weapon(BAZOOKA);
+    auto weapon = std::make_unique<Bazooka>(*this, first_unit);
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     first_unit->attach_child(std::move(weapon));
 
     std::unique_ptr<Unit> worm2 =
-            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1},
-    1, 1);
+            std::make_unique<Unit>(*this, Unit::Type::WORM, sf::Vector2f{60, 1}, 1, 1);
     auto second_unit = worm2.get();
     team2->add_unit(second_unit);
     team2->add_weapon(LAND_MINE);
@@ -282,4 +283,8 @@ void World::reset_bloody_fatality_candidates() {
 
 std::array<SceneNode *, World::Layer::LAYER_COUNT> &World::get_scene_layers() {
     return m_scene_layers;
+}
+
+State *World::get_game_state() {
+    return m_game_state;
 }

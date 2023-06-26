@@ -30,6 +30,7 @@ void Bazooka::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Bazooka::launch() {
+    Weapon::launch();
     if (!m_is_charging) {
         return;
     }

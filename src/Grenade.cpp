@@ -32,6 +32,7 @@ void Grenade::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Grenade::launch() {
+    Weapon::launch();
     if (!m_is_charging) {
         return;
     }

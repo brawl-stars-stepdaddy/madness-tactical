@@ -42,6 +42,7 @@ void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Laser::launch() {
+    Weapon::launch();
     m_is_active = true;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {

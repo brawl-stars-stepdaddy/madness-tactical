@@ -35,9 +35,14 @@ void MoveTransitionLogicState::draw() {}
 bool MoveTransitionLogicState::update(sf::Time delta_time) {
     m_timer -= delta_time;
     if (m_timer <= sf::Time::Zero) {
-        m_game_state->get_team_manager()->move_transition();
         request_stack_clear();
-        request_stack_push(StatesID::Move);
+        if (m_game_state->get_team_manager()->get_number_available_teams() <= 1) {
+            request_stack_push(StatesID::GameOver);
+        }
+        else {
+            m_game_state->get_team_manager()->move_transition();
+            request_stack_push(StatesID::Move);
+        }
     }
     return false;
 }

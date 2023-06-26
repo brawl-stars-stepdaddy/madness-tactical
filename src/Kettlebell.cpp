@@ -24,6 +24,7 @@ void Kettlebell::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Kettlebell::launch() {
+    Weapon::launch();
     sf::Vector2f position = Weapon::m_parent->get_camera_position();
     b2Vec2 position_ = {position.x, position.y};
     position_.Normalize();

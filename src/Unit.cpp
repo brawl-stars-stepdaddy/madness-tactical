@@ -9,6 +9,7 @@
 #include "ResourceHolder.hpp"
 #include "UnitHealthBar.hpp"
 #include "Weapon.hpp"
+#include "GameState.hpp"
 
 TexturesID to_texture_id(Unit::Type type) {
     switch (type) {
@@ -208,7 +209,9 @@ void Unit::set_activeness(bool new_value) {
 
 void Unit::change_health(int value) {
     if (m_is_active) {
-        // TODO
+        auto game_state = static_cast<GameState *>(m_world->get_game_state());
+        game_state->get_logic_state_stack()->clear_states();
+        game_state->get_logic_state_stack()->push_state(StatesID::BloodyFatality);
     }
     m_health += value;
     if (m_team){
