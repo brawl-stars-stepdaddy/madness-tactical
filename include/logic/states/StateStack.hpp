@@ -19,7 +19,6 @@ public:
 
     template <typename T>
     void register_state(StatesID state_id);
-
     template <typename T, typename U>
     void register_state(StatesID state_id, U &t);
 
@@ -30,7 +29,6 @@ public:
     void handle_realtime_input();
 
     void push_state(StatesID state_id);
-
     void pop_state();
     void clear_states();
     State *top();

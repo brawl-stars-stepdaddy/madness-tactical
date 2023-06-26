@@ -20,7 +20,6 @@ void Weapon::launch() {
     game_state->get_logic_state_stack()->push_state(StatesID::POST_MOVE);
 }
 
-
 std::string Weapon::weapon_name(WeaponType weapon_type) {
     static std::vector<std::string> weapon_names { "bazooka", "laser", "grenade", "land mine", "kettleball", "armageddon", };
     return weapon_names[weapon_type];
@@ -40,5 +39,6 @@ std::shared_ptr<Weapon> Weapon::make_weapon(WeaponType weapon_type, World *world
     } else if (weapon_type == ARMAGEDDON) {
         return std::make_shared<Armageddon>(*world, unit);
     }
+    return nullptr;
 }
 

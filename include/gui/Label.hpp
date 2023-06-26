@@ -1,10 +1,11 @@
-#ifndef MADNESS_TACTICAL_LABEL_HPP
-#define MADNESS_TACTICAL_LABEL_HPP
+#ifndef LABEL_HPP_
+#define LABEL_HPP_
 
 #include "Component.hpp"
 #include "utils/ResourceIdentifiers.hpp"
 
 namespace GUI {
+
 struct Label : Component {
 public:
     Label(const std::string &text, const FontHolder &fonts);
