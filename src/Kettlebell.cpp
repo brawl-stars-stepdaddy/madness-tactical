@@ -38,3 +38,7 @@ void Kettlebell::launch() {
     ));
 }
 
+WeaponControllerType Kettlebell::get_controller_type() {
+    return DISTANT;
+}
+

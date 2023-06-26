@@ -12,6 +12,10 @@ enum WeaponControllerType { LAUNCH, DISTANT };
 struct Unit;
 
 struct Weapon : SceneNode {
+public:
+    static std::string weapon_name(WeaponType weapon_type);
+    static std::shared_ptr<Weapon> make_weapon(WeaponType weapon_type, World *world, Unit *unit);
+
     explicit Weapon(World &world);
 
     virtual void launch();

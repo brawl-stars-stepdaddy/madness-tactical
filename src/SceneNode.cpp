@@ -23,6 +23,9 @@ SceneNode::Ptr SceneNode::detach_child(const SceneNode &node) {
 }
 
 SceneNode::Ptr SceneNode::detach() {
+    if (m_parent == nullptr) {
+        return nullptr;
+    }
     auto found = std::find_if(
         m_parent->m_children.begin(), m_parent->m_children.end(),
         [this](const Ptr &p) { return p.get() == this; }

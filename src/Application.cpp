@@ -15,6 +15,10 @@ Application::Application()
     register_states();
     m_font_holder.load(FontsID::SANSATION, "res/Sansation.ttf");
     m_font_holder.load(FontsID::BAGEL_FONT, "res/BagelFatOne-Regular.ttf");
+    m_music.openFromFile("res/Z_ETO_POBEDA.ogg");
+    m_music.setLoop(true);
+    m_music.setPitch(1.f);
+    m_music.play();
 }
 
 void Application::register_states() {

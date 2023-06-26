@@ -11,6 +11,7 @@ public:
     virtual bool update(sf::Time delta_time) override;
     virtual bool handle_input(const sf::Event &event) override;
     virtual bool handle_realtime_input() override;
+    void set_controller(std::unique_ptr<Controller> controller);
 
 private:
     sf::Time m_timer = sf::seconds(10);

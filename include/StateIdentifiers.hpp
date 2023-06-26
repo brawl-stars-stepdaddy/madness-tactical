@@ -11,7 +11,8 @@ enum class StatesID {
     PostMove,
     BloodyFatality,
     MoveTransition,
-    GameOver
+    GameOver,
+    WeaponSelect,
 };
 
 #endif

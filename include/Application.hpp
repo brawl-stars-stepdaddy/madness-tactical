@@ -2,6 +2,7 @@
 #define GAME_HPP_
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "Controller.hpp"
 #include "GameLogic.hpp"
 #include "ResourceHolder.hpp"
@@ -29,6 +30,7 @@ private:
     StateStack m_state_stack;
     TextureHolder m_textures;
     FontHolder m_font_holder;
+    sf::Music m_music;
 };
 
 #endif

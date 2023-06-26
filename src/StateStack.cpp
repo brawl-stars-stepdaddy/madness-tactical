@@ -77,3 +77,11 @@ void StateStack::apply_pending_changes() {
     }
 }
 
+State *StateStack::top() {
+    return &*(m_stack.back());
+}
+
+State *StateStack::front() {
+    return &*(m_stack.front());
+}
+

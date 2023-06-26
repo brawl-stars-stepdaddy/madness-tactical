@@ -13,6 +13,8 @@ public:
 
     void set_text(const std::string &text);
 
+    virtual void handle_input(const sf::Event &event) override;
+
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states)
         const override;

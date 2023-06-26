@@ -18,15 +18,17 @@ public:
     explicit StateStack(State::Context context);
     template <typename T>
     void register_state(StatesID state_id);
+    template <typename T, typename U>
+    void register_state(StatesID state_id, U &t);
     void update(sf::Time delta_time);
     void draw();
     void handle_input(const sf::Event &event);
     void handle_realtime_input();
     void push_state(StatesID state_id);
-    template <typename T, typename U>
-    void register_state(StatesID state_id, U &t);
     void pop_state();
     void clear_states();
+    State *top();
+    State *front();
 
     bool is_empty();
 

@@ -73,4 +73,8 @@ void Container::select_previous() {
     } while (!m_children[prev]->is_selectable());
     select(prev);
 }
+
+    int Container::get_selected() {
+        return m_selected_child;
+    }
 }  // namespace GUI

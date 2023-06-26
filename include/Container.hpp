@@ -11,6 +11,7 @@ public:
     void pack(Component::Ptr component);
     bool is_selectable() override;
     void handle_input(const sf::Event &event) override;
+    int get_selected();
 
 private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states)

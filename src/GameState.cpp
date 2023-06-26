@@ -5,6 +5,7 @@
 #include "MoveTransitionLogicState.hpp"
 #include "InitLogicState.hpp"
 #include "GameOverLogicState.hpp"
+#include "WeaponSelectLogicState.hpp"
 
 GameState::GameState(StateStack &stack, State::Context context)
     : State(stack, context),
@@ -18,6 +19,7 @@ GameState::GameState(StateStack &stack, State::Context context)
     m_logic_state_stack.register_state<BloodyFatalityLogicState, GameState>(StatesID::BloodyFatality, *this);
     m_logic_state_stack.register_state<MoveTransitionLogicState, GameState>(StatesID::MoveTransition, *this);
     m_logic_state_stack.register_state<GameOverLogicState, GameState>(StatesID::GameOver, *this);
+    m_logic_state_stack.register_state<WeaponSelectLogicState, GameState>(StatesID::WeaponSelect, *this);
 
     m_logic_state_stack.push_state(StatesID::Init);
 }

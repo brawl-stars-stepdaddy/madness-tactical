@@ -38,11 +38,19 @@ bool MoveLogicState::update(sf::Time delta_time) {
 }
 
 bool MoveLogicState::handle_input(const sf::Event &event) {
-    m_controller->handle_input(event);
+    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E) {
+        request_stack_push(StatesID::WeaponSelect);
+    } else {
+        m_controller->handle_input(event);
+    }
     return false;
 }
 
 bool MoveLogicState::handle_realtime_input() {
     m_controller->handle_realtime_input();
     return false;
+}
+
+void MoveLogicState::set_controller(std::unique_ptr<Controller> controller) {
+    m_controller = std::move(controller);
 }
