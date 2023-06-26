@@ -70,7 +70,7 @@ EntityType Unit::get_type() {
     return EntityType::UNIT;
 }
 
-void Unit::on_collision(Entity *other_object) {
+void Unit::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::MAP) {
         m_dumping_active = true;
     }
@@ -90,9 +90,6 @@ void Unit::on_explosion(const Explosion &explosion) {
     change_health(static_cast<int>(
             std::max(static_cast<float>(-m_health), -sqrtf(powf(x_impulse, 2) + powf(y_impulse, 2))))
     );
-    if (m_health == 0) {
-        m_world->add_bloody_fatality_candidate(this);
-    }
 }
 
 float Unit::get_direction() const {
@@ -208,14 +205,17 @@ void Unit::set_activeness(bool new_value) {
 }
 
 void Unit::change_health(int value) {
-    if (m_is_active) {
+    if (m_is_active && value < 0) {
         auto game_state = static_cast<GameState *>(m_world->get_game_state());
         game_state->get_logic_state_stack()->clear_states();
         game_state->get_logic_state_stack()->push_state(StatesID::BloodyFatality);
     }
     m_health += value;
-    if (m_team){
+    if (m_team) {
         m_team->change_health(value);
+    }
+    if (m_health <= 0) {
+        m_world->add_bloody_fatality_candidate(this);
     }
 }
 

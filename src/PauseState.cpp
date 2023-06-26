@@ -8,7 +8,7 @@ PauseState::PauseState(StateStack &stack, State::Context context)
     : State(stack, context),
       m_text_effect_time(sf::Time::Zero),
       m_show_text(true) {
-    m_pause_text.setString("BPEMR COCATb XYN!!! (pereryv 10 minutes)");
+    m_pause_text.setString("PAUSE");
     m_pause_text.setFont(context.fonts->get(FontsID::SANSATION));
     GuiUtil::center(m_pause_text);
     m_pause_text.setPosition(

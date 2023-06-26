@@ -132,8 +132,8 @@ void World::load_resources() {
 
 void World::build_scene() {
     for (std::size_t i = 0; i < LAYER_COUNT; i++) {
-        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
-        m_scene_layers[i] = layer.get();
+        auto layer = std::make_shared<SceneNode>(*this);
+        m_scene_layers[i] = layer;
         m_scene_graph.attach_child(std::move(layer));
     }
     std::unique_ptr<SpriteNode> background_sprite =
@@ -162,8 +162,8 @@ void World::build_scene() {
     );
     auto first_unit = worm1.get();
     team1->add_unit(worm1.get());
-    team1->add_weapon(BAZOOKA);
-    auto weapon = std::make_unique<Bazooka>(*this, first_unit);
+    team1->add_weapon(ARMAGEDDON);
+    auto weapon = std::make_unique<Armageddon>(*this, first_unit);
     m_scene_layers[ENTITIES]->attach_child(std::move(worm1));
     first_unit->attach_child(std::move(weapon));
 
@@ -187,8 +187,8 @@ void World::build_scene() {
 
 void World::build_start_scene() {
     for (std::size_t i = 0; i < LAYER_COUNT; i++) {
-        SceneNode::Ptr layer = std::make_unique<SceneNode>(*this);
-        m_scene_layers[i] = layer.get();
+        auto layer = std::make_shared<SceneNode>(*this);
+        m_scene_layers[i] = layer;
         m_scene_graph.attach_child(std::move(layer));
     }
     std::unique_ptr<SpriteNode> background_sprite =
@@ -279,10 +279,6 @@ std::vector<Unit *> &World::get_bloody_fatality_candidates() {
 
 void World::reset_bloody_fatality_candidates() {
     m_bloody_fatality_candidates.clear();
-}
-
-std::array<SceneNode *, World::Layer::LAYER_COUNT> &World::get_scene_layers() {
-    return m_scene_layers;
 }
 
 State *World::get_game_state() {

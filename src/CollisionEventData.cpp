@@ -1,12 +1,13 @@
 #include "CollisionEventData.hpp"
 
+#include <utility>
+
 CollisionEventData::CollisionEventData(
-    Entity *first_object,
-    Entity *second_object,
+    std::shared_ptr<Entity> first_object, std::shared_ptr<Entity> second_object,
     CollisionType collision_type
 )
-    : m_first_object(first_object),
-      m_second_object(second_object),
+    : m_first_object(std::move(first_object)),
+      m_second_object(std::move(second_object)),
       m_collision_type(collision_type) {
 }
 
@@ -19,10 +20,10 @@ CollisionEventData::CollisionType CollisionEventData::get_collision_type(
     return m_collision_type;
 }
 
-Entity *CollisionEventData::get_first_object() const {
+std::shared_ptr<Entity> CollisionEventData::get_first_object() const {
     return m_first_object;
 }
 
-Entity *CollisionEventData::get_second_object() const {
+std::shared_ptr<Entity> CollisionEventData::get_second_object() const {
     return m_second_object;
 }

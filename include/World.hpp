@@ -66,7 +66,7 @@ public:
         m_active_unit = unit;
     }
 
-    SceneNode *get_layer(Layer layer) {
+    std::shared_ptr<SceneNode> get_layer(Layer layer) {
         return m_scene_layers[layer];
     }
 
@@ -85,8 +85,6 @@ public:
     std::vector<Unit *> &get_bloody_fatality_candidates();
     void reset_bloody_fatality_candidates();
 
-    std::array<SceneNode *, LAYER_COUNT> &get_scene_layers();
-
     State *get_game_state();
 
 protected:
@@ -96,7 +94,7 @@ protected:
     State::Context m_context;
     sf::View m_world_view;
     SceneNode m_scene_graph;
-    std::array<SceneNode *, LAYER_COUNT> m_scene_layers;
+    std::array<std::shared_ptr<SceneNode>, LAYER_COUNT> m_scene_layers;
 
     sf::FloatRect m_world_bounds;
     Unit *m_active_unit;

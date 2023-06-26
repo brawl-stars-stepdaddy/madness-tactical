@@ -6,13 +6,13 @@
 struct KettlebellProjectile : Projectile {
     KettlebellProjectile(
             World &,
-    sf::Vector2f,
-    float,
-    float,
-    TexturesID
+            sf::Vector2f,
+            float,
+            float,
+            TexturesID
     );
 
-    void on_collision(Entity *) override;
+    void on_collision(std::shared_ptr<Entity>) override;
 
 private:
     void update_current(sf::Time delta_time) override;

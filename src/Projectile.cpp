@@ -51,7 +51,7 @@ EntityType Projectile::get_type() {
     return EntityType::PROJECTILE;
 }
 
-void Projectile::on_collision(Entity *other_object) {
+void Projectile::on_collision(std::shared_ptr<Entity> other_object) {
 }
 
 void Projectile::on_explosion(const Explosion &) {

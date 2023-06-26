@@ -13,7 +13,7 @@ public:
     Entity(World &world);
     virtual Body &get_body() = 0;
     virtual EntityType get_type() = 0;
-    virtual void on_collision(Entity *) = 0;
+    virtual void on_collision(std::shared_ptr<Entity>) = 0;
     virtual void on_explosion(const Explosion &) = 0;
 
 protected:

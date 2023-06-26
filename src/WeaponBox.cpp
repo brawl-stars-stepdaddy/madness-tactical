@@ -14,9 +14,9 @@ WeaponBox::WeaponBox(World &world, sf::FloatRect rect) : Box(world) {
     GuiUtil::center(m_sprite);
 }
 
-void WeaponBox::on_collision(Entity *other_object) {
+void WeaponBox::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
-        Unit *unit = static_cast<Unit *>(other_object);
+        auto unit = std::static_pointer_cast<Unit>(other_object);
         Team *team = unit->get_team();
         if (team) {
             auto type = static_cast<WeaponType>(random() % WEAPON_TYPES_NUMBER);

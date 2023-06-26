@@ -6,7 +6,7 @@ PostMoveLogicState::PostMoveLogicState(StateStack &stack, State::Context context
     :   State(stack, context), m_game_state(&game_state) {
     m_controller = std::make_unique<PostMoveController>(game_state);
     auto camera = m_game_state->get_world()->get_camera();
-    auto target = m_game_state->get_team_manager()->get_active_team()->get_active_unit();
+    auto target = std::static_pointer_cast<Unit>(m_game_state->get_team_manager()->get_active_team()->get_active_unit()->get_pointer());
     camera->set_follow_strategy(std::make_unique<SmoothFollowStrategy>(camera, target));
 }
 

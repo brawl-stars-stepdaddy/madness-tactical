@@ -18,7 +18,7 @@ struct TimerProjectile : Projectile {
     );
 
     void explode();
-    void on_collision(Entity *) override;
+    void on_collision(std::shared_ptr<Entity>) override;
 
 private:
     void update_current(sf::Time delta_time) override;

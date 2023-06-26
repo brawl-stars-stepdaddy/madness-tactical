@@ -54,7 +54,7 @@ void TimerProjectile::update_current(sf::Time delta_time) {
     explode();
 }
 
-void TimerProjectile::on_collision(Entity *) {
+void TimerProjectile::on_collision(std::shared_ptr<Entity>) {
     if (m_activation_timer <= 0) {
         is_activated = true;
     }

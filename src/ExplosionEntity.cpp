@@ -18,7 +18,7 @@ ExplosionEntity::ExplosionEntity(World &world, Explosion explosion)
       ) {
 }
 
-void ExplosionEntity::on_collision(Entity *other_object) {
+void ExplosionEntity::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() != EntityType::EXPLOSION &&
         other_object->get_type() != EntityType::PROJECTILE) {
         m_world->get_event_manager()->queue_event(

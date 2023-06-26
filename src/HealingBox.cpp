@@ -14,9 +14,9 @@ HealingBox::HealingBox(World &world, sf::FloatRect rect) : Box(world) {
     GuiUtil::center(m_sprite);
 }
 
-void HealingBox::on_collision(Entity *other_object) {
+void HealingBox::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
-        Unit *unit = static_cast<Unit *>(other_object);
+        auto unit = std::static_pointer_cast<Unit>(other_object);
         unit->change_health(25);
         m_body.get_b2Body()->SetEnabled(false);
         m_world->get_event_manager()->queue_event(

@@ -18,16 +18,6 @@ void CollisionEventListener::process(const EventData &event) {
             first->on_collision(second);
             second->on_collision(first);
         }
-        else {
-            if (first->get_type() ==
-                    EntityType::JUMP_SENSOR) {
-                static_cast<JumpSensor *>(first)->end_collision(second);
-            }
-            if (second->get_type() ==
-                    EntityType::JUMP_SENSOR) {
-                static_cast<JumpSensor *>(second)->end_collision(first);
-            }
-        }
         processed_collisions.insert({first, second});
     }
 }

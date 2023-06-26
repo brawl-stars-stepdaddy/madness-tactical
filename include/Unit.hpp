@@ -35,7 +35,7 @@ public:
     void set_weapon(Weapon *);
     Weapon *get_weapon() const;
 
-    void on_collision(Entity *) override;
+    void on_collision(std::shared_ptr<Entity>) override;
     void on_explosion(const Explosion &) override;
 
     void set_moving_active(bool);

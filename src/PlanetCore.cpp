@@ -38,9 +38,9 @@ EntityType PlanetCore::get_type() {
     return EntityType::PLANET_CORE;
 }
 
-void PlanetCore::on_collision(Entity *other_object) {
+void PlanetCore::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
-        auto unit = static_cast<Unit *>(other_object);
+        auto unit = std::static_pointer_cast<Unit>(other_object);
         unit->change_health(-unit->get_health());
     }
 }
