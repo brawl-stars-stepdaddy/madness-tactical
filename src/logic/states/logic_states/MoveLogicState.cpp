@@ -12,9 +12,6 @@ MoveLogicState::MoveLogicState(
     GameState &game_state
 )
     : State(stack, context), m_game_state(&game_state) {
-    m_game_state->get_world()->set_active_unit(
-        m_game_state->get_team_manager()->get_active_team()->get_active_unit()
-    );
     auto unit = std::static_pointer_cast<Unit>(m_game_state->get_team_manager()
                                                    ->get_active_team()
                                                    ->get_active_unit()

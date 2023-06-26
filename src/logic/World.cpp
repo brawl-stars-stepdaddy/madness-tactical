@@ -26,7 +26,6 @@ World::World(
       m_team_manager(&team_manager),
       m_world_view(context.window->getDefaultView()),
       m_world_bounds(-200, -200, 400, 400),
-      m_active_unit(nullptr),
       m_physics_world({0, 0}),
       m_camera(nullptr),
       m_scene_graph(*this) {

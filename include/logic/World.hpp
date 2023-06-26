@@ -54,11 +54,7 @@ public:
     }
 
     Unit *get_player() {
-        return m_active_unit;
-    }
-
-    void set_active_unit(Unit *unit) {
-        m_active_unit = unit;
+        return m_team_manager->get_active_team()->get_active_unit();
     }
 
     std::shared_ptr<SceneNode> get_layer(Layer layer) {
@@ -92,7 +88,6 @@ protected:
     std::array<std::shared_ptr<SceneNode>, LAYER_COUNT> m_scene_layers;
 
     sf::FloatRect m_world_bounds;
-    Unit *m_active_unit;
     b2World m_physics_world;
     CollisionEventListener *m_collision_listener;
     DestructionEventListener *m_destruction_listener;
