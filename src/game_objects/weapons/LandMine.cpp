@@ -33,9 +33,6 @@ void LandMine::launch() {
     }
     Weapon::m_parent->get_team()->remove_weapon(WeaponType::LAND_MINE);
     Weapon::launch();
-    if (!Weapon::m_parent->get_jumping_active()) {
-        return;
-    }
     b2Vec2 position = {
         m_parent->get_body().get_position().x,
         m_parent->get_body().get_position().y};

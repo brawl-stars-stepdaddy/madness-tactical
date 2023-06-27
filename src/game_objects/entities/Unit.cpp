@@ -102,7 +102,7 @@ void Unit::move(sf::Time delta_time, float direction) {
                 .Length();
         float horizontal_change =
             direction *
-                b2Min(abs(horizontal_projection + 5.0f * direction), 5.0f) -
+                b2Min(abs(horizontal_projection + 10.0f * direction), 10.0f) -
             horizontal_projection;
         float impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
         float angle = atan2f(normal.x, normal.y);
@@ -126,28 +126,28 @@ void Unit::stop_move(sf::Time delta_time) {
     }
 }
 
-void Unit::jump_forward() {
+void Unit::big_jump() {
     if (m_jumping_active) {
         b2Vec2 vertical = m_body.get_b2Body()->GetPosition();
         b2Vec2 horizontal = {-vertical.y, vertical.x};
         vertical.Normalize();
         horizontal.Normalize();
-        horizontal *= m_direction * 30;
-        vertical *= 30;
+        horizontal *= m_direction * 60;
+        vertical *= 150;
         m_body.get_b2Body()->ApplyLinearImpulseToCenter(
             horizontal + vertical, true
         );
     }
 }
 
-void Unit::jump_backward() {
+void Unit::small_jump() {
     if (m_jumping_active) {
         b2Vec2 vertical = m_body.get_b2Body()->GetPosition();
         b2Vec2 horizontal = {-vertical.y, vertical.x};
         vertical.Normalize();
         horizontal.Normalize();
-        horizontal *= -m_direction * 20;
-        vertical *= 40;
+        horizontal *= m_direction * 80;
+        vertical *= 50;
         m_body.get_b2Body()->ApplyLinearImpulseToCenter(
             horizontal + vertical, true
         );

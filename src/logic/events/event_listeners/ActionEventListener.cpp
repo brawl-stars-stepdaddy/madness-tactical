@@ -48,14 +48,14 @@ MoveRightEventListener::MoveRightEventListener(World &world) : ActionEventListen
 
 void JumpForwardEventListener::process([[maybe_unused]] const EventData &event
 ) {
-    m_world->get_player()->jump_forward();
+    m_world->get_player()->big_jump();
 }
 
 JumpForwardEventListener::JumpForwardEventListener(World &world) : ActionEventListener(world) {}
 
 void JumpBackwardEventListener::process([[maybe_unused]] const EventData &event
 ) {
-    m_world->get_player()->jump_backward();
+    m_world->get_player()->small_jump();
 }
 
 JumpBackwardEventListener::JumpBackwardEventListener(World &world) : ActionEventListener(world) {}
