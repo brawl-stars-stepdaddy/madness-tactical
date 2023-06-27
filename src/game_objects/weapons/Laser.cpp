@@ -35,6 +35,22 @@ void Laser::update_current(sf::Time delta_time) {
 void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
     RotatableWeapon::draw_current(target, states);
+    if (m_is_active) {
+        sf::Vector2f position = m_start_position;
+        position.x += m_direction.x * static_cast<float>(m_explosions_number);
+        position.y += m_direction.y * static_cast<float>(m_explosions_number);
+        sf::Vector2f s_pos = position - m_direction * 3.f;
+        float dx = position.x - s_pos.x;
+        float dy = position.y - s_pos.y;
+        float beam_length = sqrtf(dx * dx + dy * dy);
+        sf::RectangleShape beam;
+        beam.setSize({beam_length * World::SCALE, 40});
+        beam.setOrigin({0, 20});
+        beam.rotate(m_laser_angle * 180 / M_PI);
+        beam.setFillColor(sf::Color::Red);
+        beam.setPosition(s_pos * World::SCALE);
+        target.draw(beam);
+    }
     if (!m_is_hidden) {
         target.draw(m_sprite, states);
     }
@@ -52,6 +68,7 @@ void Laser::launch() {
         angle = M_PI - angle;
     }
     angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
+    m_laser_angle = angle;
     m_start_position = {
         m_parent->get_body().get_position().x + cos(angle) * 3.0f,
         m_parent->get_body().get_position().y + sin(angle) * 3.0f};
