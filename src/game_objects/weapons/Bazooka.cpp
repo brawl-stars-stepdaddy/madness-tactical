@@ -39,7 +39,7 @@ void Bazooka::launch() {
         return;
     }
     set_currently_charging(false);
-    float impulse_value = m_charge_level * 20;
+    float impulse_value = m_charge_level * 5;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;

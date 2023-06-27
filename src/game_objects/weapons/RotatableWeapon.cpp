@@ -14,14 +14,16 @@ void RotatableWeapon::draw_current(
     sf::RenderTarget &target,
     sf::RenderStates states
 ) const {
-    float angle = m_angle;
-    float dist = 400.f;
-    sf::Sprite aim;
-    aim.setTexture(m_world->get_texture_holder().get(TexturesID::AIM));
-    GuiUtil::center(aim);
-    GuiUtil::resize(aim, {100, 100});
-    aim.setPosition(sf::Vector2f{cos(angle), sin(angle)} * dist);
-    target.draw(aim, states);
+    if (!m_is_hidden) {
+        float angle = m_angle;
+        float dist = 400.f;
+        sf::Sprite aim;
+        aim.setTexture(m_world->get_texture_holder().get(TexturesID::AIM));
+        GuiUtil::center(aim);
+        GuiUtil::resize(aim, {200, 200});
+        aim.setPosition(sf::Vector2f{cos(angle), sin(angle)} * dist);
+        target.draw(aim, states);
+    }
 }
 
 void RotatableWeapon::set_angle_change_direction(float direction) {
@@ -29,14 +31,12 @@ void RotatableWeapon::set_angle_change_direction(float direction) {
 }
 
 void RotatableWeapon::change_angle(sf::Time delta_time, float direction) {
-    if (!m_is_rotation_blocked) {
-        m_angle = std::min(
-            M_PI_2f,
-            std::max(
-                -M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction
-            )
-        );
-    }
+    m_angle = std::min(
+        M_PI_2f,
+        std::max(
+            -M_PI_2f, m_angle + delta_time.asSeconds() * 1.f * -direction
+        )
+    );
 }
 
 void RotatableWeapon::reset() {

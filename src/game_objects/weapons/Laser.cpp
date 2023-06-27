@@ -39,15 +39,15 @@ void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
         sf::Vector2f position = m_start_position;
         position.x += m_direction.x * static_cast<float>(m_explosions_number);
         position.y += m_direction.y * static_cast<float>(m_explosions_number);
-        sf::Vector2f s_pos = position - m_direction * 3.f;
+        sf::Vector2f s_pos = position - m_direction * 10.f;
         float dx = position.x - s_pos.x;
         float dy = position.y - s_pos.y;
-        float beam_length = sqrtf(dx * dx + dy * dy);
-        sf::RectangleShape beam;
-        beam.setSize({beam_length * World::SCALE, 40});
-        beam.setOrigin({0, 20});
-        beam.rotate(m_laser_angle * 180 / M_PI);
-        beam.setFillColor(sf::Color::Red);
+        float beam_length = sqrtf(dx * dx + dy * dy) * World::SCALE;
+        sf::Sprite beam;
+        beam.setTexture(m_world->get_texture_holder().get(TexturesID::LASER_BLAST));
+        GuiUtil::resize(beam, sf::Vector2u(beam_length, 150));
+        beam.setOrigin(0, 101);
+        beam.rotate(m_laser_angle * 180 / M_PIf);
         beam.setPosition(s_pos * World::SCALE);
         target.draw(beam);
     }

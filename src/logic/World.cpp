@@ -121,6 +121,7 @@ void World::load_resources() const {
     m_context.textures->load(TexturesID::CASE, "res/case.png");
     m_context.textures->load(TexturesID::METEORITE, "res/meteorite.png");
     m_context.textures->load(TexturesID::AIM, "res/aim.png");
+    m_context.textures->load(TexturesID::LASER_BLAST, "res/laser_blast.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 }
