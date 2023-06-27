@@ -33,6 +33,8 @@ private:
     void								handleIncomingEventPacket(sf::Packet packet);
     void								broadcastMessage(sf::Packet packet);
 
+    void                                start_game();
+
     int                                 port;
     int                                 number_of_players;
 

@@ -1,6 +1,5 @@
 #include "logic/GameServer.hpp"
 
-
 GameServer::GameServer(int players_count) {
     number_of_players = players_count;
     port = 50000;
@@ -53,6 +52,13 @@ void GameServer::handleIncomingConnections() {
             }
         }
     }
+    start_game();
+}
+
+void GameServer::start_game() {
+    sf::Packet start_game_packet;
+    start_game_packet << "start_game";
+    broadcastMessage(start_game_packet);
 }
 
 void GameServer::handleIncomingPackets(int active_player) {
