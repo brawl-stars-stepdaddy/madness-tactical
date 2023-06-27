@@ -20,11 +20,14 @@ Projectile::Projectile(
           this,
           m_world->get_physics_world(),
           center,
-          radius,
+          radius / 2,
           is_sensor,
-          is_static
+          false
       )),
       m_explosion_radius(explosion_radius) {
+    if (is_static) {
+        m_body.get_b2Body()->SetFixedRotation(true);
+    }
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setScale(
         radius * World::SCALE * 2 / bounds.width,

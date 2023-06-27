@@ -12,6 +12,9 @@ void Box::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 
 void Box::update_current([[maybe_unused]] sf::Time delta_time) {
     Entity::update_current(delta_time);
+    if (get_body().get_b2Body()->IsAwake()) {
+        m_world->set_world_at_rest(false);
+    }
 }
 
 RectBody &Box::get_body() {

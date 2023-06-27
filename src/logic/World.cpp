@@ -120,6 +120,7 @@ void World::load_resources() const {
     m_context.textures->load(TexturesID::KETTLEBELL, "res/kettlebell.png");
     m_context.textures->load(TexturesID::CASE, "res/case.png");
     m_context.textures->load(TexturesID::METEORITE, "res/meteorite.png");
+    m_context.textures->load(TexturesID::AIM, "res/aim.png");
     m_context.textures->get(TexturesID::MAP_TEXTURE).setRepeated(true);
     m_context.textures->get(TexturesID::BACKGROUND).setRepeated(true);
 }
@@ -205,6 +206,7 @@ void World::draw() {
 }
 
 void World::update(sf::Time delta_time) {
+    m_world_at_rest = true;
     execute_processes(delta_time);
     m_physics_world.Step(delta_time.asSeconds(), 1, 1);
     m_scene_graph.update(delta_time);
@@ -239,7 +241,10 @@ Camera *World::get_camera() {
 }
 
 void World::add_bloody_fatality_candidate(Unit *unit) {
-    m_bloody_fatality_candidates.push_back(unit);
+    if (std::find(m_bloody_fatality_candidates.begin(), m_bloody_fatality_candidates.end(), unit)
+            == m_bloody_fatality_candidates.end()) {
+        m_bloody_fatality_candidates.push_back(unit);
+    }
 }
 
 std::vector<Unit *> &World::get_bloody_fatality_candidates() {
@@ -258,11 +263,19 @@ void World::create_unit() {
     auto position = m_camera.get_offset();
 
     std::shared_ptr<Unit> unit =
-        std::make_shared<Unit>(*this, position, 1);
+        std::make_shared<Unit>(*this, position, 2);
     m_team_manager->get_active_team(true)->add_unit(unit.get());
     auto weapon = std::make_shared<Bazooka>(*this, unit.get());
     m_scene_layers[ENTITIES]->attach_child(unit);
     unit->attach_child(weapon);
 
     m_team_manager->move_transition(true);
+}
+
+void World::set_world_at_rest(bool value) {
+    m_world_at_rest = value;
+}
+
+bool World::get_world_at_rest() const {
+    return m_world_at_rest;
 }

@@ -78,6 +78,10 @@ public:
 
     void create_unit();
 
+
+    void set_world_at_rest(bool value);
+    bool get_world_at_rest() const;
+
 protected:
     void load_resources() const;
 
@@ -94,6 +98,8 @@ protected:
     Camera m_camera;
     TeamManager *m_team_manager;
     EventManager *m_event_manager;
+
+    bool m_world_at_rest = true;
 
     std::vector<std::unique_ptr<Process>> m_processes;
     std::vector<Unit *> m_bloody_fatality_candidates;

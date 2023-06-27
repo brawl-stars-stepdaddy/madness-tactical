@@ -15,7 +15,7 @@ public:
     void set_controller(std::unique_ptr<Controller> controller);
 
 private:
-    sf::Time m_timer = sf::seconds(10);
+    sf::Time m_timer = sf::seconds(30);
     std::unique_ptr<Controller> m_controller = nullptr;
     GameState *m_game_state;
     sf::Text m_timer_text;
