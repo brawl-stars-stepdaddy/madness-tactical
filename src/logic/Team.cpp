@@ -3,7 +3,11 @@
 
 Team::Team(sf::Color color) : m_team_color(color) {
     m_available_weapons[BAZOOKA] = 10;
-    m_available_weapons[GRENADE] = 10;
+    m_available_weapons[GRENADE] = 1;
+    m_available_weapons[LASER] = 1;
+    m_available_weapons[LAND_MINE] = 1;
+    m_available_weapons[ARMAGEDDON] = 1;
+    m_available_weapons[KETTLEBELL] = 1;
 }
 
 void Team::add_unit(Unit *unit) {

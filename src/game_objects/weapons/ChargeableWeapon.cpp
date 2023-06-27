@@ -28,8 +28,8 @@ void ChargeableWeapon::draw_current(
             sf::Vector2f pos = m_parent->get_body().get_position() +
                                direction * (2.f + 2.f * static_cast<float>(i) / static_cast<float>(charge_steps));
             sf::CircleShape circle;
-            circle.setRadius((0.25f + 0.25f / static_cast<float>(charge_steps * i) * World::SCALE));
-            circle.setFillColor(sf::Color(255, static_cast<int>(255.f / static_cast<float>(charge_steps * i)), 0));
+            circle.setRadius((0.25f + 0.25f / static_cast<float>(charge_steps) * static_cast<float>(i)) * World::SCALE);
+            circle.setFillColor(sf::Color(255, static_cast<int>(255.f / static_cast<float>(charge_steps)) * i, 0));
             circle.setOrigin(circle.getRadius(), circle.getRadius());
             circle.setPosition(pos * World::SCALE);
             target.draw(circle);

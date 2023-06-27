@@ -1,4 +1,5 @@
 #include "game_objects/entities/PlanetCore.hpp"
+#include "game_objects/entities/Box.hpp"
 #include "game_objects/entities/Unit.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/DestructionEventData.hpp"
@@ -44,6 +45,10 @@ void PlanetCore::on_collision(std::shared_ptr<Entity> other_object) {
     if (other_object->get_type() == EntityType::UNIT) {
         auto unit = std::static_pointer_cast<Unit>(other_object);
         unit->change_health(-unit->get_health());
+    }
+    if (other_object->get_type() == EntityType::BOX) {
+        auto box = std::static_pointer_cast<Box>(other_object);
+        box->detach();
     }
 }
 

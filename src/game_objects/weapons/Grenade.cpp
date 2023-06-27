@@ -31,6 +31,10 @@ void Grenade::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Grenade::launch() {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::GRENADE) == 0) {
+        return;
+    }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::GRENADE);
     Weapon::launch();
     if (!m_is_charging) {
         return;

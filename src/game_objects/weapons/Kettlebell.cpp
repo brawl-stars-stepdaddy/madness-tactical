@@ -26,6 +26,10 @@ void Kettlebell::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Kettlebell::launch() {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::KETTLEBELL) == 0) {
+        return;
+    }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::KETTLEBELL);
     Weapon::launch();
     sf::Vector2f position = Weapon::m_parent->get_camera_position();
     b2Vec2 position_ = {position.x, position.y};

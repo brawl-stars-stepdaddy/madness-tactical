@@ -15,6 +15,7 @@ void Weapon::set_hidden(bool new_value) {
 }
 
 void Weapon::launch() {
+    set_hidden(true);
     auto game_state = dynamic_cast<GameState *>(m_world->get_game_state());
     game_state->get_logic_state_stack()->clear_states();
     game_state->get_logic_state_stack()->push_state(StatesID::POST_MOVE);

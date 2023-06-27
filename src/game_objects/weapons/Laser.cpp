@@ -12,7 +12,7 @@ Laser::Laser(World &world, Unit *parent) : RotatableWeapon(world) {
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
     float width = 1, height = 0.6;
-    GuiUtil::shrink_to_rect_scale(m_sprite, width * 2, height * 2);
+    GuiUtil::shrink_to_rect_scale(m_sprite, width * 4, height * 4);
 }
 
 void Laser::update_current(sf::Time delta_time) {
@@ -41,6 +41,10 @@ void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Laser::launch() {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::LASER) == 0) {
+        return;
+    }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::LASER);
     Weapon::launch();
     m_is_active = true;
     float angle = m_angle;
@@ -49,8 +53,8 @@ void Laser::launch() {
     }
     angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
     m_start_position = {
-        m_parent->get_body().get_position().x + cos(angle) * 1.5f,
-        m_parent->get_body().get_position().y + sin(angle) * 1.5f};
+        m_parent->get_body().get_position().x + cos(angle) * 3.0f,
+        m_parent->get_body().get_position().y + sin(angle) * 3.0f};
     m_direction = {
         cos(angle) * m_ray_radius * 1.2f, sin(angle) * m_ray_radius * 1.2f};
 }

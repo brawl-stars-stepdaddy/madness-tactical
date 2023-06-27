@@ -17,7 +17,7 @@ public:
     bool handle_realtime_input() override;
 
 private:
-    sf::Time m_timer = sf::seconds(5);
+    sf::Time m_timer = sf::seconds(8);
     GameState *m_game_state;
     float m_box_fall_distance = 100.0f;
     float m_box_fall_impulse = -0.1f;

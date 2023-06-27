@@ -1,5 +1,7 @@
 #include "logic/states/logic_states/InitLogicState.hpp"
 #include "logic/controllers/InitController.hpp"
+#include "utils/ResourceHolder.hpp"
+#include "utils/GuiUtil.hpp"
 
 InitLogicState::InitLogicState(
     StateStack &stack,
@@ -19,6 +21,13 @@ InitLogicState::InitLogicState(
 }
 
 void InitLogicState::draw() {
+    get_context().window->setView(get_context().window->getDefaultView());
+    sf::Sprite aim;
+    aim.setTexture(get_context().textures->get(TexturesID::AIM));
+    GuiUtil::center(aim);
+    GuiUtil::resize(aim, {100, 100});
+    aim.setPosition(get_context().window->getView().getCenter());
+    get_context().window->draw(aim);
 }
 
 bool InitLogicState::update(sf::Time delta_time) {
