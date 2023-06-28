@@ -11,8 +11,8 @@ LandMine::LandMine(World &world, Unit *parent) : Weapon(world) {
     );
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setScale(
-        m_projectile_radius * World::SCALE * 2 / bounds.width,
-        m_projectile_radius * World::SCALE * 2 / bounds.height
+        m_projectile_radius * World::SCALE * 1.5f / bounds.width,
+        m_projectile_radius * World::SCALE * 1.5f / bounds.height
     );
     m_sprite.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
 }
@@ -28,10 +28,11 @@ void LandMine::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void LandMine::launch() {
-    Weapon::launch();
-    if (!Weapon::m_parent->get_jumping_active()) {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::LAND_MINE) == 0) {
         return;
     }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::LAND_MINE);
+    Weapon::launch();
     b2Vec2 position = {
         m_parent->get_body().get_position().x,
         m_parent->get_body().get_position().y};
@@ -42,7 +43,7 @@ void LandMine::launch() {
     m_world->get_layer(World::Layer::ENTITIES)
         ->attach_child(std::make_unique<TimerProjectile>(
             *m_world, start_position, impulse, m_projectile_radius,
-            m_explosion_radius, m_activation_time, m_explosion_time, true, true,
+            m_explosion_radius, m_activation_time, m_explosion_time, false, true,
             TexturesID::LAND_MINE
         ));
 }

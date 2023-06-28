@@ -15,6 +15,7 @@ void ChargeableWeapon::draw_current(
     sf::RenderTarget &target,
     sf::RenderStates states
 ) const {
+    RotatableWeapon::draw_current(target, states);
     if (!m_is_hidden && m_is_charging) {
         int charge_steps = 20;
         int steps = static_cast<int>(m_charge_level * (static_cast<float>(charge_steps) - 0.1f));
@@ -39,7 +40,6 @@ void ChargeableWeapon::draw_current(
 
 void ChargeableWeapon::set_currently_charging(bool is_charging) {
     m_is_charging = is_charging;
-    m_is_rotation_blocked = is_charging;
 }
 
 void ChargeableWeapon::charge(sf::Time delta_time) {

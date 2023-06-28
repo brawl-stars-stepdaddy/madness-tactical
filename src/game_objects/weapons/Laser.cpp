@@ -12,7 +12,7 @@ Laser::Laser(World &world, Unit *parent) : RotatableWeapon(world) {
     sf::FloatRect bounds = m_sprite.getLocalBounds();
     m_sprite.setOrigin(bounds.width / 4.f, bounds.height / 2.f);
     float width = 1, height = 0.6;
-    GuiUtil::shrink_to_rect_scale(m_sprite, width * 2, height * 2);
+    GuiUtil::shrink_to_rect_scale(m_sprite, width * 4, height * 4);
 }
 
 void Laser::update_current(sf::Time delta_time) {
@@ -35,12 +35,32 @@ void Laser::update_current(sf::Time delta_time) {
 void Laser::draw_current(sf::RenderTarget &target, sf::RenderStates states)
     const {
     RotatableWeapon::draw_current(target, states);
+    if (m_is_active) {
+        sf::Vector2f position = m_start_position;
+        position.x += m_direction.x * static_cast<float>(m_explosions_number);
+        position.y += m_direction.y * static_cast<float>(m_explosions_number);
+        sf::Vector2f s_pos = position - m_direction * 10.f;
+        float dx = position.x - s_pos.x;
+        float dy = position.y - s_pos.y;
+        float beam_length = sqrtf(dx * dx + dy * dy) * World::SCALE;
+        sf::Sprite beam;
+        beam.setTexture(m_world->get_texture_holder().get(TexturesID::LASER_BLAST));
+        GuiUtil::resize(beam, sf::Vector2u(beam_length, 150));
+        beam.setOrigin(0, 101);
+        beam.rotate(m_laser_angle * 180 / M_PIf);
+        beam.setPosition(s_pos * World::SCALE);
+        target.draw(beam);
+    }
     if (!m_is_hidden) {
         target.draw(m_sprite, states);
     }
 }
 
 void Laser::launch() {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::LASER) == 0) {
+        return;
+    }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::LASER);
     Weapon::launch();
     m_is_active = true;
     float angle = m_angle;
@@ -48,9 +68,10 @@ void Laser::launch() {
         angle = M_PI - angle;
     }
     angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
+    m_laser_angle = angle;
     m_start_position = {
-        m_parent->get_body().get_position().x + cos(angle) * 1.5f,
-        m_parent->get_body().get_position().y + sin(angle) * 1.5f};
+        m_parent->get_body().get_position().x + cos(angle) * 3.0f,
+        m_parent->get_body().get_position().y + sin(angle) * 3.0f};
     m_direction = {
         cos(angle) * m_ray_radius * 1.2f, sin(angle) * m_ray_radius * 1.2f};
 }

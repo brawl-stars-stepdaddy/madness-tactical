@@ -38,8 +38,8 @@ public:
 
     void move(sf::Time delta_time, float direction);
     void stop_move(sf::Time delta_time);
-    void jump_forward();
-    void jump_backward();
+    void big_jump();
+    void small_jump();
 
     bool get_jumping_active() const;
 

@@ -20,11 +20,12 @@ private:
 
     int m_frequency = 3;
     int m_current_frequency = 0;
-    float m_default_active_time = 2.5f;
+    float m_default_active_time = 5.0f;
     float m_active_time = m_default_active_time;
     float m_ray_radius = 0.4f;
     int m_explosions_number = 0;
     bool m_is_active = false;
+    float m_laser_angle;
 
     sf::Sprite m_sprite;
 };

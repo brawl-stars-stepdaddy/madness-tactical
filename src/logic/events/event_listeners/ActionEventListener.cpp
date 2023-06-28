@@ -12,7 +12,9 @@ void ChangeAngleDownEventListener::process(const EventData &event) {
     auto weapon = dynamic_cast<RotatableWeapon *>(
         m_world->get_player()->get_weapon()
     );
-    weapon->set_angle_change_direction(-1);
+    if (weapon) {
+        weapon->set_angle_change_direction(-1);
+    }
 }
 
 ChangeAngleDownEventListener::ChangeAngleDownEventListener(World &world) : ActionEventListener(world) {}
@@ -21,7 +23,9 @@ void ChangeAngleUpEventListener::process(const EventData &event) {
     auto weapon = dynamic_cast<RotatableWeapon *>(
             m_world->get_player()->get_weapon()
     );
-    weapon->set_angle_change_direction(1);
+    if (weapon) {
+        weapon->set_angle_change_direction(1);
+    }
 }
 
 ChangeAngleUpEventListener::ChangeAngleUpEventListener(World &world) : ActionEventListener(world) {}
@@ -44,14 +48,14 @@ MoveRightEventListener::MoveRightEventListener(World &world) : ActionEventListen
 
 void JumpForwardEventListener::process([[maybe_unused]] const EventData &event
 ) {
-    m_world->get_player()->jump_forward();
+    m_world->get_player()->big_jump();
 }
 
 JumpForwardEventListener::JumpForwardEventListener(World &world) : ActionEventListener(world) {}
 
 void JumpBackwardEventListener::process([[maybe_unused]] const EventData &event
 ) {
-    m_world->get_player()->jump_backward();
+    m_world->get_player()->small_jump();
 }
 
 JumpBackwardEventListener::JumpBackwardEventListener(World &world) : ActionEventListener(world) {}
@@ -60,7 +64,9 @@ void BeginChargeWeaponEventListener::process(const EventData &event) {
     auto weapon = dynamic_cast<ChargeableWeapon *>(
         m_world->get_player()->get_weapon()
     );
-    weapon->set_currently_charging(true);
+    if (weapon) {
+        weapon->set_currently_charging(true);
+    }
 }
 
 BeginChargeWeaponEventListener::BeginChargeWeaponEventListener(World &world) : ActionEventListener(world) {}

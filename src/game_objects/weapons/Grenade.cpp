@@ -31,12 +31,16 @@ void Grenade::draw_current(sf::RenderTarget &target, sf::RenderStates states)
 }
 
 void Grenade::launch() {
+    if (Weapon::m_parent->get_team()->get_available_number_weapons(WeaponType::GRENADE) == 0) {
+        return;
+    }
+    Weapon::m_parent->get_team()->remove_weapon(WeaponType::GRENADE);
     Weapon::launch();
     if (!m_is_charging) {
         return;
     }
     set_currently_charging(false);
-    float impulse_value = m_charge_level * 20;
+    float impulse_value = m_charge_level * 5;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;
