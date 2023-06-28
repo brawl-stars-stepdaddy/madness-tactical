@@ -40,7 +40,7 @@ void Grenade::launch() {
         return;
     }
     set_currently_charging(false);
-    float impulse_value = m_charge_level * 5;
+    float impulse_value = m_charge_level * 15;
     float angle = m_angle;
     if (Weapon::m_parent->get_direction() == -1) {
         angle = M_PI - angle;
@@ -48,8 +48,8 @@ void Grenade::launch() {
     angle += Weapon::m_parent->getRotation() / (180 / M_PIf);
     m_charge_level = m_init_charge_level;
     sf::Vector2f start_position = {
-        m_parent->get_body().get_position().x + cos(angle) * 2,
-        m_parent->get_body().get_position().y + sin(angle) * 2};
+        m_parent->get_body().get_position().x + cos(angle) * 3,
+        m_parent->get_body().get_position().y + sin(angle) * 3};
     sf::Vector2f impulse = {
         cos(angle) * impulse_value, sin(angle) * impulse_value};
     m_world->get_layer(World::Layer::ENTITIES)

@@ -20,6 +20,7 @@ void InitMultiplayerState::draw() {
 }
 
 bool InitMultiplayerState::update(sf::Time delta_time) {
+    std::cout << m_game_client->is_ready() << std::endl;
     if (m_game_client->is_ready()) {
         m_text.setString("Connected " + std::to_string(m_game_client->get_number()));
         //request_stack_clear();

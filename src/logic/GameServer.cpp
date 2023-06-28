@@ -21,16 +21,16 @@ void GameServer::run_server_loop() {
 void GameServer::handleIncomingConnections() {
     std::cout << "hui1" << std::endl;
     while (m_players_sockets.size() < m_number_of_players) {
+        std::cout << m_players_sockets.size() << ' ' << m_number_of_players << std::endl;
         std::cout << "hui2" << std::endl;
         if (m_socket_selector.wait()) {
             std::cout << "hui3" << std::endl;
             if (m_socket_selector.isReady(m_listener)) {
                 std::cout << "hui4" << std::endl;
                 auto *client = new sf::TcpSocket;
-                if (m_listener.accept(*client) == sf::Socket::Done) {
-                    m_players_sockets.push_back(client);
-                    m_socket_selector.add(*client);
-                }
+                m_listener.accept(*client);
+                m_players_sockets.push_back(client);
+                m_socket_selector.add(*client);
             }
         }
     }
@@ -38,13 +38,11 @@ void GameServer::handleIncomingConnections() {
 }
 
 void GameServer::start_game() {
-    sf::Packet start_game_packet;
-    start_game_packet << "start game";
     int client_number = 0;
     for (auto client_pointer : m_players_sockets) {
         sf::TcpSocket &client = *client_pointer;
         sf::Packet packet;
-        packet << client_number;
+        packet << "start game" << client_number;
         client.send(packet);
         client_number++;
     }

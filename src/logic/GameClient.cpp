@@ -47,13 +47,16 @@ void GameClient::start_client() {
 void GameClient::start_listening() {
     m_thread = std::thread([this](){
         m_is_running = true;
+        std::cout << "he1" << std::endl;
         connect_to_server();
         while (m_is_running) {
              sf::Packet packet;
+            std::cout << "he2" << std::endl;
              m_client_socket.receive(packet);
              if (packet.getDataSize() != 0) {
                  std::string packet_type;
                  if (packet_type == "start_game") {
+                     std::cout << "he3" << std::endl;
                      packet >> m_number;
                      m_is_ready = true;
                  }
@@ -105,7 +108,11 @@ void GameClient::process_event(EventType event) {
 }
 
 bool GameClient::is_ready() {
-    return m_is_ready;
+    if (m_is_ready) {
+        m_is_ready = false;
+        return true;
+    }
+    return false;
 }
 
 bool GameClient::is_running() {
@@ -113,7 +120,6 @@ bool GameClient::is_running() {
 }
 
 void GameClient::close() {
-    m_is_running = false;
     m_thread.join();
 }
 
