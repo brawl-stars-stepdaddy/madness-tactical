@@ -1,5 +1,6 @@
 #include <cmath>
 #include "game_objects/entities/Unit.hpp"
+#include "game_objects/entities/Map.hpp"
 #include "game_objects/UnitHealthBar.hpp"
 #include "logic/World.hpp"
 #include "logic/events/event_data/ExplosionEventData.hpp"
@@ -94,22 +95,14 @@ void Unit::set_direction(float direction) {
 
 void Unit::move(sf::Time delta_time, float direction) {
     if (m_jumping_active && m_moving_active) {
-        b2Vec2 position = m_body.get_b2Body()->GetPosition();
-        b2Vec2 normal = {-position.y, position.x};
+        b2Vec2 radial = m_body.get_b2Body()->GetPosition();
+        radial.Normalize();
+        b2Vec2 normal = {-radial.y, radial.x};
+        normal.Normalize();
         b2Vec2 current_velocity = m_body.get_b2Body()->GetLinearVelocity();
-        float horizontal_projection =
-            (b2Dot(current_velocity, normal) / b2Dot(normal, normal) * normal)
-                .Length();
-        float horizontal_change =
-            direction *
-                b2Min(abs(horizontal_projection + 10.0f * direction), 10.0f) -
-            horizontal_projection;
-        float impulse = m_body.get_b2Body()->GetMass() * horizontal_change;
-        float angle = atan2f(normal.x, normal.y);
-
-        m_body.get_b2Body()->ApplyLinearImpulseToCenter(
-            {impulse * sin(angle), impulse * cos(angle)}, true
-        );
+        float horizontal_projection = 10 * direction;
+        float vertical_projection = (b2Dot(current_velocity, radial) * radial).Length();
+        m_body.get_b2Body()->SetLinearVelocity(horizontal_projection * normal - vertical_projection * radial);
     }
 }
 
