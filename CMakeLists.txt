@@ -14,10 +14,16 @@ add_subdirectory(libs/clipper2)
 add_subdirectory(libs/CDT)
 add_subdirectory(libs/SimplexNoise)
 
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE SOURCES "src/game_objects/*.cpp" "src/gui/*.cpp" "src/logic/*.cpp" "src/utils/*.cpp")
 
 add_executable(madness-tactical
+        src/Main.cpp
         ${SOURCES}
+)
+
+add_executable(madness-tactical-server
+        src/ServerMain.cpp
+        src/logic/GameServer.cpp
 )
 
 target_link_libraries(madness-tactical
@@ -26,4 +32,8 @@ target_link_libraries(madness-tactical
         clipper2
         CDT
         SimplexNoise
+        )
+
+target_link_libraries(madness-tactical-server
+        sfml-network
         )

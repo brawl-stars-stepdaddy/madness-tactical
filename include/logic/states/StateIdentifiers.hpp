@@ -13,6 +13,7 @@ enum class StatesID {
     MOVE_TRANSITION,
     GAME_OVER,
     WEAPON_SELECT,
+    INIT_MULTIPLAYER,
 };
 
 #endif // STATE_IDENTIFIERS_HPP_

@@ -12,45 +12,42 @@
 #include <iostream>
 #include <thread>
 #include <logic/events/EventType.hpp>
+#include <atomic>
 
 
-class GameClient
-{
+struct GameClient {
 public:
     explicit GameClient();
-//    ~GameServer();
 
     void start_client();
 
-    void process_event();
-
-
-//    void sendPlayerEvent(const EventType& event, int player_id);
-
-    void connect_to_server();
-
-private:
-
-    sf::Packet event_to_packet(const EventType& event);
-    EventType packet_to_event(sf::Packet);
-    std::vector<EventType> events_for_next_tick;
-
     std::vector<EventType> get_tick_events();
 
+    bool is_ready();
+
+    bool is_running();
+
+    void close();
+
+    int get_number();
+
+private:
+    void connect_to_server();
     void send_packet_server(sf::Packet);
+    void process_event(EventType event);
+    void start_listening();
+    sf::Packet event_to_packet(const EventType& event);
+    EventType packet_to_event(sf::Packet);
 
-    void do_event(EventType event);
-
-     [[noreturn]] void start_listening();
-
-    int                 port;
-
-    std::map<EventType, std::string> EVENT_TO_STRING_MAP;
-    std::map<std::string, EventType> STRING_TO_EVENT_MAP;
-
-
-    sf::TcpSocket client_socket;
-void process_event(EventType event);
+    std::vector<EventType> m_events_for_next_tick;
+    std::map<EventType, std::string> m_event_to_string_map;
+    std::map<std::string, EventType> m_string_to_event_map;
+    sf::TcpSocket m_client_socket;
+    int m_port;
+    int m_number;
+    std::atomic<bool> m_is_ready = false;
+    std::atomic<bool> m_is_running = false;
+    std::thread m_thread;
 };
 
 #endif //MADNESS_TACTICAL_GAMECLIENT_HPP

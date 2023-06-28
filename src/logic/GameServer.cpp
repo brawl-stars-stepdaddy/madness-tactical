@@ -1,53 +1,35 @@
 #include "logic/GameServer.hpp"
+#include <iostream>
 
 GameServer::GameServer(int players_count) {
-    number_of_players = players_count;
-    port = 50000;
+    m_number_of_players = players_count;
+    m_port = 50000;
 }
 
 void GameServer::run_server_loop() {
-    listener.listen(port);
-    socket_selector.add(listener);
-
-    sf::Time stepInterval = sf::seconds(1.f / 60.f);
-    sf::Time stepTime = sf::Time::Zero;
-    sf::Time tickInterval = sf::seconds(1.f / 20.f);
-    sf::Time tickTime = sf::Time::Zero;
-    sf::Clock stepClock, tickClock;
+    m_listener.listen(m_port);
+    m_socket_selector.add(m_listener);
 
     handleIncomingConnections();
     std::cout << "AllPlayersConnected";
 
-    int active_player = 0;
-    while (!game_ends) {
-        handleIncomingPackets(active_player);
-        active_player += 1;
-        active_player %= players_sockets.size();
+    while (!m_game_ends) {
+        handleIncomingPackets();
     }
-
 }
 
 void GameServer::handleIncomingConnections() {
-
-    while (players_sockets.size() < number_of_players)
-    {
-        if (socket_selector.wait())
-        {
-            if (socket_selector.isReady(listener))
-            {
+    std::cout << "hui1" << std::endl;
+    while (m_players_sockets.size() < m_number_of_players) {
+        std::cout << "hui2" << std::endl;
+        if (m_socket_selector.wait()) {
+            std::cout << "hui3" << std::endl;
+            if (m_socket_selector.isReady(m_listener)) {
+                std::cout << "hui4" << std::endl;
                 auto *client = new sf::TcpSocket;
-                if (listener.accept(*client) == sf::Socket::Done)
-                {
-                    // Add the new client to the players_sockets list
-                    players_sockets.push_back(client);
-                    // Add the new client to the socket_selector so that we will
-                    // be notified when he sends something
-                    socket_selector.add(*client);
-                }
-                else
-                {
-                    // Error, we won't get a new connection, delete the socket
-                    delete client;
+                if (m_listener.accept(*client) == sf::Socket::Done) {
+                    m_players_sockets.push_back(client);
+                    m_socket_selector.add(*client);
                 }
             }
         }
@@ -57,38 +39,46 @@ void GameServer::handleIncomingConnections() {
 
 void GameServer::start_game() {
     sf::Packet start_game_packet;
-    start_game_packet << "start_game";
-    broadcastMessage(start_game_packet);
+    start_game_packet << "start game";
+    int client_number = 0;
+    for (auto client_pointer : m_players_sockets) {
+        sf::TcpSocket &client = *client_pointer;
+        sf::Packet packet;
+        packet << client_number;
+        client.send(packet);
+        client_number++;
+    }
 }
 
-void GameServer::handleIncomingPackets(int active_player) {
-    while (true)
-    {
-        sf::TcpSocket &active_player_socket = *players_sockets[active_player];
-        sf::Packet packet;
-        active_player_socket.receive(packet);
-        if (packet.getDataSize() != 0) {
-
-            std::string packet_type;
-            packet >> packet_type;
-            if (packet_type == "end_of_turn") {
-                return;
-            }
-
-            if (packet_type == "end_of_game") {
-                game_ends = true;
-                return;
-            }
-
-            if (packet_type == "event") {
-                handleIncomingEventPacket(packet);
+void GameServer::handleIncomingPackets() {
+    while (true) {
+        for (int active_player = 0; active_player < m_number_of_players; active_player++) {
+            sf::TcpSocket &active_player_socket = *m_players_sockets[active_player];
+            sf::Packet packet;
+            active_player_socket.receive(packet);
+            if (packet.getDataSize() != 0) {
+                std::string packet_type;
+                packet >> packet_type;
+                if (packet_type == "end_of_turn") {
+                    sf::Packet p;
+                    p << packet_type;
+                    handleIncomingEventPacket(p);
+                    return;
+                }
+                if (packet_type == "end_of_game") {
+                    m_game_ends = true;
+                    return;
+                }
+                if (packet_type == "event") {
+                    handleIncomingEventPacket(packet);
+                }
             }
         }
     }
 }
 
 void GameServer::broadcastMessage(sf::Packet packet) {
-    for (auto client_pointer: players_sockets) {
+    for (auto client_pointer : m_players_sockets) {
         sf::TcpSocket &client = *client_pointer;
         client.send(packet);
     }
