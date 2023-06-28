@@ -10,23 +10,23 @@ MenuState::MenuState(StateStack &stack, State::Context context)
       m_background_world(*this, context, m_event_manager, m_team_manager) {
     m_background_world.build_start_scene();
 
-    auto multiplayer_button = std::make_unique<GUI::Button>(*context.fonts);
-    multiplayer_button->setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0, -100));
-    multiplayer_button->set_text("Multiplayer");
-    multiplayer_button->set_callback([this]() {
-        request_stack_pop();
-        request_stack_push(StatesID::INIT_MULTIPLAYER);
-    });
-    m_gui_container.pack(std::move(multiplayer_button));
-
     auto play_button = std::make_unique<GUI::Button>(*context.fonts);
-    play_button->setPosition(context.window->getView().getSize() / 2.f);
+    play_button->setPosition(context.window->getView().getSize() / 2.f + sf::Vector2f(0, -100));
     play_button->set_text("Local play");
     play_button->set_callback([this]() {
         request_stack_pop();
         request_stack_push(StatesID::GAME);
     });
     m_gui_container.pack(std::move(play_button));
+
+    auto multiplayer_button = std::make_unique<GUI::Button>(*context.fonts);
+    multiplayer_button->setPosition(context.window->getView().getSize() / 2.f);
+    multiplayer_button->set_text("Multiplayer");
+    multiplayer_button->set_callback([this]() {
+        request_stack_pop();
+        request_stack_push(StatesID::INIT_MULTIPLAYER);
+    });
+    m_gui_container.pack(std::move(multiplayer_button));
 
     auto exit_button = std::make_unique<GUI::Button>(*context.fonts);
     exit_button->setPosition(

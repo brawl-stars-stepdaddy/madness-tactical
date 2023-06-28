@@ -1,7 +1,7 @@
 #ifndef GAME_STATE_HPP_
 #define GAME_STATE_HPP_
 
-#include "StateStack.hpp"
+#include "logic/states/StateStack.hpp"
 #include "logic/World.hpp"
 #include "logic/events/EventManager.hpp"
 

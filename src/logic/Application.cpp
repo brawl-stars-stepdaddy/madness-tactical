@@ -1,3 +1,4 @@
+#include <logic/states/MultiplayerGameState.hpp>
 #include "logic/Application.hpp"
 #include "logic/states/GameState.hpp"
 #include "logic/states/MenuState.hpp"
@@ -28,6 +29,7 @@ void Application::register_states() {
     m_state_stack.register_state<GameState>(StatesID::GAME);
     m_state_stack.register_state<PauseState>(StatesID::PAUSE);
     m_state_stack.register_state<InitMultiplayerState>(StatesID::INIT_MULTIPLAYER);
+    m_state_stack.register_state<MultiplayerGameState>(StatesID::MULTIPLAYER_GAME);
     m_state_stack.push_state(StatesID::TITLE);
 }
 
